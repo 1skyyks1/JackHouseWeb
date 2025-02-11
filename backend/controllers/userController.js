@@ -1,4 +1,4 @@
-const User = require('../models/user');  // 引入 User 模型
+const User = require('../models/index');  // 引入 User 模型
 const bcrypt = require('bcryptjs');
 
 // 创建用户

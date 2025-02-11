@@ -46,7 +46,7 @@ const User = sequelize.define('User', {
         onUpdate: DataTypes.NOW,
     },
 }, {
-    tableName: 'user',  // 映射到数据库中的 'users' 表
+    tableName: 'user',
     timestamps: false,
 });
 
