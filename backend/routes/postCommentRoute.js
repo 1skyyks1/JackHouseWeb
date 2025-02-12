@@ -5,8 +5,8 @@ const PostCommentController = require('../controllers/PostCommentController');
 // 获取指定帖子的所有评论
 router.get('/post/:post_id', PostCommentController.getCommentsByPostId);
 
-// 获取单个评论
-router.get('/:comment_id', PostCommentController.getCommentById);
+// 获取所有帖子所有评论
+router.get('/', PostCommentController.getAllComments);
 
 // 创建评论
 router.post('/', PostCommentController.createComment);

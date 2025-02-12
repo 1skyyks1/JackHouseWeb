@@ -1,4 +1,4 @@
-const { Post, PostTranslation } = require('../models/index');
+const { Post, PostTranslation,User } = require('../models/index');
 const sequelize = require('../config/db')
 
 // 获取所有帖子
@@ -10,21 +10,70 @@ exports.getAllPosts = async (req, res) => {
                     model: PostTranslation,
                     as: 'translations',
                     attributes: ['title', 'language'],
+                },
+                {
+                    model: User,
+                    as: 'user',
+                    attributes: ['user_name', 'role'],
                 }
             ]
         });
 
-        const result = posts.map(post => {
-            const postData = post.toJSON();
-            postData.title_zh = postData.translations.find(t => t.language === 'zh')?.title || null;
-            postData.title_en = postData.translations.find(t => t.language === 'en')?.title || null;
-            delete postData.translations;
-            return postData;
-        })
+        const result = processPosts(posts)
         res.json(result);
     } catch (error) {
         res.status(500).json({ message: '获取帖子列表失败', error });
     }
+};
+
+// 获取某个用户的所有帖子
+exports.getPostsByUserId = async (req, res) => {
+    const { user_id } = req.params; // 从请求的参数中获取 user_id
+    try {
+        const posts = await Post.findAll({
+            where: {
+                user_id, // 通过 user_id 过滤
+            },
+            include: [
+                {
+                    model: PostTranslation,
+                    as: 'translations',
+                    attributes: ['title', 'language'],
+                },
+                {
+                    model: User,
+                    as: 'user',
+                    attributes: ['user_name', 'role'],
+                }
+            ]
+        });
+
+        const result = posts.length ? processPosts(posts) : [];
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({ message: '获取用户帖子列表失败', error });
+    }
+};
+
+// 公共的处理帖子数据的函数
+const processPosts = (posts) => {
+    return posts.map(post => {
+        const postData = post.toJSON();
+
+        // 提取翻译内容
+        postData.title_zh = postData.translations.find(t => t.language === 'zh')?.title || null;
+        postData.title_en = postData.translations.find(t => t.language === 'en')?.title || null;
+
+        // 提取用户信息
+        postData.user_name = postData.user.user_name;
+        postData.role = postData.user.role;
+
+        // 删除冗余字段
+        delete postData.translations;
+        delete postData.user;
+
+        return postData;
+    });
 };
 
 // 获取单个帖子
@@ -38,6 +87,11 @@ exports.getPostById = async (req, res) => {
                     model: PostTranslation,
                     as: 'translations',
                     attributes: ['title', 'content', 'language']
+                },
+                {
+                    model: User,
+                    as: 'user',
+                    attributes: ['user_name', 'role'],
                 }
             ]
         });

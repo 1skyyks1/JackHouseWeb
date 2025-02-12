@@ -5,6 +5,9 @@ const PostController = require('../controllers/PostController');
 // 获取所有帖子
 router.get('/', PostController.getAllPosts);
 
+// 获取某个用户的所有帖子
+router.get('/user/:user_id', PostController.getPostsByUserId);
+
 // 获取单个帖子
 router.get('/:post_id', PostController.getPostById);
 

@@ -1,26 +1,39 @@
-const PostComment = require('../models/index');
+const { PostComment, User} = require('../models/index');
 
 // 获取指定帖子的所有评论
 exports.getCommentsByPostId = async (req, res) => {
     const { post_id } = req.params;
     try {
-        const comments = await PostComment.findAll({ where: { post_id } });
-        res.json(comments);
+        const comments = await PostComment.findAll({
+            where: { post_id },
+            include: [
+                {
+                    model: User,
+                    as: 'user',
+                    attributes: ['user_name', 'role']
+                }
+            ]
+        });
+
+        const result = comments.map(comment => {
+            const commentData = comment.toJSON();
+            commentData.user_name = commentData.user.user_name;
+            commentData.role = commentData.user.role;
+            delete commentData.user;
+            return commentData
+        })
+
+        res.json(result);
     } catch (error) {
         res.status(500).json({ message: '获取评论失败', error });
     }
 };
 
-// 获取单个评论
-exports.getCommentById = async (req, res) => {
-    const { comment_id } = req.params;
+// 获取所有帖子所有评论
+exports.getAllComments = async (req, res) => {
     try {
-        const comment = await PostComment.findOne({ where: { comment_id } });
-        if (comment) {
-            res.json(comment);
-        } else {
-            res.status(404).json({ message: '评论不存在' });
-        }
+        const comment = await PostComment.findAll();
+        res.json(comment);
     } catch (error) {
         res.status(500).json({ message: '获取评论失败', error });
     }
@@ -35,7 +48,7 @@ exports.createComment = async (req, res) => {
             user_id,
             comment,
         });
-        res.status(201).json(newComment);
+        res.status(201).json({ message: '创建评论成功' });
     } catch (error) {
         res.status(500).json({ message: '创建评论失败', error });
     }

@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db'); // 引入数据库配置
+const sequelize = require('../config/db');
 
 const PostTranslation = sequelize.define('PostTranslation', {
     post_translation_id: {

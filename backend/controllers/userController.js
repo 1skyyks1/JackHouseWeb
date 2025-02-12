@@ -1,13 +1,13 @@
-const User = require('../models/index');  // 引入 User 模型
+const { User, Post} = require('../models/index');  // 引入 User 模型
 const bcrypt = require('bcryptjs');
 
 // 创建用户
 const createUser = async (req, res) => {
     try {
-        const { user_name, password, email, role, status, osu_uid } = req.body;
+        const { user_name, password, email, role, status, osu_uid, avatar} = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = await User.create({ user_name, password: hashedPassword, email, role, status, osu_uid });
-        res.status(201).json({ message: '用户创建成功', user });
+        const user = await User.create({ user_name, password: hashedPassword, email, role, status, osu_uid, avatar });
+        res.status(201).json({ message: '用户创建成功' });
     } catch (err) {
         res.status(500).json({ message: '创建用户失败', error: err.message });
     }
@@ -43,12 +43,12 @@ const updateUser = async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: '用户未找到' });
         }
-        const { user_name, password, email, role, status, osu_uid } = req.body;
+        const { user_name, password, email, role, status, osu_uid, avatar } = req.body;
         if (req.body.password){
             const hashedPassword = await bcrypt.hash(req.body.password, 10);
-            await user.update({ user_name, password: hashedPassword, email, role, status, osu_uid });
+            await user.update({ user_name, password: hashedPassword, email, role, status, osu_uid, avatar });
         } else {
-            await user.update({ user_name, email, role, status, osu_uid });
+            await user.update({ user_name, email, role, status, osu_uid, avatar });
         }
         res.status(200).json({ message: '用户信息更新成功', user });
     } catch (err) {

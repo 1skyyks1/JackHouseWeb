@@ -47,7 +47,7 @@ const authCallback = async (req, res) => {
         }
 
         // 生成 JWT
-        const token = jwt.sign({ userId: user.user_id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user.user_id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         // 重定向到前端完成页面
         res.redirect(`${process.env.FRONTEND_URL}/oauth/complete?token=${token}`);
