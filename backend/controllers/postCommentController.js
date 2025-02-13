@@ -39,6 +39,20 @@ exports.getAllComments = async (req, res) => {
     }
 };
 
+// 获取指定用户的所有投稿
+exports.getCommentsByUserId = async (req, res) => {
+    const { user_id } = req.params;
+    try {
+        const comment = await PostComment.findAll({
+            where: { user_id },
+        });
+        res.json(comment);
+    } catch (error){
+        res.status(500).json({ message: '获取评论失败', error });
+    }
+}
+
+
 // 创建评论
 exports.createComment = async (req, res) => {
     const { post_id, user_id, comment } = req.body;
@@ -59,7 +73,7 @@ exports.updateComment = async (req, res) => {
     const { comment_id } = req.params;
     const { comment } = req.body;
     try {
-        const existingComment = await PostComment.findOne({ where: { comment_id } });
+        const existingComment = await PostComment.findByPk(comment_id);
         if (!existingComment) {
             return res.status(404).json({ message: '评论不存在' });
         }
@@ -75,7 +89,7 @@ exports.updateComment = async (req, res) => {
 exports.deleteComment = async (req, res) => {
     const { comment_id } = req.params;
     try {
-        const comment = await PostComment.findOne({ where: { comment_id } });
+        const comment = await PostComment.findByPk(comment_id);
         if (!comment) {
             return res.status(404).json({ message: '评论不存在' });
         }

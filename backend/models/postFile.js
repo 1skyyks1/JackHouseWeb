@@ -1,5 +1,4 @@
-// models/PostFile.js
-const { Sequelize, DataTypes } = require('sequelize');
+const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db'); // 引入数据库配置
 
 const PostFile = sequelize.define('PostFile', {

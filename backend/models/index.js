@@ -13,7 +13,7 @@ PostComment.belongsTo(Post, { foreignKey: 'post_id' });
 PostComment.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 
 PostFile.belongsTo(Post, { foreignKey: 'post_id' });
-PostFile.belongsTo(User, { foreignKey: 'user_id' });
+PostFile.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 
 PostTranslation.belongsTo(Post, { foreignKey: 'post_id' });
 

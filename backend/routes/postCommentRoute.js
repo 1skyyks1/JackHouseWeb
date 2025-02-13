@@ -8,6 +8,9 @@ router.get('/post/:post_id', PostCommentController.getCommentsByPostId);
 // 获取所有帖子所有评论
 router.get('/', PostCommentController.getAllComments);
 
+// 获取指定用户的所有评论
+router.get('/user/:user_id', PostCommentController.getCommentsByUserId)
+
 // 创建评论
 router.post('/', PostCommentController.createComment);
 
