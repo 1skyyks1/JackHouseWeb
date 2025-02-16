@@ -25,7 +25,7 @@ exports.getFileByPostId = async (req, res) => {
             return fileData;
         })
 
-        res.json(result);
+        res.json({ data: result });
     } catch (error){
         res.status(500).json({ message: '获取投稿失败', error });
     }
@@ -38,7 +38,7 @@ exports.getFileByUserId = async (req, res) => {
         const files = await PostFile.findAll({
             where: { user_id },
         });
-        res.json(files);
+        res.json({ data: files });
     } catch (error){
         res.status(500).json({ message: '获取投稿失败', error });
     }
@@ -48,7 +48,7 @@ exports.getFileByUserId = async (req, res) => {
 exports.getAllPostFiles = async (req, res) => {
     try {
         const file = await PostFile.findAll();
-        res.json(file);
+        res.json({ data: file });
     } catch (error) {
         res.status(500).json({ message: '获取投稿失败', error });
     }

@@ -23,7 +23,7 @@ exports.getCommentsByPostId = async (req, res) => {
             return commentData
         })
 
-        res.json(result);
+        res.json({ data: result });
     } catch (error) {
         res.status(500).json({ message: '获取评论失败', error });
     }
@@ -46,7 +46,7 @@ exports.getCommentsByUserId = async (req, res) => {
         const comment = await PostComment.findAll({
             where: { user_id },
         });
-        res.json(comment);
+        res.json({ data: comment });
     } catch (error){
         res.status(500).json({ message: '获取评论失败', error });
     }
@@ -79,7 +79,7 @@ exports.updateComment = async (req, res) => {
         }
         existingComment.comment = comment || existingComment.comment;
         await existingComment.save();
-        res.json(existingComment);
+        res.json({ data: existingComment });
     } catch (error) {
         res.status(500).json({ message: '更新评论失败', error });
     }

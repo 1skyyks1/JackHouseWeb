@@ -20,11 +20,40 @@ exports.getAllPosts = async (req, res) => {
         });
 
         const result = processPosts(posts)
-        res.json(result);
+        res.json({ data: result });
     } catch (error) {
         res.status(500).json({ message: '获取帖子列表失败', error });
     }
 };
+
+// 获取指定类型帖子列表
+exports.getPostByType = async (req, res) => {
+    const { type } = req.params;
+    try {
+        const posts = await Post.findAll({
+            where: {
+                type,
+            },
+            include: [
+                {
+                    model: PostTranslation,
+                    as: 'translations',
+                    attributes: ['title', 'language'],
+                },
+                {
+                    model: User,
+                    as: 'user',
+                    attributes: ['user_name', 'role'],
+                }
+            ]
+        });
+
+        const result = posts.length ? processPosts(posts) : [];
+        res.json({ data: result });
+    } catch (error) {
+        res.status(500).json({ message: '获取帖子列表失败', error });
+    }
+}
 
 // 获取某个用户的所有帖子
 exports.getPostsByUserId = async (req, res) => {
@@ -49,7 +78,7 @@ exports.getPostsByUserId = async (req, res) => {
         });
 
         const result = posts.length ? processPosts(posts) : [];
-        res.json(result);
+        res.json({ data: result });
     } catch (error) {
         res.status(500).json({ message: '获取用户帖子列表失败', error });
     }
@@ -96,7 +125,7 @@ exports.getPostById = async (req, res) => {
             ]
         });
         if (post) {
-            res.json(post);
+            res.json({ data: post });
         } else {
             res.status(404).json({ message: '帖子不存在' });
         }
@@ -127,7 +156,7 @@ exports.createPost = async (req, res) => {
             },{ transaction: t });
         }
         await t.commit();
-        res.status(201).json(newPost);
+        res.status(201).json({ data: newPost });
     } catch (error) {
         await t.rollback();
         console.error(error)

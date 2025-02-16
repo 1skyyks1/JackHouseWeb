@@ -30,7 +30,12 @@ async function exchangeCodeForToken(code) {
             code: code,
         }),
     });
-    return response.json();
+    const data = await response.json();
+    return {
+        access_token: data.access_token,
+        refresh_token: data.refresh_token, // 获取 refresh_token
+        expires_in: data.expires_in, // 获取过期时间
+    };
 }
 
 // 获取用户信息
@@ -43,8 +48,30 @@ async function getUserInfo(accessToken) {
     return response.json();
 }
 
+async function refreshAccessToken(refreshToken) {
+    const response = await fetch('https://osu.ppy.sh/oauth/token', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            client_id: CLIENT_ID,
+            client_secret: CLIENT_SECRET,
+            grant_type: 'refresh_token',
+            refresh_token: refreshToken,
+        }),
+    });
+    const data = await response.json();
+    return {
+        access_token: data.access_token,
+        refresh_token: data.refresh_token, // 新的 refresh_token
+        expires_in: data.expires_in,
+    };
+}
+
 module.exports = {
     generateAuthUrl,
     exchangeCodeForToken,
     getUserInfo,
+    refreshAccessToken,
 };

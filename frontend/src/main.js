@@ -1,4 +1,21 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import router from './router/index'
+import store from './store/index'
+import ElementPlus from "element-plus";
+import 'element-plus/dist/index.css'
+import '@/assets/font/font.css'
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+import 'element-plus/theme-chalk/dark/css-vars.css'
+import './style/dark/css-vars.css'
 
-createApp(App).mount('#app')
+const app = createApp(App)
+app.use(ElementPlus)
+app.use(router)
+app.use(store)
+
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    app.component(key, component)
+}
+
+app.mount('#app')

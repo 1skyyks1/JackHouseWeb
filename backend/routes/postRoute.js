@@ -1,9 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const PostController = require('../controllers/PostController');
+const PostController = require('../controllers/postController');
 
 // 获取所有帖子
 router.get('/', PostController.getAllPosts);
+
+// 获取指定类型帖子列表
+router.get('/type/:type', PostController.getPostByType)
 
 // 获取某个用户的所有帖子
 router.get('/user/:user_id', PostController.getPostsByUserId);

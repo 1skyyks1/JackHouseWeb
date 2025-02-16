@@ -7,11 +7,13 @@ const postFileRoutes = require('./routes/postFileRoute')
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const morgan = require('morgan');
-const cors = require('cors'); // 引入 CORS
+const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.set('trust proxy', true);
 
 // 安全中间件
 app.use(helmet());
@@ -30,18 +32,18 @@ const limiter = rateLimit({
     standardHeaders: true,
     legacyHeaders: false,
 });
-app.use('/api/', limiter);
+app.use(limiter);
 
 // 解析 JSON 请求体
 app.use(express.json());
 
 // 路由
-app.use('/api/user', userRoutes);
-app.use('/api', authRoutes);
-app.use('/api/post', postRoutes);
-app.use('/api/comment', postCommentRoutes)
-app.use('/api/postFile', postFileRoutes)
+app.use('/user', userRoutes);
+app.use('/auth', authRoutes);
+app.use('/post', postRoutes);
+app.use('/comment', postCommentRoutes);
+app.use('/postFile', postFileRoutes);
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log(`Server running on http://localhost:${port}`);
 });

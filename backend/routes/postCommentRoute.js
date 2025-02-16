@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const PostCommentController = require('../controllers/PostCommentController');
+const PostCommentController = require('../controllers/postCommentController');
 
 // 获取指定帖子的所有评论
 router.get('/post/:post_id', PostCommentController.getCommentsByPostId);

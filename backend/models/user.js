@@ -18,6 +18,10 @@ const User = sequelize.define('User', {
     email: {
         type: DataTypes.STRING,
         allowNull: true,
+        unique: true,
+        validate: {
+            isEmail: true
+        }
     },
     avatar: {
         type: DataTypes.STRING,
@@ -45,6 +49,10 @@ const User = sequelize.define('User', {
         defaultValue: DataTypes.NOW,
         onUpdate: DataTypes.NOW,
     },
+    refresh_token: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    }
 }, {
     tableName: 'user',
     timestamps: false,
