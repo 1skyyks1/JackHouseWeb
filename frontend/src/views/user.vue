@@ -1,7 +1,7 @@
 <template>
   <div>
     <navMenu></navMenu>
-    {{ postId }}
+    {{ userId }}
   </div>
 </template>
 
@@ -10,7 +10,7 @@ import navMenu from '../components/navmenu.vue'
 import { useRoute } from "vue-router";
 
 const route = useRoute()
-const postId = route.params.post_id
+const userId = route.params.user_id
 
 
 </script>

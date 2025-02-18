@@ -5,9 +5,14 @@ const {or} = require("sequelize");
 // 获取指定帖子的所有投稿
 exports.getFileByPostId = async (req, res) => {
     const { post_id } = req.params;
+    const { page, pageSize } = req.query
+    const offset = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
+    const limit = parseInt(pageSize, 10);
     try {
-        const files = await PostFile.findAll({
+        const { count, rows} = await PostFile.findAndCountAll({
             where: { post_id },
+            limit,
+            offset,
             include: [
                 {
                     model: User,
@@ -17,15 +22,15 @@ exports.getFileByPostId = async (req, res) => {
             ]
         });
 
-        const result = files.map(file => {
+        const result = rows.map(file => {
             const fileData = file.toJSON();
             fileData.user_name = fileData.user.user_name;
             fileData.role = fileData.user.role;
             delete fileData.user;
             return fileData;
         })
-
-        res.json({ data: result });
+        const totalPages = Math.ceil(count / limit)
+        res.json({ data: result, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error){
         res.status(500).json({ message: '获取投稿失败', error });
     }
@@ -34,11 +39,17 @@ exports.getFileByPostId = async (req, res) => {
 // 获取指定用户的所有投稿
 exports.getFileByUserId = async (req, res) => {
     const { user_id } = req.params;
+    const { page, pageSize } = req.query
+    const offset = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
+    const limit = parseInt(pageSize, 10);
     try {
-        const files = await PostFile.findAll({
+        const { count, rows } = await PostFile.findAndCountAll({
             where: { user_id },
+            limit,
+            offset,
         });
-        res.json({ data: files });
+        const totalPages = Math.ceil(count / limit)
+        res.json({ data: rows, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error){
         res.status(500).json({ message: '获取投稿失败', error });
     }
@@ -46,9 +57,16 @@ exports.getFileByUserId = async (req, res) => {
 
 // 获取所有帖子所有投稿
 exports.getAllPostFiles = async (req, res) => {
+    const { page, pageSize } = req.query;
+    const offset = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
+    const limit = parseInt(pageSize, 10);
     try {
-        const file = await PostFile.findAll();
-        res.json({ data: file });
+        const { count, rows } = await PostFile.findAndCountAll({
+            limit,
+            offset,
+        });
+        const totalPages = Math.ceil(count / limit);
+        res.json({ data: rows, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error) {
         res.status(500).json({ message: '获取投稿失败', error });
     }

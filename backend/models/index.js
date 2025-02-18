@@ -5,7 +5,7 @@ const PostComment = require('../models/postComment');
 const User = require('../models/user');
 
 Post.hasMany(PostTranslation, { foreignKey: 'post_id', onDelete: 'CASCADE', as: 'translations' });
-Post.hasMany(PostFile, { foreignKey: 'post_id', onDelete: 'CASCADE' });
+Post.hasMany(PostFile, { foreignKey: 'post_id', onDelete: 'CASCADE', as: 'files' });
 Post.hasMany(PostComment, { foreignKey: 'post_id', onDelete: 'CASCADE' });
 Post.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 

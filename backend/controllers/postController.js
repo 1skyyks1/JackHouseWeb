@@ -3,8 +3,13 @@ const sequelize = require('../config/db')
 
 // 获取所有帖子
 exports.getAllPosts = async (req, res) => {
+    const { page, pageSize } = req.query
+    const offset = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
+    const limit = parseInt(pageSize, 10);
     try {
-        const posts = await Post.findAll({
+        const { count, rows } = await Post.findAndCountAll({
+            limit,
+            offset,
             include: [
                 {
                     model: PostTranslation,
@@ -19,8 +24,9 @@ exports.getAllPosts = async (req, res) => {
             ]
         });
 
-        const result = processPosts(posts)
-        res.json({ data: result });
+        const result = processPosts(rows)
+        const totalPages = Math.ceil(count / limit)
+        res.json({ data: result, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error) {
         res.status(500).json({ message: '获取帖子列表失败', error });
     }
@@ -29,11 +35,16 @@ exports.getAllPosts = async (req, res) => {
 // 获取指定类型帖子列表
 exports.getPostByType = async (req, res) => {
     const { type } = req.params;
+    const { page, pageSize } = req.query;
+    const offset = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
+    const limit = parseInt(pageSize, 10);
     try {
-        const posts = await Post.findAll({
+        const { count, rows } = await Post.findAndCountAll({
             where: {
                 type,
             },
+            limit,
+            offset,
             include: [
                 {
                     model: PostTranslation,
@@ -48,8 +59,9 @@ exports.getPostByType = async (req, res) => {
             ]
         });
 
-        const result = posts.length ? processPosts(posts) : [];
-        res.json({ data: result });
+        const result = rows.length ? processPosts(rows) : [];
+        const totalPages = Math.ceil(count / limit);
+        res.json({ data: result, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error) {
         res.status(500).json({ message: '获取帖子列表失败', error });
     }
@@ -57,12 +69,17 @@ exports.getPostByType = async (req, res) => {
 
 // 获取某个用户的所有帖子
 exports.getPostsByUserId = async (req, res) => {
-    const { user_id } = req.params; // 从请求的参数中获取 user_id
+    const { user_id } = req.params;
+    const { page, pageSize } = req.query;
+    const offset = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
+    const limit = parseInt(pageSize, 10);
     try {
-        const posts = await Post.findAll({
+        const { count, rows } = await Post.findAndCountAll({
             where: {
-                user_id, // 通过 user_id 过滤
+                user_id,
             },
+            limit,
+            offset,
             include: [
                 {
                     model: PostTranslation,
@@ -77,8 +94,9 @@ exports.getPostsByUserId = async (req, res) => {
             ]
         });
 
-        const result = posts.length ? processPosts(posts) : [];
-        res.json({ data: result });
+        const result = rows.length ? processPosts(rows) : [];
+        const totalPages = Math.ceil(count / limit);
+        res.json({ data: result, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error) {
         res.status(500).json({ message: '获取用户帖子列表失败', error });
     }
@@ -107,23 +125,23 @@ const processPosts = (posts) => {
 
 // 获取单个帖子
 exports.getPostById = async (req, res) => {
-    const { post_id } = req.params;
     try {
-        const post = await Post.findOne({
-            where: { post_id },
-            include: [
-                {
-                    model: PostTranslation,
-                    as: 'translations',
-                    attributes: ['title', 'content', 'language']
-                },
-                {
-                    model: User,
-                    as: 'user',
-                    attributes: ['user_name', 'role'],
-                }
-            ]
-        });
+        const post = await Post.findByPk(
+            req.params.post_id,
+            {
+                include: [
+                    {
+                        model: PostTranslation,
+                        as: 'translations',
+                        attributes: ['title', 'content', 'language']
+                    },
+                    {
+                        model: User,
+                        as: 'user',
+                        attributes: ['user_name', 'role'],
+                    }
+                ]
+            });
         if (post) {
             res.json({ data: post });
         } else {

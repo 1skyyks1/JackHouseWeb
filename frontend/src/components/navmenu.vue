@@ -4,11 +4,13 @@
            mode="horizontal"
            class="nav-menu"
            :ellipsis="false">
-    <el-menu-item index="/">
+    <div class="avatar">
       <img alt="logo" src="../assets/pic/jackhouse.svg" />
-    </el-menu-item>
+    </div>
     <div class="flex-grow"/>
-    <el-menu-item index="/pack">叠包下载</el-menu-item>
+    <el-menu-item index="/" class="menu-item">首页</el-menu-item>
+    <el-menu-item index="/forum" class="menu-item">论坛</el-menu-item>
+    <el-menu-item index="/pack" class="menu-item">叠包</el-menu-item>
     <el-menu-item>
       <div class="darkModeSvg">
         <svg
@@ -48,10 +50,13 @@
         <el-avatar shape="square" :src="avatar"/>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item v-if="isLogged"> {{ userName }} </el-dropdown-item>
-            <el-dropdown-item v-else @click="goLogin">登录</el-dropdown-item>
-            <el-dropdown-item v-if="isLogged && userId" @click="goUserInfo">资料</el-dropdown-item>
-            <el-dropdown-item divided v-if="isLogged">登出</el-dropdown-item>
+            <div>
+              <el-dropdown-item v-if="isLogged && userName"> {{ userName }} </el-dropdown-item>
+              <el-dropdown-item v-else @click="goLogin">登录</el-dropdown-item>
+            </div>
+            <el-dropdown-item v-if="isLogged && userId" @click="goUserInfo">个人资料</el-dropdown-item>
+            <el-dropdown-item v-if="role === 1 || role === 2" @click="goAdmin">管理后台</el-dropdown-item>
+            <el-dropdown-item divided v-if="isLogged">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -62,7 +67,7 @@
 <script setup>
 import { useRoute } from "vue-router";
 import { useDark, useToggle } from "@vueuse/core";
-import { computed, onBeforeMount, onMounted, ref } from "vue";
+import { computed, onBeforeMount, ref } from "vue";
 import { userById } from "@/api/user"
 import router from "@/router";
 import { useStore } from 'vuex'
@@ -76,6 +81,8 @@ const isLogged = computed(() => store.state.isLogged);
 const userId = ref(localStorage.getItem('userId'))
 const userName = ref(null)
 const avatar = ref(null)
+const role = ref(0)
+
 const toggleDarkMode = () => {
   useToggle(isDark)();
 };
@@ -84,6 +91,7 @@ const getUserInfo = (userId) => {
   userById(userId).then(response => {
     userName.value = response.data.user_name;
     avatar.value = response.data.avatar;
+    role.value = response.data.role;
   })
 }
 
@@ -93,6 +101,10 @@ const goLogin = () => {
 
 const goUserInfo = () => {
   router.push({ path: `/user/${userId.value}` })
+}
+
+const goAdmin = () => {
+  router.push(({ path: '/admin/dashboard' }))
 }
 
 onBeforeMount(() => {
@@ -124,5 +136,8 @@ onBeforeMount(() => {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.menu-item{
+  padding: 0 30px;
 }
 </style>

@@ -1,16 +1,13 @@
 <template>
   <div>
     <navMenu></navMenu>
-    pack
+    forum
   </div>
 </template>
 
 <script setup>
-import navMenu from "../components/navmenu.vue";
-
-
+import navMenu from "@/components/navmenu.vue";
 </script>
-
 
 <style scoped>
 

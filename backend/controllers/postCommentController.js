@@ -3,9 +3,14 @@ const { PostComment, User} = require('../models/index');
 // 获取指定帖子的所有评论
 exports.getCommentsByPostId = async (req, res) => {
     const { post_id } = req.params;
+    const { page, pageSize } = req.query
+    const offset = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
+    const limit = parseInt(pageSize, 10);
     try {
-        const comments = await PostComment.findAll({
+        const { count, rows } = await PostComment.findAndCountAll({
             where: { post_id },
+            limit,
+            offset,
             include: [
                 {
                     model: User,
@@ -15,15 +20,16 @@ exports.getCommentsByPostId = async (req, res) => {
             ]
         });
 
-        const result = comments.map(comment => {
+        const result = rows.map(comment => {
             const commentData = comment.toJSON();
             commentData.user_name = commentData.user.user_name;
             commentData.role = commentData.user.role;
             delete commentData.user;
             return commentData
         })
+        const totalPages = Math.ceil(count / limit)
 
-        res.json({ data: result });
+        res.json({ data: result, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error) {
         res.status(500).json({ message: '获取评论失败', error });
     }
@@ -31,9 +37,15 @@ exports.getCommentsByPostId = async (req, res) => {
 
 // 获取所有帖子所有评论
 exports.getAllComments = async (req, res) => {
+    const { page, pageSize } = req.query
+    const offset = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
+    const limit = parseInt(pageSize, 10);
     try {
-        const comment = await PostComment.findAll();
-        res.json(comment);
+        const { count, rows } = await PostComment.findAndCountAll({
+            limit, offset
+        });
+        const totalPages = Math.ceil(count / limit)
+        res.json({data: rows, page: parseInt(page, 10), pageSize: limit, totalPages, total: count});
     } catch (error) {
         res.status(500).json({ message: '获取评论失败', error });
     }
@@ -42,11 +54,17 @@ exports.getAllComments = async (req, res) => {
 // 获取指定用户的所有投稿
 exports.getCommentsByUserId = async (req, res) => {
     const { user_id } = req.params;
+    const { page, pageSize } = req.query
+    const offset = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
+    const limit = parseInt(pageSize, 10);
     try {
-        const comment = await PostComment.findAll({
+        const { count, rows } = await PostComment.findAndCountAll({
             where: { user_id },
+            limit,
+            offset
         });
-        res.json({ data: comment });
+        const totalPages = Math.ceil(count / limit);
+        res.json({ data: rows, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error){
         res.status(500).json({ message: '获取评论失败', error });
     }
