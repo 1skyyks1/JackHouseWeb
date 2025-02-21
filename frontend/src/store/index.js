@@ -4,7 +4,7 @@ import { userLogin } from "@/api/login";
 export default createStore({
     state: {
         isLogged: !!localStorage.getItem('token'),
-        userId: null,
+        userId: localStorage.getItem('userId') || null,
     },
     mutations: {
         setLogin(state, userId) {

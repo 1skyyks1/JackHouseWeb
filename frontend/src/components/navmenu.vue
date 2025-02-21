@@ -62,26 +62,53 @@
       </el-dropdown>
     </el-menu-item>
   </el-menu>
+
+  <el-dialog v-model="loginOpen" width="400px" align-center>
+    <form class="login-form">
+      <div class="flex-column"><label>用户名/邮箱 </label></div>
+      <div class="inputForm">
+        <el-input v-model="loginForm.username" placeholder="输入用户名或邮箱" class="input" :prefix-icon="User"/>
+      </div>
+      <div class="flex-column"><label>密码 </label></div>
+      <div class="inputForm">
+        <el-input v-model="loginForm.password" placeholder="输入密码" class="input" type="password" show-password :prefix-icon="Lock"/>
+      </div>
+      <el-button class="submit-button" plain @click="submitLogin">登录</el-button>
+      <el-divider style="margin-bottom: 5px"><span class="else-login">其他登录方式</span></el-divider>
+      <div class="else-login">
+        <el-button class="osu-button" @click="osuLogin">
+          <img src="../assets/pic/osu/osu.svg" width="40" />
+        </el-button>
+      </div>
+    </form>
+  </el-dialog>
 </template>
 
 <script setup>
 import { useRoute } from "vue-router";
 import { useDark, useToggle } from "@vueuse/core";
-import { computed, onBeforeMount, ref } from "vue";
+import { computed, onBeforeMount, onMounted, ref, watch } from "vue";
 import { userById } from "@/api/user"
 import router from "@/router";
 import { useStore } from 'vuex'
+import { User, Lock } from '@element-plus/icons-vue'
+import { userLogin } from "@/api/login";
+import {ElMessage} from "element-plus";
 
 const route = useRoute();
 const isDark = useDark();
 
 const store = useStore();
 const isLogged = computed(() => store.state.isLogged);
-
-const userId = ref(localStorage.getItem('userId'))
+const userId = computed(() => store.state.userId);
 const userName = ref(null)
 const avatar = ref(null)
 const role = ref(0)
+const loginOpen = ref(false)
+const loginForm = ref({
+  username: '',
+  password: ''
+});
 
 const toggleDarkMode = () => {
   useToggle(isDark)();
@@ -96,7 +123,11 @@ const getUserInfo = (userId) => {
 }
 
 const goLogin = () => {
-  router.push({ path: '/login' })
+  loginOpen.value = true;
+}
+
+const osuLogin = () => {
+  window.location.href = 'https://api.jackhouse.xyz/auth/osu'
 }
 
 const goUserInfo = () => {
@@ -107,7 +138,27 @@ const goAdmin = () => {
   router.push(({ path: '/admin/dashboard' }))
 }
 
-onBeforeMount(() => {
+const submitLogin = async () => {
+  try{
+    await store.dispatch('Login',
+        { identifier: loginForm.value.username,
+          password: loginForm.value.password
+        });
+    ElMessage.success('登录成功')
+  }
+  catch (error) {
+    console.log(error)
+  }
+}
+
+watch(userId, (newUserId) => {
+  if (newUserId) {
+    getUserInfo(newUserId);
+  }
+});
+
+onMounted(() => {
+  console.log(store.state)
   if(userId.value){
     getUserInfo(userId.value);
   }
@@ -139,5 +190,23 @@ onBeforeMount(() => {
 }
 .menu-item{
   padding: 0 30px;
+}
+.login-form{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 20px;
+}
+.submit-button{
+  margin: 10px 0 0 0;
+}
+.else-login{
+  display: flex;
+  justify-content: center;
+}
+.osu-button{
+  border: none;
+  width: 50px;
+  height: 50px;
 }
 </style>

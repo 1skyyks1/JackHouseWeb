@@ -4,10 +4,20 @@
       <template #header>
         <div class="card-header">
           <span>用户管理</span>
-          <el-button type="primary" plain size="small" @click="userAdd = true">
-            <el-icon style="margin-right: 3px"><Plus /></el-icon>
-            新增用户
-          </el-button>
+          <div>
+            <el-input
+                v-model="searchQuery"
+                placeholder="用户名搜索"
+                size="small"
+                style="width: 200px; margin-right: 10px"
+                @input="handleSearchInput"
+                :suffix-icon="Search"
+            />
+            <el-button type="primary" plain size="small" @click="userAdd = true">
+              <el-icon style="margin-right: 3px"><Plus /></el-icon>
+              新增用户
+            </el-button>
+          </div>
         </div>
       </template>
       <div>
@@ -142,10 +152,12 @@
 import { userList, userById, userUpdate, userDelete, userCreate } from '@/api/user';
 import { ref, onBeforeMount, reactive } from "vue";
 import { dayjs, ElMessage, ElMessageBox } from "element-plus";
-import { Plus } from "@element-plus/icons-vue"
+import { Plus, Search } from "@element-plus/icons-vue"
 import router from "@/router";
+import { debounce } from 'lodash';
 
 const users = ref([])
+const searchQuery = ref('');
 const currentPage = ref(1)
 const pageSize = ref(10)
 const totalUsers = ref(0)
@@ -181,7 +193,7 @@ const formRules = reactive({
 
 const getUserList = () => {
   userTableLoading.value = true;
-  userList(currentPage.value, pageSize.value).then(response => {
+  userList(currentPage.value, pageSize.value, searchQuery.value).then(response => {
     users.value = response.data;
     totalUsers.value = response.total;
     userTableLoading.value = false;
@@ -189,6 +201,15 @@ const getUserList = () => {
       ElMessage.error(err)
   })
 }
+
+const debouncedSearch = debounce(() => {
+  currentPage.value = 1;
+  getUserList();
+}, 500);
+
+const handleSearchInput = () => {
+  debouncedSearch();
+};
 
 const handlePageChange = (page) => {
   currentPage.value = page;

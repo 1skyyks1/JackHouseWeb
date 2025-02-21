@@ -1,13 +1,14 @@
 import request from "@/utils/request";
 
 // 获取所有用户
-export function userList(page, pageSize){
+export function userList(page, pageSize, search){
     return request({
         url: '/user',
         method: 'GET',
         params: {
             page,
-            pageSize
+            pageSize,
+            search
         }
     })
 }

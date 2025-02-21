@@ -5,6 +5,7 @@ const crypto = require('crypto');
 const { createUser } = require('./userController');
 const { Op } = require('sequelize');
 const bcrypt = require('bcryptjs');
+const {response} = require("express");
 
 // 生成授权链接并重定向
 const authRedirect = (req, res) => {
@@ -12,6 +13,22 @@ const authRedirect = (req, res) => {
     const authUrl = generateAuthUrl(state);
     res.redirect(authUrl);
 };
+
+const auth = (req, res) => {
+    const url = new URL(
+        "https://osu.ppy.sh/oauth/authorize"
+    );
+    const params = {
+        "client_id": process.env.OSU_CLIENT_ID,
+        "redirect_uri": process.env.OSU_REDIRECT_URI,
+        "response_type": "code",
+        "scope": "public identify",
+        "state": crypto.randomBytes(32).toString('hex'),
+    };
+    Object.keys(params)
+        .forEach(key => url.searchParams.append(key, params[key]));
+    res.redirect(url)
+}
 
 // 处理回调并完成登录
 const authCallback = async (req, res) => {
@@ -45,7 +62,6 @@ const authCallback = async (req, res) => {
                 avatar: userInfo.avatar_url,
                 role: 0, // 默认角色
                 status: 0, // 默认状态
-                refresh_token: tokenResponse.refresh_token,
             });
         }
 
@@ -53,7 +69,7 @@ const authCallback = async (req, res) => {
         const token = jwt.sign({ userId: user.user_id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
         // 重定向到前端完成页面
-        res.redirect(`${process.env.FRONTEND_URL}/oauth/complete?token=${token}`);
+        res.redirect(`${process.env.FRONTEND_URL}/oauth/complete?token=${token}&userId=${user.user_id}`);
     } catch (error) {
         res.status(500).json({ message: 'Authentication failed', error: error.message });
     }
@@ -125,6 +141,7 @@ const login = async (req, res) => {
 };
 
 module.exports = {
+    auth,
     authRedirect,
     authCallback,
     register,

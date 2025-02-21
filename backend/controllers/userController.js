@@ -1,5 +1,6 @@
 const { User, Post} = require('../models/index');  // 引入 User 模型
 const bcrypt = require('bcryptjs');
+const { Op } = require('sequelize');
 
 // 创建用户
 const createUser = async (req, res) => {
@@ -15,13 +16,20 @@ const createUser = async (req, res) => {
 
 // 获取所有用户
 const getUsers = async (req, res) => {
-    const { page, pageSize } = req.query;
+    const { page, pageSize, search } = req.query;
     const offset = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
     const limit = parseInt(pageSize, 10);
     try {
+        const whereCondition = {};
+        if (search) {
+            whereCondition.user_name = {
+                [Op.like]: `%${search}%`  // 使用 Op.like 进行模糊搜索
+            };
+        }
         const { count, rows } = await User.findAndCountAll(
             {
                 attributes: { exclude: ['password'] } ,
+                where: whereCondition,
                 offset,
                 limit
             }

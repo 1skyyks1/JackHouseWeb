@@ -30,6 +30,11 @@ const router = createRouter({
             component: () => import('../views/forum.vue')
         },
         {
+            path: '/oauth/complete',
+            name: 'oAuthComplete',
+            component: () => import('../views/auth/oAuthComplete.vue'),
+        },
+        {
             path: '/admin',
             name: 'admin',
             component: () => import('../views/admin/admin.vue'),

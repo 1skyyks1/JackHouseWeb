@@ -13,7 +13,7 @@ const User = sequelize.define('User', {
     },
     password: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     email: {
         type: DataTypes.STRING,
@@ -50,7 +50,7 @@ const User = sequelize.define('User', {
         onUpdate: DataTypes.NOW,
     },
     refresh_token: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(512),
         allowNull: true,
     }
 }, {
