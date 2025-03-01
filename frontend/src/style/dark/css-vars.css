@@ -1,7 +1,9 @@
 html.dark{
     --el-color-primary: #EE7B33;
+    --el-color-primary-light-9: #232323;
+    --el-menu-bg-color: #121212;
     body{
-        background-color: #121212;
+        background-color: #191919;
     }
 }
 

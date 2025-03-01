@@ -2,12 +2,12 @@
   <div>
     <navMenu></navMenu>
     <el-row justify="center">
-      <el-col :xs="24" :sm="24" :md="24" :lg="16" :xl="16">
-        <el-carousel :interval="4000" type="card" height="150px"></el-carousel>
+      <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
+        <el-carousel :interval="4000" type="card" height="180px"></el-carousel>
       </el-col>
     </el-row>
     <el-row justify="center" :gutter="10">
-      <el-col :xs="24" :sm="24" :md="24" :lg="12" :xl="12">
+      <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
         <el-row :gutter="10">
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" style="margin-bottom: 10px">
             <el-card>

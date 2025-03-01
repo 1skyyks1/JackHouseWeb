@@ -1,10 +1,14 @@
 import request from "@/utils/request";
 
 // 获取所有帖子
-export function postList(){
+export function postList(page, pageSize){
     return request({
         url: '/post',
-        method: 'GET'
+        method: 'GET',
+        params: {
+            page,
+            pageSize,
+        }
     })
 }
 
@@ -44,7 +48,7 @@ export function postCreate(data){
 // 更新帖子
 export function postUpdate(postId, data){
     return request({
-        url: '/post' + postId,
+        url: '/post/' + postId,
         method: 'PUT',
         data: data
     })
@@ -53,7 +57,7 @@ export function postUpdate(postId, data){
 // 删除帖子
 export function postDelete(postId){
     return request({
-        url: '/post' + postId,
+        url: '/post/' + postId,
         method: 'DELETE'
     })
 }

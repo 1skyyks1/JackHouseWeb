@@ -159,7 +159,7 @@ import { debounce } from 'lodash';
 const users = ref([])
 const searchQuery = ref('');
 const currentPage = ref(1)
-const pageSize = ref(10)
+const pageSize = ref(8)
 const totalUsers = ref(0)
 
 const userTableLoading = ref(false)
@@ -299,7 +299,7 @@ const submitForm = () => {
 }
 
 const cancelForm = () => {
-  userEditForm.user_id = '';
+  userEditForm.user_id = null;
   userEditForm.user_name = '';
   userEditForm.avatar = '';
   userEditForm.password = '';

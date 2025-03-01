@@ -1,0 +1,35 @@
+{
+  "menu": {
+    "home": "主页",
+    "forum": "论坛",
+    "pack": "叠包",
+    "login": "登录",
+    "userInfo": "个人资料",
+    "admin": "管理后台",
+    "logout": "退出登录",
+    "message": {
+      "loginSuccess": "登录成功",
+      "logoutSuccess": "已退出登录"
+    }
+  },
+  "loginDialog": {
+    "username": "用户名/邮箱",
+    "password": "密码",
+    "login": "登录",
+    "elseLogin": "其他登录方式",
+    "enterUsername": "输入用户名或邮箱",
+    "enterPassword": "输入密码"
+  },
+  "post": {
+    "by": "发帖人",
+    "placeholder": "输入你的评论",
+    "createComment": "发表评论",
+    "login": "请登录后发表评论",
+    "postSuccess": "成功发表评论",
+    "forumPost": "帖子",
+    "isNotMyPost": "您只能修改自己发布的帖子",
+    "editSuccess": "修改成功",
+    "submit": "确认修改",
+    "cancel": "取消"
+  }
+}

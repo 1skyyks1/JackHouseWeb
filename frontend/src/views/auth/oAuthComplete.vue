@@ -15,11 +15,15 @@ const loading = ref(true)
 const urlParams = new URLSearchParams(window.location.search);
 const token = urlParams.get('token');
 const userId = urlParams.get('userId')
+const redirectTo = localStorage.getItem('loginRedirect') || '/';
+
 onBeforeMount(() => {
   if (token && userId) {
     localStorage.setItem('token', token);
     localStorage.setItem('userId', userId);
-    window.history.back()
+    store.commit('setLogin', userId)
+    router.push(redirectTo)
+    ElMessage.success('授权登录成功')
   }
   else{
     router.push('/')

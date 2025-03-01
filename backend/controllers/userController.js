@@ -30,6 +30,7 @@ const getUsers = async (req, res) => {
             {
                 attributes: { exclude: ['password'] } ,
                 where: whereCondition,
+                order: [['created_time', 'DESC']],
                 offset,
                 limit
             }
@@ -44,7 +45,9 @@ const getUsers = async (req, res) => {
 // 获取单个用户
 const getUserById = async (req, res) => {
     try {
-        const user = await User.findByPk(req.params.user_id);
+        const user = await User.findByPk(req.params.user_id, {
+            attributes: { exclude: ['password'] }
+        });
         if (!user) {
             return res.status(404).json({ message: '用户未找到' });
         }
@@ -68,7 +71,7 @@ const updateUser = async (req, res) => {
         } else {
             await user.update({ user_name, email, role, status, osu_uid, avatar });
         }
-        res.status(200).json({ message: '用户信息更新成功', data: user });
+        res.status(200).json({ message: '用户信息更新成功' });
     } catch (err) {
         res.status(500).json({ message: '更新用户信息失败', error: err.message });
     }

@@ -10,6 +10,8 @@ exports.getAllPosts = async (req, res) => {
         const { count, rows } = await Post.findAndCountAll({
             limit,
             offset,
+            distinct: true,
+            order: [['created_time', 'DESC']],
             include: [
                 {
                     model: PostTranslation,
@@ -45,6 +47,8 @@ exports.getPostByType = async (req, res) => {
             },
             limit,
             offset,
+            distinct: true,
+            order: [['created_time', 'DESC']],
             include: [
                 {
                     model: PostTranslation,
@@ -80,6 +84,8 @@ exports.getPostsByUserId = async (req, res) => {
             },
             limit,
             offset,
+            distinct: true,
+            order: [['created_time', 'DESC']],
             include: [
                 {
                     model: PostTranslation,
@@ -187,7 +193,7 @@ exports.updatePost = async (req, res) => {
     const { post_id } = req.params;
     const { type, status, translations } = req.body;
     try {
-        const existingPost = await Post.findOne({ where: { post_id } });
+        const existingPost = await Post.findByPk(post_id);
         if (!existingPost) {
             return res.status(404).json({ message: '帖子不存在' });
         }
@@ -233,7 +239,7 @@ exports.updatePost = async (req, res) => {
 exports.deletePost = async (req, res) => {
     const { post_id } = req.params;
     try {
-        const post = await Post.findOne({ where: { post_id } });
+        const post = await Post.findByPk(post_id);
         if (!post) {
             return res.status(404).json({ message: '帖子不存在' });
         }

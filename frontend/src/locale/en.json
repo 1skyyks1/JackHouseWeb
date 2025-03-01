@@ -1,0 +1,35 @@
+{
+  "menu": {
+    "home": "Home",
+    "forum": "Forum",
+    "pack": "Pack",
+    "login": "Sign in",
+    "userInfo": "My Profile",
+    "admin": "Admin Sys.",
+    "logout": "Sign out",
+    "message": {
+      "loginSuccess": "Logged in successfully",
+      "logoutSuccess": "Logged out successfully"
+    }
+  },
+  "loginDialog": {
+    "username": "Username / Email",
+    "password": "Password",
+    "login": "Sign in",
+    "elseLogin": "Third-Party Login",
+    "enterUsername": "Enter your username or email",
+    "enterPassword": "Enter your password"
+  },
+  "post": {
+    "by": "by",
+    "placeholder": "Enter your comment",
+    "createComment": "Post",
+    "login": "Log in to leave a comment",
+    "postSuccess": "Comment posted successfully",
+    "forumPost": "Forum Post",
+    "isNotMyPost": "Sorry, you can only edit your own posts.",
+    "editSuccess": "Edited successfully",
+    "submit": "Save changes",
+    "cancel": "Cancel"
+  }
+}

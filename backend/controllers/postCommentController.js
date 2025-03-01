@@ -11,11 +11,12 @@ exports.getCommentsByPostId = async (req, res) => {
             where: { post_id },
             limit,
             offset,
+            order: [['created_time', 'DESC']],
             include: [
                 {
                     model: User,
                     as: 'user',
-                    attributes: ['user_name', 'role']
+                    attributes: ['user_name', 'role', 'avatar']
                 }
             ]
         });
@@ -24,6 +25,7 @@ exports.getCommentsByPostId = async (req, res) => {
             const commentData = comment.toJSON();
             commentData.user_name = commentData.user.user_name;
             commentData.role = commentData.user.role;
+            commentData.avatar = commentData.user.avatar
             delete commentData.user;
             return commentData
         })
@@ -42,7 +44,7 @@ exports.getAllComments = async (req, res) => {
     const limit = parseInt(pageSize, 10);
     try {
         const { count, rows } = await PostComment.findAndCountAll({
-            limit, offset
+            limit, offset, order: [['created_time', 'DESC']],
         });
         const totalPages = Math.ceil(count / limit)
         res.json({data: rows, page: parseInt(page, 10), pageSize: limit, totalPages, total: count});
@@ -61,7 +63,8 @@ exports.getCommentsByUserId = async (req, res) => {
         const { count, rows } = await PostComment.findAndCountAll({
             where: { user_id },
             limit,
-            offset
+            offset,
+            order: [['created_time', 'DESC']],
         });
         const totalPages = Math.ceil(count / limit);
         res.json({ data: rows, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });

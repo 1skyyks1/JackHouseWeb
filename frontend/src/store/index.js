@@ -5,6 +5,8 @@ export default createStore({
     state: {
         isLogged: !!localStorage.getItem('token'),
         userId: localStorage.getItem('userId') || null,
+        loginRedirect: null,
+        showLoginDialog: false
     },
     mutations: {
         setLogin(state, userId) {
@@ -14,6 +16,9 @@ export default createStore({
         logout(state, userId) {
             state.isLogged = false;
             state.userId = null;
+        },
+        SET_LOGIN_DIALOG(state, value) {
+            state.showLoginDialog = value
         }
     },
     actions: {
@@ -36,7 +41,15 @@ export default createStore({
                     reject(error);
                 })
             })
-        }
+        },
+        logout({ commit }) {
+            return new Promise((resolve) => {
+                localStorage.removeItem('token');
+                localStorage.removeItem('userId');
+                commit('logout');
+                resolve();
+            })
+        },
     },
     getters: {
 
