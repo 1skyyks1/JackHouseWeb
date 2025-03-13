@@ -94,7 +94,7 @@ const posts = ref([
 .el-row:last-child {
   margin-bottom: 0;
 }
-:deep .el-card__header{
+:deep(.el-card__header){
   padding: 10px 20px;
 }
 .notice-title {
@@ -124,7 +124,7 @@ const posts = ref([
 .post-username {
   margin-right: 15px;
 }
-:deep .el-divider--horizontal{
+:deep(.el-divider--horizontal){
   margin: 15px 0 5px;
 }
 </style>

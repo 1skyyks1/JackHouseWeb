@@ -3,7 +3,7 @@ import router from "../router/index";
 
 const service = axios.create({
     baseURL: process.env.VUE_APP_BASE_URL, // 后端的基础请求地址
-    timeout: 10000 // 请求超时时间
+    timeout: 50000 // 请求超时时间
 });
 
 // 请求拦截器

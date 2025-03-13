@@ -1,5 +1,6 @@
 const { Post, PostTranslation,User } = require('../models/index');
 const sequelize = require('../config/db')
+const { Op } = require('sequelize');
 
 // 获取所有帖子
 exports.getAllPosts = async (req, res) => {
@@ -108,6 +109,34 @@ exports.getPostsByUserId = async (req, res) => {
     }
 };
 
+// 获取某用户的所有征稿帖
+exports.getRequestPostByUserId = async (req, res) => {
+    const { user_id } = req.params;
+    try{
+        const rows = await Post.findAll({
+            where: {
+                [Op.and]: [
+                    { user_id: user_id },
+                    { type: 1 }
+                ]
+            },
+            order: [['created_time', 'DESC']],
+            include: [
+                {
+                    model: PostTranslation,
+                    as: 'translations',
+                    attributes: ['title', 'language'],
+                }
+            ]
+        });
+
+        const result = rows.length ? processPosts(rows) : [];
+        res.json({ data: result })
+    } catch(error){
+        res.status(500).json({ message: '获取用户征稿帖子列表失败', error });
+    }
+}
+
 // 公共的处理帖子数据的函数
 const processPosts = (posts) => {
     return posts.map(post => {
@@ -116,14 +145,15 @@ const processPosts = (posts) => {
         // 提取翻译内容
         postData.title_zh = postData.translations.find(t => t.language === 'zh')?.title || null;
         postData.title_en = postData.translations.find(t => t.language === 'en')?.title || null;
-
-        // 提取用户信息
-        postData.user_name = postData.user.user_name;
-        postData.role = postData.user.role;
-
-        // 删除冗余字段
         delete postData.translations;
-        delete postData.user;
+
+        if(postData.user){
+            // 提取用户信息
+            postData.user_name = postData.user.user_name;
+            postData.role = postData.user.role;
+            // 删除冗余字段
+            delete postData.user;
+        }
 
         return postData;
     });
@@ -144,7 +174,7 @@ exports.getPostById = async (req, res) => {
                     {
                         model: User,
                         as: 'user',
-                        attributes: ['user_name', 'role'],
+                        attributes: ['user_name', 'role', 'avatar'],
                     }
                 ]
             });
@@ -247,5 +277,90 @@ exports.deletePost = async (req, res) => {
         res.json({ message: '帖子删除成功' });
     } catch (error) {
         res.status(500).json({ message: '删除帖子失败', error });
+    }
+};
+
+// 搜索帖子
+exports.searchPosts = async (req, res) => {
+    const { keyword, locale, page, pageSize } = req.query;
+    const offset = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
+    const limit = parseInt(pageSize, 10);
+
+    try {
+        const { count, rows } = await Post.findAndCountAll({
+            limit,
+            offset,
+            distinct: true,
+            order: [['created_time', 'DESC']],
+            include: [
+                {
+                    model: PostTranslation,
+                    as: 'translations',
+                    attributes: ['title', 'language'],
+                    where: {
+                        language: locale,
+                        [Op.or]: [
+                            { title: { [Op.like]: `%${keyword}%` } },
+                            { content: { [Op.like]: `%${keyword}%` } },
+                        ],
+                    },
+                    required: true,
+                },
+                {
+                    model: User,
+                    as: 'user',
+                    attributes: ['user_name', 'role'],
+                }
+            ]
+        });
+
+        const result = rows.map(post => {
+            const translation = post.translations[0];
+            return {
+                value: translation.title,
+                post_id: post.post_id,
+                time: post.created_time
+            };
+        });
+        const totalPages = Math.ceil(count / limit);
+        res.status(200).json({ data: result, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
+    } catch (error) {
+        res.status(500).json({ message: '搜索帖子失败', error });
+    }
+};
+
+exports.getAllType3Posts = async (req, res) => {
+    const types =  [0, 1, 2, 3];
+    const limit = 3;
+
+    try {
+        const results = await Promise.all(types.map(async (type) => {
+            const { rows } = await Post.findAndCountAll({
+                where: { type },
+                limit,
+                order: [['created_time', 'DESC']],
+                include: [
+                    {
+                        model: PostTranslation,
+                        as: 'translations',
+                        attributes: ['title', 'language'],
+                    },
+                    {
+                        model: User,
+                        as: 'user',
+                        attributes: ['user_name', 'role'],
+                    }
+                ]
+            });
+
+            return {
+                type,
+                posts: rows.length ? processPosts(rows) : [],
+            };
+        }));
+
+        res.json({ data: results });
+    } catch (error) {
+        res.status(500).json({ message: '获取帖子列表失败', error });
     }
 };

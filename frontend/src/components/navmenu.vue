@@ -348,7 +348,7 @@ const updateMenuMode = () => {
 .el-drawer {
   z-index: 2000;
 }
-:deep .el-drawer .el-drawer__footer{
+:deep(.el-drawer .el-drawer__footer){
   text-align: left !important;
 }
 </style>

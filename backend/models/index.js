@@ -15,7 +15,7 @@ PostComment.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 PostFile.belongsTo(Post, { foreignKey: 'post_id' });
 PostFile.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 
-PostTranslation.belongsTo(Post, { foreignKey: 'post_id' });
+PostTranslation.belongsTo(Post, { foreignKey: 'post_id', as: 'post' });
 
 User.hasMany(Post, { foreignKey: 'user_id', onDelete: 'CASCADE' })
 User.hasMany(PostFile, { foreignKey: 'user_id', onDelete: 'CASCADE' });

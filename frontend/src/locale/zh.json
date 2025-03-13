@@ -30,6 +30,42 @@
     "isNotMyPost": "您只能修改自己发布的帖子",
     "editSuccess": "修改成功",
     "submit": "确认修改",
-    "cancel": "取消"
+    "cancel": "取消",
+    "deleteComment": "删除",
+    "deleteCommentSuccess": "删除评论成功",
+    "delete": {
+      "text": "此操作无法恢复，确认删除此帖子？",
+      "warning": "警告",
+      "confirm": "确认删除",
+      "cancel": "取消",
+      "cancelText": "取消删除操作",
+      "isNotMyPost": "您只能删除自己发布的帖子",
+      "success": "删除成功"
+    },
+    "upload": "点此投稿"
+  },
+  "forum": {
+    "submit": "创建",
+    "cancel": "取消",
+    "placeholder": {
+      "selectPostType": "请选择帖子类型"
+    },
+    "postType": {
+      "normal": "常规帖",
+      "mapRequest": "谱面征集",
+      "event": "活动帖",
+      "announcement": "公告"
+    },
+    "by": "发帖人"
+  },
+  "mapUpload": {
+    "dropText": "拖动文件到这里 或",
+    "clickText": " 点击选择文件",
+    "tip": "一次只能上传一个.osz/.mcz文件",
+    "tip2": "只传符合要求的倍速和原速",
+    "tip3": "请将文件名改为“曲师 - 曲名”的格式再上传",
+    "warning": "请选择文件",
+    "success": "成功上传",
+    "upload": "确认上传"
   }
 }

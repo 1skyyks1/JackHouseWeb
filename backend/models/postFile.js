@@ -19,6 +19,10 @@ const PostFile = sequelize.define('PostFile', {
         type: DataTypes.STRING(255),
         allowNull: false,
     },
+    minio_file_name: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+    },
     file_url: {
         type: DataTypes.STRING(255),
         allowNull: false,

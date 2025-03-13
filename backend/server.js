@@ -14,13 +14,14 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.set('trust proxy', true);
+app.get('/ip', (request, response) => response.send(request.ip))
 
 // 安全中间件
 app.use(helmet());
 app.use(morgan('dev'));
 app.use(cors({
     origin: '*', // 允许的前端域名
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // 允许的 HTTP 方法
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // 允许的 HTTP 方法
     allowedHeaders: ['Content-Type', 'Authorization'], // 允许的请求头
     credentials: true, // 允许发送 Cookie
 })); // 启用 CORS

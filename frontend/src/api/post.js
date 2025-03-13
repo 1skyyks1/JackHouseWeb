@@ -13,17 +13,33 @@ export function postList(page, pageSize){
 }
 
 // 根据类型type获取帖子
-export function postByType(type){
+export function postByType(type, page, pageSize){
     return request({
         url: '/post/type/' + type,
-        method: 'GET'
+        method: 'GET',
+        params: {
+            page,
+            pageSize,
+        }
     })
 }
 
 // 根据userId获取帖子
-export function postByUserId(userId){
+export function postByUserId(userId, page, pageSize){
     return request({
         url: '/post/user/' + userId,
+        method: 'GET',
+        params: {
+            page,
+            pageSize,
+        }
+    })
+}
+
+// 根据userId获取 征稿 帖
+export function requestByUserId(userId){
+    return request({
+        url: '/post/requestPost/' + userId,
         method: 'GET'
     })
 }
@@ -59,5 +75,27 @@ export function postDelete(postId){
     return request({
         url: '/post/' + postId,
         method: 'DELETE'
+    })
+}
+
+//搜索帖子
+export function postSearch(keyword, locale, page, pageSize){
+    return request({
+        url: '/post/search',
+        method: 'GET',
+        params: {
+            keyword,
+            locale,
+            page,
+            pageSize,
+        }
+    })
+}
+
+// 获取每种类型最新的三个帖子
+export function allType3Post(){
+    return request({
+        url: '/post/forum',
+        method: 'GET',
     })
 }
