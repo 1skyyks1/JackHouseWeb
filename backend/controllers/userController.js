@@ -23,7 +23,7 @@ const getUsers = async (req, res) => {
         const whereCondition = {};
         if (search) {
             whereCondition.user_name = {
-                [Op.like]: `%${search}%`  // 使用 Op.like 进行模糊搜索
+                [Op.like]: `%${search}%`
             };
         }
         const { count, rows } = await User.findAndCountAll(

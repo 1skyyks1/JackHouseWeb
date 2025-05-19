@@ -5,7 +5,6 @@ const crypto = require('crypto');
 const { createUser } = require('./userController');
 const { Op } = require('sequelize');
 const bcrypt = require('bcryptjs');
-const {response} = require("express");
 
 // 生成授权链接并重定向
 const authRedirect = (req, res) => {

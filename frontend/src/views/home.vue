@@ -17,16 +17,16 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell" viewBox="0 0 16 16">
                       <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2M8 1.918l-.797.161A4 4 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4 4 0 0 0-3.203-3.92zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5 5 0 0 1 13 6c0 .88.32 4.2 1.22 6"/>
                     </svg>
-                    <span style="margin-left: 5px">公告</span>
+                    <span style="margin-left: 5px">{{ t('home.announcement') }}</span>
                   </span>
                 </div>
               </template>
               <div>
                 <el-carousel height="150px" direction="vertical" :autoplay="true" :interval="4000">
                   <el-carousel-item v-for="(notice, index) in notices" :key="index">
-                    <div>
-                      <div class="notice-title">{{ notice.title }}</div>
-                      <div class="notice-content">{{ notice.content }}</div>
+                    <div v-loading="noticeLoading">
+                      <div class="notice-title">{{ getTitle(notice) }}</div>
+                      <div class="notice-content">{{ getContent(notice) }}</div>
                     </div>
                   </el-carousel-item>
                 </el-carousel>
@@ -42,16 +42,16 @@
                       <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
                       <path d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6m0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/>
                     </svg>
-                    <span style="margin-left: 5px">论坛</span>
+                    <span style="margin-left: 5px">{{ t('home.forum') }}</span>
                   </span>
                 </div>
               </template>
-              <div>
-                <div v-for="(post, index) in posts" :key="index" class="post-item">
-                  <div class="post-title">{{ post.title }}</div>
+              <div v-loading="postLoading">
+                <div v-for="(post, index) in posts" :key="index" class="post-item" @click="goToPost(post.post_id)">
+                  <div class="post-title">{{ getTitle(post) }}</div>
                   <div class="post-info">
-                    <span class="post-username">发帖人：{{ post.username }}</span>
-                    <span class="post-time">{{ post.created_time }}</span>
+                    <span class="post-username">{{ t('home.by') }} {{ post.user_name }}</span>
+                    <span class="post-time">{{ formatDate(post.created_time) }}</span>
                   </div>
                   <el-divider />
                 </div>
@@ -69,20 +69,64 @@
 
 <script setup>
 import navMenu from '../components/navmenu.vue'
-import { ref } from "vue";
+import { ref, onBeforeMount } from "vue";
+import { postList, postByType } from "@/api/post"
+import { useI18n } from "vue-i18n";
+import { dayjs } from "element-plus";
+import router from "@/router";
+const { locale, t } = useI18n();
 
-const notices = ref([
-  { title: '公告 1', content: '这是公告 1 的详细内容。' },
-  { title: '公告 2', content: '这是公告 2 的详细内容。' },
-  { title: '公告 3', content: '这是公告 3 的详细内容。' }
-])
+const postLoading = ref(true) // 主页论坛加载
+const noticeLoading = ref(true) // 主页公告加载
 
-const posts = ref([
-  { title: '这是标题111', username: 'yks1', created_time: '2025-02-16 10:00' },
-  { title: '这是标题222222', username: '1sky', created_time: '2025-02-15 14:30' },
-  { title: '标题333333', username: 'yks1sky', created_time: '2025-02-14 09:45' }
-])
+const notices = ref([])
 
+const posts = ref([])
+
+const formatDate = (dateString) => {
+  return dayjs(dateString).format('YYYY-MM-DD');
+}
+
+const getTitle = (post) => {
+  if(locale.value === 'zh'){
+    return post.title_zh || post.title_en || "暂无标题 (>_<)";
+  }
+  else{
+    return post.title_en || post.title_zh || "No title available (>_<)";
+  }
+}
+
+const getContent = (post) => {
+  if(locale.value === 'zh'){
+    return post.content_zh || post.content_en || "暂无内容 (>_<)";
+  }
+  else{
+    return post.content_en || post.content_zh || "No content available (>_<)";
+  }
+}
+
+const getNotice = () => {
+  postByType(3, 1, 3).then(response => { //获取前三个公告
+    notices.value = response.data;
+    noticeLoading.value = false;
+  })
+}
+
+const getPostList = () => {
+  postList(1, 3).then(response => { //获取前三个
+    posts.value = response.data;
+    postLoading.value = false;
+  })
+}
+
+const goToPost = (postId) => {
+  router.push(`/post/${postId}`)
+}
+
+onBeforeMount(() => {
+  getPostList();
+  getNotice();
+})
 
 </script>
 
@@ -107,6 +151,11 @@ const posts = ref([
 }
 .post-item {
   padding: 5px 0 10px;
+  cursor: pointer;
+}
+.post-item:hover{
+  transform: scale(1.02);
+  transition: all 0.2s ease;
 }
 .post-item:last-child{
   padding: 5px 0 0;

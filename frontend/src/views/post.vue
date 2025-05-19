@@ -174,8 +174,8 @@ const getPostInfo = () => {
     response.data.translations.forEach(translation => {
       mergeLocaleMessage(translation.language, {
         post: {
-          title: translation.title,
-          content: translation.content
+          title: translation.title || t('post.noTitle'),
+          content: translation.content || t('post.noContent')
         }
       });
     });
@@ -399,8 +399,8 @@ onBeforeMount(() => {
 }
 .delete{
   font-size: 11px;
+  margin: 1px 6px 0;
   padding: 0 6px;
-  margin-top: 1px;
 }
 :deep(.el-dialog) {
   min-width: 400px;

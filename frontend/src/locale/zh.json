@@ -20,6 +20,11 @@
     "enterUsername": "输入用户名或邮箱",
     "enterPassword": "输入密码"
   },
+  "home": {
+    "by": "发帖人",
+    "announcement": "公告",
+    "forum": "论坛"
+  },
   "post": {
     "by": "发帖人",
     "placeholder": "输入你的评论",
@@ -31,7 +36,7 @@
     "editSuccess": "修改成功",
     "submit": "确认修改",
     "cancel": "取消",
-    "deleteComment": "删除",
+    "deleteComment": "删除评论",
     "deleteCommentSuccess": "删除评论成功",
     "delete": {
       "text": "此操作无法恢复，确认删除此帖子？",
@@ -42,7 +47,9 @@
       "isNotMyPost": "您只能删除自己发布的帖子",
       "success": "删除成功"
     },
-    "upload": "点此投稿"
+    "upload": "点此投稿",
+    "noTitle": "暂无中文标题 (>_<)",
+    "noContent": "抱歉！暂无中文内容 (>_<)"
   },
   "forum": {
     "submit": "创建",

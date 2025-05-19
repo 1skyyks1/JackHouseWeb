@@ -45,7 +45,7 @@
           </template>
           <div>
             <div v-for="(post, index) in notice" :key="index" class="post-item" @click="goToPost(post.post_id)">
-              <div class="post-title">{{ locale === 'zh' ? post.title_zh : post.title_en }}</div>
+              <div class="post-title">{{ getTitle(post) }}</div>
               <div class="post-info">
                 <span class="post-username">{{ t('forum.by') }} {{ post.user_name }}</span>
                 <span class="post-time">{{ formatDate(post.created_time) }}</span>
@@ -70,7 +70,7 @@
           </template>
           <div>
             <div v-for="(post, index) in event" :key="index" class="post-item" @click="goToPost(post.post_id)">
-              <div class="post-title">{{ locale === 'zh' ? post.title_zh : post.title_en }}</div>
+              <div class="post-title">{{ getTitle(post) }}</div>
               <div class="post-info">
                 <span class="post-username">{{ t('forum.by') }} {{ post.user_name }}</span>
                 <span class="post-time">{{ formatDate(post.created_time) }}</span>
@@ -96,7 +96,7 @@
           </template>
           <div>
             <div v-for="(post, index) in request" :key="index" class="post-item" @click="goToPost(post.post_id)">
-              <div class="post-title">{{ locale === 'zh' ? post.title_zh : post.title_en }}</div>
+              <div class="post-title">{{ getTitle(post) }}</div>
               <div class="post-info">
                 <span class="post-username">{{ t('forum.by') }} {{ post.user_name }}</span>
                 <span class="post-time">{{ formatDate(post.created_time) }}</span>
@@ -121,7 +121,7 @@
           </template>
           <div>
             <div v-for="(post, index) in normal" :key="index" class="post-item" @click="goToPost(post.post_id)">
-              <div class="post-title">{{ locale === 'zh' ? post.title_zh : post.title_en }}</div>
+              <div class="post-title">{{ getTitle(post) }}</div>
               <div class="post-info">
                 <span class="post-username">{{ t('forum.by') }} {{ post.user_name }}</span>
                 <span class="post-time">{{ formatDate(post.created_time) }}</span>
@@ -219,6 +219,15 @@ const request = ref([])
 
 const formatDate = (dateString) => {
   return dayjs(dateString).format('YYYY-MM-DD');
+}
+
+const getTitle = (post) => {
+  if(locale.value === 'zh'){
+    return post.title_zh || post.title_en || "暂无标题 (>_<)";
+  }
+  else{
+    return post.title_en || post.title_zh || "No title available (>_<)";
+  }
 }
 
 const getAllType3Post = () => {

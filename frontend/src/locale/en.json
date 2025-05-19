@@ -20,6 +20,11 @@
     "enterUsername": "Enter your username or email",
     "enterPassword": "Enter your password"
   },
+  "home": {
+    "by": "by",
+    "announcement": "Announcement",
+    "forum": "Forum"
+  },
   "post": {
     "by": "by",
     "placeholder": "Enter your comment",
@@ -42,7 +47,9 @@
       "isNotMyPost": "Sorry, you can only delete your own posts.",
       "success": "Deleted Successfully"
     },
-    "upload": "Upload your map"
+    "upload": "Upload your map",
+    "noTitle": "No EN title available (>_<)",
+    "noContent": "Sorry... No EN content available (>_<)"
   },
   "forum": {
     "submit": "Create",
