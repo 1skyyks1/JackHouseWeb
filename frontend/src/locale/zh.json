@@ -49,13 +49,14 @@
     },
     "upload": "点此投稿",
     "noTitle": "暂无中文标题 (>_<)",
-    "noContent": "抱歉！暂无中文内容 (>_<)"
+    "noContent": "<p> 抱歉！暂无中文内容 (>_<) </p>"
   },
   "forum": {
     "submit": "创建",
     "cancel": "取消",
     "placeholder": {
-      "selectPostType": "请选择帖子类型"
+      "selectPostType": "请选择帖子类型",
+      "search": "请输入..."
     },
     "postType": {
       "normal": "常规帖",
@@ -63,7 +64,9 @@
       "event": "活动帖",
       "announcement": "公告"
     },
-    "by": "发帖人"
+    "by": "发帖人",
+    "create": "发帖",
+    "selectType": "请选择帖子类型"
   },
   "mapUpload": {
     "dropText": "拖动文件到这里 或",

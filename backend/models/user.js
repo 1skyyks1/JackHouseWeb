@@ -42,11 +42,11 @@ const User = sequelize.define('User', {
     },
     created_time: {
         type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
     },
     updated_time: {
         type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
         onUpdate: DataTypes.NOW,
     },
     refresh_token: {
@@ -55,7 +55,9 @@ const User = sequelize.define('User', {
     }
 }, {
     tableName: 'user',
-    timestamps: false,
+    timestamps: true,
+    createdAt: 'created_time',
+    updatedAt: 'updated_time'
 });
 
 // 导出模型

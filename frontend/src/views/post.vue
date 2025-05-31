@@ -40,7 +40,7 @@
             </el-button>
           </div>
           <div>
-            <div v-html="t('post.content')"></div>
+            <div class="rich-text-content" v-html="t('post.content')"></div>
           </div>
         </el-card>
         <el-card style="margin-top: 10px;" v-loading="commentLoading">
@@ -93,14 +93,14 @@
               v-model="postEditForm.title_zh"
               placeholder="请输入标题"
               style="margin-bottom: 10px"></el-input>
-          <editor v-model:content="postEditForm.content_zh"></editor>
+          <wangEditor v-model="postEditForm.content_zh"></wangEditor>
         </el-tab-pane>
         <el-tab-pane label="English" name="en">
           <el-input
               v-model="postEditForm.title_en"
               placeholder="Please input the title"
               style="margin-bottom: 10px"></el-input>
-          <editor v-model:content="postEditForm.content_en" style="min-height: 300px"></editor>
+          <wangEditor v-model="postEditForm.content_en"></wangEditor>
         </el-tab-pane>
       </el-tabs>
       <div style="margin-top: 10px">
@@ -129,7 +129,7 @@ import { commentByPostId, postCommentCreate, postCommentDelete } from "@/api/pos
 import { dayjs, ElMessage, ElMessageBox } from "element-plus";
 const { locale, mergeLocaleMessage, t } = useI18n();
 import { EditPen, Ticket, Delete, Upload } from '@element-plus/icons-vue'
-import editor from '../components/editor.vue'
+import wangEditor from "@/components/wangEditor.vue";
 import router from "@/router";
 
 const route = useRoute()
@@ -404,5 +404,9 @@ onBeforeMount(() => {
 }
 :deep(.el-dialog) {
   min-width: 400px;
+}
+.rich-text-content :deep(img){
+  max-width: 100%;
+  height: auto;
 }
 </style>

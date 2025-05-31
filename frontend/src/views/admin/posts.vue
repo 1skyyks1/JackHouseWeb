@@ -56,14 +56,14 @@
           v-model="postEditForm.title_zh"
           placeholder="请输入标题"
           style="margin-bottom: 10px"></el-input>
-        <editor v-model:content="postEditForm.content_zh"></editor>
+        <wangEditor v-model="postEditForm.content_zh"></wangEditor>
       </el-tab-pane>
       <el-tab-pane label="English" name="en">
         <el-input
             v-model="postEditForm.title_en"
             placeholder="Please input the title"
             style="margin-bottom: 10px"></el-input>
-        <editor v-model:content="postEditForm.content_en" style="min-height: 300px"></editor>
+        <wangEditor v-model="postEditForm.content_en"></wangEditor>
       </el-tab-pane>
     </el-tabs>
     <div style="margin-top: 10px">
@@ -81,7 +81,7 @@ import { onBeforeMount, reactive, ref } from "vue";
 import { postById, postDelete, postList, postUpdate } from "@/api/post"
 import { dayjs, ElMessage, ElMessageBox } from "element-plus";
 import router from "@/router";
-import editor from "@/components/editor.vue";
+import wangEditor from "@/components/wangEditor.vue"
 
 const posts = ref([])
 const currentPage = ref(1)
@@ -90,7 +90,6 @@ const totalPosts = ref(0)
 
 const postEdit = ref(false)
 const tabName = ref('zh')
-const editForm = ref(null);
 const postEditForm = reactive({
   post_id: null,
   user_id: null,

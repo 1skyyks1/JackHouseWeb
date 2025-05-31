@@ -21,13 +21,12 @@ const Post = sequelize.define('Post', {
     },
     created_time: {
         type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
         comment: '创建时间',
     },
     updated_time: {
         type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-        onUpdate: DataTypes.NOW,
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
         comment: '更新时间',
     },
     status: {
@@ -38,7 +37,9 @@ const Post = sequelize.define('Post', {
     },
 }, {
     tableName: 'post',
-    timestamps: false,
+    timestamps: true,
+    createdAt: 'created_time',
+    updatedAt: 'updated_time'
 });
 
 

@@ -72,6 +72,70 @@ exports.getPostByType = async (req, res) => {
     }
 }
 
+// 获取指定类型帖子列表（有帖子内容），用于主页公告栏
+exports.getPostWithContentByType = async (req, res) => {
+    const { type } = req.params;
+    const { page, pageSize } = req.query;
+    const offset = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
+    const limit = parseInt(pageSize, 10);
+    try{
+        const {count, rows} = await Post.findAndCountAll({
+            where: {type},
+            limit,
+            offset,
+            distinct: true,
+            order: [['created_time', 'DESC']],
+            include: [
+                {
+                    model: PostTranslation,
+                    as: 'translations',
+                    attributes: ['title', 'content', 'language'], // 获取标题和内容
+                },
+                {
+                    model: User,
+                    as: 'user',
+                    attributes: ['user_name', 'role'],
+                }
+            ]
+        })
+
+        const processedPosts = rows.map(post => {
+            const postData = post.toJSON();
+
+            // 提取中文翻译
+            const zhTranslation = postData.translations.find(t => t.language === 'zh') || {};
+            postData.title_zh = zhTranslation.title || null;
+            postData.content_zh = zhTranslation.content || null;
+
+            // 提取英文翻译
+            const enTranslation = postData.translations.find(t => t.language === 'en') || {};
+            postData.title_en = enTranslation.title || null;
+            postData.content_en = enTranslation.content || null;
+
+            // 提取用户信息
+            if (postData.user) {
+                postData.user_name = postData.user.user_name;
+                postData.role = postData.user.role;
+                delete postData.user;
+            }
+
+            delete postData.translations;
+            return postData;
+        });
+
+        res.json({
+            data: processedPosts,
+            page: parseInt(page, 10),
+            pageSize: limit,
+            totalPages: Math.ceil(count / limit),
+            total: count
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: '获取帖子列表失败', error });
+    }
+}
+
 // 获取某个用户的所有帖子
 exports.getPostsByUserId = async (req, res) => {
     const { user_id } = req.params;
@@ -227,9 +291,11 @@ exports.updatePost = async (req, res) => {
         if (!existingPost) {
             return res.status(404).json({ message: '帖子不存在' });
         }
-        existingPost.type = type || existingPost.type;
-        existingPost.status = status || existingPost.status;
+        existingPost.type = type ?? existingPost.type;
+        existingPost.status = status ?? existingPost.status;
         await existingPost.save();
+
+        let translationModified = false;
 
         if (translations && Array.isArray(translations)) {
             for (const { language, title, content } of translations) {
@@ -245,7 +311,7 @@ exports.updatePost = async (req, res) => {
                         existingTranslation.title = title || existingTranslation.title;
                         existingTranslation.content = content || existingTranslation.content;
                         await existingTranslation.save();
-                        console.log(existingTranslation)
+                        translationModified = true;
                     } else {
                         // 如果没有找到该语言的翻译，创建新的翻译记录
                         await PostTranslation.create({
@@ -254,11 +320,15 @@ exports.updatePost = async (req, res) => {
                             title,
                             content
                         });
+                        translationModified = true;
                     }
                 }
             }
+            if (translationModified){ // 当修改帖子内容时，触发updated_time更新
+                existingPost.changed('updated_time', true);
+                await existingPost.save();
+            }
         }
-
         res.json({ message: '帖子更新成功' });
     } catch (error) {
         res.status(500).json({ message: '更新帖子失败', error });

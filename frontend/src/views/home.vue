@@ -26,7 +26,7 @@
                   <el-carousel-item v-for="(notice, index) in notices" :key="index">
                     <div v-loading="noticeLoading">
                       <div class="notice-title">{{ getTitle(notice) }}</div>
-                      <div class="notice-content">{{ getContent(notice) }}</div>
+                      <div class="notice-content" v-html="getContent(notice)"></div>
                     </div>
                   </el-carousel-item>
                 </el-carousel>
@@ -70,7 +70,7 @@
 <script setup>
 import navMenu from '../components/navmenu.vue'
 import { ref, onBeforeMount } from "vue";
-import { postList, postByType } from "@/api/post"
+import { postList, postByType, postWithContentByType } from "@/api/post"
 import { useI18n } from "vue-i18n";
 import { dayjs } from "element-plus";
 import router from "@/router";
@@ -106,9 +106,9 @@ const getContent = (post) => {
 }
 
 const getNotice = () => {
-  postByType(3, 1, 3).then(response => { //获取前三个公告
+  postWithContentByType(3, 1, 3).then(response => {
     notices.value = response.data;
-    noticeLoading.value = false;
+    noticeLoading.value = false
   })
 }
 
@@ -175,5 +175,8 @@ onBeforeMount(() => {
 }
 :deep(.el-divider--horizontal){
   margin: 15px 0 5px;
+}
+.notice-content :deep(img){
+  display: none;
 }
 </style>

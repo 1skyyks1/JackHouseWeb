@@ -49,13 +49,14 @@
     },
     "upload": "Upload your map",
     "noTitle": "No EN title available (>_<)",
-    "noContent": "Sorry... No EN content available (>_<)"
+    "noContent": "<p> Sorry... No EN content available (>_<) </p>"
   },
   "forum": {
     "submit": "Create",
     "cancel": "Cancel",
     "placeholder": {
-      "selectPostType": "Please select a post type"
+      "selectPostType": "Please select a post type",
+      "search": "Please input..."
     },
     "postType": {
       "normal": "Normal Post",
@@ -63,7 +64,9 @@
       "event": "Event",
       "announcement": "Announcement"
     },
-    "by": "by"
+    "by": "by",
+    "create": "Create",
+    "selectType": "Please select a post type"
   },
   "mapUpload": {
     "dropText": "Drop file here or",

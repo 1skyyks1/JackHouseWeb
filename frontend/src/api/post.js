@@ -99,3 +99,14 @@ export function allType3Post(){
         method: 'GET',
     })
 }
+
+export function postWithContentByType(type, page, pageSize){
+    return request({
+        url: '/post/typeWithContent/' + type,
+        method: 'GET',
+        params: {
+            page,
+            pageSize,
+        }
+    })
+}

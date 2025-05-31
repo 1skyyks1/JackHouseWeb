@@ -5,7 +5,7 @@
       <el-col :xs="18" :sm="20" :md="12" :lg="14" :xl="14">
         <el-autocomplete v-model="searchKeyword"
                          :fetch-suggestions="querySearchAsync"
-                         placeholder="Please input"
+                         :placeholder="t('forum.placeholder.search')"
                          @select="handleSelect"
                          debounce="600"
                          :suffix-icon="Search"
@@ -26,7 +26,7 @@
       <el-col :xs="6" :sm="4" :md="4" :lg="2" :xl="2">
         <el-button size="large" class="create-button" plain @click="createNewPost">
           <el-icon><Edit /></el-icon>
-          <span>Create</span>
+          <span>{{ t('forum.create') }}</span>
         </el-button>
       </el-col>
     </el-row>
@@ -147,14 +147,16 @@
               v-model="postForm.title_zh"
               placeholder="请输入标题"
               style="margin-bottom: 10px"></el-input>
-          <editor v-model:content="postForm.content_zh"></editor>
+          <wangEditor v-model="postForm.content_zh"></wangEditor>
+<!--          <editor v-model:content="postForm.content_zh"></editor>-->
         </el-tab-pane>
         <el-tab-pane label="English" name="en">
           <el-input
               v-model="postForm.title_en"
               placeholder="Please input the title"
               style="margin-bottom: 10px"></el-input>
-          <editor v-model:content="postForm.content_en" style="min-height: 300px"></editor>
+          <wangEditor v-model="postForm.content_en"></wangEditor>
+<!--          <editor v-model:content="postForm.content_en" style="min-height: 300px"></editor>-->
         </el-tab-pane>
       </el-tabs>
       <div style="margin-top: 10px">
@@ -175,8 +177,8 @@ import { postSearch, postUpdate, postCreate, allType3Post } from "@/api/post";
 import router from '@/router/index'
 import { Edit, Search } from '@element-plus/icons-vue'
 import { dayjs, ElMessage } from 'element-plus'
-import editor from '../components/editor.vue'
 import { useStore } from "vuex"
+import wangEditor from "@/components/wangEditor.vue";
 
 const store = useStore()
 
@@ -274,6 +276,10 @@ const createNewPost = () => {
 }
 
 const submitForm = () => {
+  if(postForm.type === null){
+    ElMessage.warning(t('forum.selectType'))
+    return
+  }
   const form = {
     user_id : userId.value,
     type: postForm.type,
@@ -294,6 +300,7 @@ const submitForm = () => {
   postCreate(form).then(() => {
     ElMessage.success('success')
     newPost.value = false;
+    getAllType3Post();
   })
 }
 

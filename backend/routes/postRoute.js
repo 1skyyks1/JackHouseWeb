@@ -8,6 +8,9 @@ router.get('/', PostController.getAllPosts);
 // 获取指定类型帖子列表
 router.get('/type/:type', PostController.getPostByType)
 
+// 获取指定类型帖子列表（有帖子内容），用于主页公告栏
+router.get('/typeWithContent/:type', PostController.getPostWithContentByType)
+
 // 获取某个用户的所有帖子
 router.get('/user/:user_id', PostController.getPostsByUserId);
 
