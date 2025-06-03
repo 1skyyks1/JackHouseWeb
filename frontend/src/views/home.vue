@@ -3,7 +3,11 @@
     <navMenu></navMenu>
     <el-row justify="center">
       <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
-        <el-carousel :interval="4000" type="card" height="180px"></el-carousel>
+        <el-carousel :interval="4000" height="180px" indicator-position="none">
+          <el-carousel-item v-for="homeImg in homeImgs" :key="homeImg.img_id" @click="goToPage(homeImg.redirect_url)">
+            <img :src="homeImg.signedUrl" :alt="homeImg.description" style="object-fit: scale-down; width: 100%; height: 100%">
+          </el-carousel-item>
+        </el-carousel>
       </el-col>
     </el-row>
     <el-row justify="center" :gutter="10">
@@ -23,7 +27,7 @@
               </template>
               <div>
                 <el-carousel height="150px" direction="vertical" :autoplay="true" :interval="4000">
-                  <el-carousel-item v-for="(notice, index) in notices" :key="index">
+                  <el-carousel-item v-for="(notice, index) in notices" :key="index" @click="goToPost(notice.post_id)">
                     <div v-loading="noticeLoading">
                       <div class="notice-title">{{ getTitle(notice) }}</div>
                       <div class="notice-content" v-html="getContent(notice)"></div>
@@ -71,6 +75,7 @@
 import navMenu from '../components/navmenu.vue'
 import { ref, onBeforeMount } from "vue";
 import { postList, postByType, postWithContentByType } from "@/api/post"
+import { homeImg } from "@/api/homeImg";
 import { useI18n } from "vue-i18n";
 import { dayjs } from "element-plus";
 import router from "@/router";
@@ -80,8 +85,8 @@ const postLoading = ref(true) // 主页论坛加载
 const noticeLoading = ref(true) // 主页公告加载
 
 const notices = ref([])
-
 const posts = ref([])
+const homeImgs = ref([])
 
 const formatDate = (dateString) => {
   return dayjs(dateString).format('YYYY-MM-DD');
@@ -119,13 +124,24 @@ const getPostList = () => {
   })
 }
 
+const getHomeImg = () => {
+  homeImg().then(response => {
+    homeImgs.value = response.data;
+  })
+}
+
 const goToPost = (postId) => {
   router.push(`/post/${postId}`)
+}
+
+const goToPage = (page) => {
+  router.push(page)
 }
 
 onBeforeMount(() => {
   getPostList();
   getNotice();
+  getHomeImg();
 })
 
 </script>

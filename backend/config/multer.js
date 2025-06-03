@@ -13,6 +13,23 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: storage });
+const imageUpload = multer({
+    storage: storage,
+    limits: { fileSize: 3 * 1024 * 1024 },
+    fileFilter: function (req, file, cb) {
+        const filetypes = /jpeg|jpg|png|gif/;
+        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+        const mimetype = filetypes.test(file.mimetype);
 
-module.exports = upload;
+        if (extname && mimetype) {
+            return cb(null, true);
+        } else {
+            return cb(new Error('只允许上传图片文件'), false);
+        }
+    }
+});
+
+module.exports = {
+    upload: multer({ storage: storage }),
+    imageUpload: imageUpload
+};

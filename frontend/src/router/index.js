@@ -64,6 +64,11 @@ const router = createRouter({
                     name: 'postFiles',
                     component: () => import('../views/admin/postFiles.vue')
                 },
+                {
+                    path: 'homeImgs',
+                    name: 'homeImgs',
+                    component: () => import('../views/admin/homeImgs.vue')
+                }
             ]
         }
     ]

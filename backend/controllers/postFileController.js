@@ -4,11 +4,10 @@ const fs = require('fs')
 const path = require('path')
 const upload = require('../config/multer')
 
-
 // 获取指定帖子的所有投稿
 exports.getFileByPostId = async (req, res) => {
     const { post_id } = req.params;
-    const { page, pageSize } = req.query
+    const { page, pageSize } = req.query;
     const offset = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
     const limit = parseInt(pageSize, 10);
     try {
@@ -97,7 +96,7 @@ exports.createPostFile = async (req, res) => {
 
 // 上传投稿
 exports.uploadPostFile = [
-    upload.single('file'),
+    upload.upload.single('file'),
     async (req, res) => {
         const { post_id, user_id, status } = req.body;
         const file = req.file;
@@ -200,6 +199,7 @@ exports.deletePostFile = async (req, res) => {
         if (!file) {
             return res.status(404).json({ message: '投稿不存在' });
         }
+        await mc.removeObject(process.env.MINIO_HOMEIMG_BUCKET, file.minio_file_name);
         await file.destroy();
         res.json({ message: '删除成功' });
     } catch (error) {

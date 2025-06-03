@@ -3,7 +3,8 @@ const userRoutes = require('./routes/userRoute');
 const authRoutes = require('./routes/authRoute');
 const postRoutes = require('./routes/postRoute');
 const postCommentRoutes = require('./routes/postCommentRoute');
-const postFileRoutes = require('./routes/postFileRoute')
+const postFileRoutes = require('./routes/postFileRoute');
+const homeImgRoutes = require('./routes/homeImgRoute')
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -44,6 +45,7 @@ app.use('/auth', authRoutes);
 app.use('/post', postRoutes);
 app.use('/comment', postCommentRoutes);
 app.use('/postFile', postFileRoutes);
+app.use('/homeImg', homeImgRoutes);
 
 app.listen(port, '0.0.0.0', () => {
     console.log(`Server running on http://localhost:${port}`);

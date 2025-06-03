@@ -103,9 +103,9 @@
 
 <script setup>
 import { Plus } from "@element-plus/icons-vue";
-import {ref, onBeforeMount, reactive, computed} from "vue";
+import { ref, onBeforeMount, reactive, computed } from "vue";
 import { dayjs, ElMessage, ElMessageBox } from "element-plus";
-import {postById, postByType, postCreate, postDelete, postUpdate} from '@/api/post'
+import { postById, postByType, postCreate, postDelete, postUpdate } from '@/api/post'
 import router from "@/router";
 import wangEditor from "@/components/wangEditor.vue"
 import { useStore } from "vuex"

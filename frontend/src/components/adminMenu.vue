@@ -12,6 +12,10 @@
       <el-icon><Bell /></el-icon>
       <span>公告发布</span>
     </el-menu-item>
+    <el-menu-item index="homeImgs" route="/admin/homeImgs">
+      <el-icon><Postcard /></el-icon>
+      <span>头图设置</span>
+    </el-menu-item>
     <el-menu-item index="users" route="/admin/users">
       <el-icon><User /></el-icon>
       <span>用户管理</span>
@@ -29,7 +33,7 @@
 
 <script setup>
 import { useRoute } from "vue-router";
-import { Odometer, Bell, User, ChatLineSquare, DocumentChecked } from "@element-plus/icons-vue"
+import { Odometer, Bell, User, ChatLineSquare, DocumentChecked, Postcard } from "@element-plus/icons-vue"
 
 const route = useRoute();
 </script>
