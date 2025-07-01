@@ -14,7 +14,7 @@
       <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
         <el-row :gutter="10">
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" style="margin-bottom: 10px">
-            <el-card>
+            <el-card shadow="never">
               <template #header>
                 <div class="card-header">
                   <span style="display: flex; align-items: center">
@@ -38,7 +38,7 @@
             </el-card>
           </el-col>
           <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" style="margin-bottom: 10px">
-            <el-card>
+            <el-card shadow="never">
               <template #header>
                 <div class="card-header">
                   <span style="display: flex; align-items: center">
@@ -64,8 +64,26 @@
           </el-col>
         </el-row>
       </el-col>
-      <el-col :xs="24" :sm="24" :md="24" :lg="4" :xl="4">
-        <el-card style="height: 200px"></el-card>
+      <el-col :xs="24" :sm="24" :md="6" :lg="4" :xl="4">
+        <el-card shadow="never">
+          <el-row justify="center" :gutter="10" class="dashboard-stat">
+            <el-col :xs="12" :sm="12" :md="12" :lg="24" :xl="24">
+              <el-statistic :title="t('home.dashboard.user')" :value="userValue" />
+            </el-col>
+            <el-col :xs="12" :sm="12" :md="12" :lg="24" :xl="24">
+              <el-statistic :title="t('home.dashboard.post')" :value="postValue" />
+            </el-col>
+            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
+              <el-countdown :format="countdownFormat" :value="fourthAnni">
+                <template #title>
+                  <div style="display: inline-flex; align-items: center">
+                    {{ t('home.dashboard.anni') }}
+                  </div>
+                </template>
+              </el-countdown>
+            </el-col>
+          </el-row>
+        </el-card>
       </el-col>
     </el-row>
   </div>
@@ -73,8 +91,9 @@
 
 <script setup>
 import navMenu from '../components/navmenu.vue'
-import { ref, onBeforeMount } from "vue";
+import { ref, onBeforeMount, computed } from "vue";
 import { postList, postByType, postWithContentByType } from "@/api/post"
+import { homeDashboard } from "@/api/dashboard"
 import { homeImg } from "@/api/homeImg";
 import { useI18n } from "vue-i18n";
 import { dayjs } from "element-plus";
@@ -87,6 +106,24 @@ const noticeLoading = ref(true) // 主页公告加载
 const notices = ref([])
 const posts = ref([])
 const homeImgs = ref([])
+
+import { useTransition } from '@vueuse/core'
+
+const userCount = ref(0)
+const postCount = ref(0)
+
+const userValue = useTransition(userCount, {
+  duration: 1500,
+})
+const postValue = useTransition(postCount, {
+  duration: 1500,
+})
+
+const fourthAnni = ref(dayjs('2026-06-01 00:00:00').valueOf());
+
+const countdownFormat = computed(() => {
+  return `DD [${t('home.dashboard.day')}] HH:mm:ss`
+})
 
 const formatDate = (dateString) => {
   return dayjs(dateString).format('YYYY-MM-DD');
@@ -130,6 +167,13 @@ const getHomeImg = () => {
   })
 }
 
+const getHomeDashboard = () => {
+  homeDashboard().then(response => {
+    userCount.value = response.userCount;
+    postCount.value = response.postCount;
+  })
+}
+
 const goToPost = (postId) => {
   router.push(`/post/${postId}`)
 }
@@ -142,6 +186,7 @@ onBeforeMount(() => {
   getPostList();
   getNotice();
   getHomeImg();
+  getHomeDashboard();
 })
 
 </script>
@@ -194,5 +239,14 @@ onBeforeMount(() => {
 }
 .notice-content :deep(img){
   display: none;
+}
+.dashboard-stat {
+  text-align: center;
+}
+.dashboard-stat .el-col {
+  margin-bottom: 19px;
+}
+.dashboard-stat .el-col:last-child {
+  margin-bottom: 0;
 }
 </style>

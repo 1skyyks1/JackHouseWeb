@@ -1,4 +1,4 @@
-const { User, Post} = require('../models/index');  // 引入 User 模型
+const { User, Post } = require('../models/index');
 const bcrypt = require('bcryptjs');
 const { Op } = require('sequelize');
 

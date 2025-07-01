@@ -23,7 +23,13 @@
   "home": {
     "by": "by",
     "announcement": "Announcement",
-    "forum": "Forum"
+    "forum": "Forum",
+    "dashboard": {
+      "user": "Registered Users",
+      "post": "Posts Published",
+      "anni": "Countdown to 4th Anniversary",
+      "day": "days"
+    }
   },
   "post": {
     "by": "by",

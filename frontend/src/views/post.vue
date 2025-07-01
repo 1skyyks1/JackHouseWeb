@@ -3,7 +3,7 @@
     <navMenu></navMenu>
     <el-row justify="center">
       <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
-        <el-card v-loading="postLoading">
+        <el-card v-loading="postLoading" shadow="never">
           <template #header>
             <div class="card-header">
               <div class="post-header">
@@ -43,7 +43,7 @@
             <div class="rich-text-content" v-html="t('post.content')"></div>
           </div>
         </el-card>
-        <el-card style="margin-top: 10px;" v-loading="commentLoading">
+        <el-card style="margin-top: 10px;" v-loading="commentLoading" shadow="never">
           <div class="comments">
             <div class="comment-form">
               <el-input

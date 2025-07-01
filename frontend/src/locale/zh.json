@@ -23,7 +23,13 @@
   "home": {
     "by": "发帖人",
     "announcement": "公告",
-    "forum": "论坛"
+    "forum": "论坛",
+    "dashboard": {
+      "user": "注册用户数",
+      "post": "发布帖子数",
+      "anni": "距离四周年庆还有",
+      "day": "天"
+    }
   },
   "post": {
     "by": "发帖人",
