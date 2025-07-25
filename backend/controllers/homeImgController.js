@@ -72,7 +72,8 @@ exports.getHomeImg = async (req, res) => {
 exports.uploadHomeImg = [
     upload.imageUpload.single('file'),
     async (req, res) => {
-        const { user_id, redirect_url, sort_order, description } = req.body;
+        const { redirect_url, sort_order, description } = req.body;
+        const user_id = req.user.user_id;
         const file = req.file;
 
         if (!file) {

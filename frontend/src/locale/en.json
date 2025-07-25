@@ -12,6 +12,7 @@
       "logoutSuccess": "Logged out successfully"
     }
   },
+
   "loginDialog": {
     "username": "Username / Email",
     "password": "Password",
@@ -20,6 +21,7 @@
     "enterUsername": "Enter your username or email",
     "enterPassword": "Enter your password"
   },
+
   "home": {
     "by": "by",
     "announcement": "Announcement",
@@ -31,6 +33,7 @@
       "day": "days"
     }
   },
+
   "post": {
     "by": "by",
     "placeholder": "Enter your comment",
@@ -57,6 +60,7 @@
     "noTitle": "No EN title available (>_<)",
     "noContent": "<p> Sorry... No EN content available (>_<) </p>"
   },
+
   "forum": {
     "submit": "Create",
     "cancel": "Cancel",
@@ -74,6 +78,7 @@
     "create": "Create",
     "selectType": "Please select a post type"
   },
+
   "mapUpload": {
     "dropText": "Drop file here or",
     "clickText": "click to upload",
@@ -83,5 +88,27 @@
     "warning": "Please select a file",
     "success": "File uploaded successfully",
     "upload": "Submit"
+  },
+
+  "user": {
+    "info": {
+      "info": "Info",
+      "uid": "UID",
+      "osuUid": "Osu! UID",
+      "status": "Account Status",
+      "regTime": "Reg. Date",
+      "role": "Role",
+      "osuPage": "Osu! Profile Page",
+      "roleName": {
+        "admin": "Admin",
+        "org": "Organizer",
+        "user": "User"
+      },
+      "statusName": {
+        "active": "Active",
+        "restricted": "Restricted",
+        "banned": "Banned"
+      }
+    }
   }
 }

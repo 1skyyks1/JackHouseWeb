@@ -49,10 +49,6 @@ const User = sequelize.define('User', {
         defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
         onUpdate: DataTypes.NOW,
     },
-    refresh_token: {
-        type: DataTypes.STRING(512),
-        allowNull: true,
-    }
 }, {
     tableName: 'user',
     timestamps: true,

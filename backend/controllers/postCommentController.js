@@ -1,4 +1,5 @@
 const { PostComment, User} = require('../models/index');
+const ROLES = require('../config/roles');
 
 // 获取指定帖子的所有评论
 exports.getCommentsByPostId = async (req, res) => {
@@ -76,7 +77,8 @@ exports.getCommentsByUserId = async (req, res) => {
 
 // 创建评论
 exports.createComment = async (req, res) => {
-    const { post_id, user_id, comment } = req.body;
+    const { post_id, comment } = req.body;
+    const user_id = req.user.user_id;
     try {
         const newComment = await PostComment.create({
             post_id,
@@ -109,13 +111,21 @@ exports.updateComment = async (req, res) => {
 // 删除评论
 exports.deleteComment = async (req, res) => {
     const { comment_id } = req.params;
+    const user_id = req.user.user_id;
+    const role = req.user.role;
     try {
         const comment = await PostComment.findByPk(comment_id);
         if (!comment) {
             return res.status(404).json({ message: '评论不存在' });
         }
-        await comment.destroy();
-        res.json({ message: '评论删除成功' });
+        const isAdmin = role === ROLES.ADMIN;
+        const isOwner = comment.user_id === user_id;
+        if (isAdmin || isOwner) {
+            await comment.destroy();
+            res.json({ message: '评论删除成功' });
+        } else {
+            res.status(403).json({ message: '权限不足，无法删除' });
+        }
     } catch (error) {
         res.status(500).json({ message: '删除评论失败', error });
     }

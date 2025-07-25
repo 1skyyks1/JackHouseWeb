@@ -3,6 +3,7 @@ const mc = require('../config/minio')
 const fs = require('fs')
 const path = require('path')
 const upload = require('../config/multer')
+const ROLES = require('../config/roles')
 
 // 获取指定帖子的所有投稿
 exports.getFileByPostId = async (req, res) => {
@@ -11,7 +12,7 @@ exports.getFileByPostId = async (req, res) => {
     const offset = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
     const limit = parseInt(pageSize, 10);
     try {
-        const { count, rows} = await PostFile.findAndCountAll({
+        const { count, rows } = await PostFile.findAndCountAll({
             where: { post_id },
             limit,
             offset,
@@ -98,7 +99,8 @@ exports.createPostFile = async (req, res) => {
 exports.uploadPostFile = [
     upload.upload.single('file'),
     async (req, res) => {
-        const { post_id, user_id, status } = req.body;
+        const { post_id, status } = req.body;
+        const user_id = req.user.user_id;
         const file = req.file;
 
         if (!file) {
@@ -194,14 +196,22 @@ exports.reviewPostFile = async (req, res) => {
 // 删除投稿
 exports.deletePostFile = async (req, res) => {
     const { file_id } = req.params;
+    const user_id = req.user.user_id;
+    const role = req.user.role;
     try {
         const file = await PostFile.findByPk(file_id);
         if (!file) {
             return res.status(404).json({ message: '投稿不存在' });
         }
-        await mc.removeObject(process.env.MINIO_HOMEIMG_BUCKET, file.minio_file_name);
-        await file.destroy();
-        res.json({ message: '删除成功' });
+        const isAdmin = (role === ROLES.ADMIN || role === ROLES.ORG);
+        const isOwner = file.user_id === user_id;
+        if (isAdmin || isOwner) {
+            await mc.removeObject(process.env.MINIO_HOMEIMG_BUCKET, file.minio_file_name);
+            await file.destroy();
+            res.json({ message: '删除成功' });
+        } else {
+            res.status(403).json({ message: '权限不足，无法删除' });
+        }
     } catch (error) {
         res.status(500).json({ message: '删除失败', error });
     }

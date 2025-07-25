@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const UserController = require('../controllers/userController');
+const checkAuth = require("../middleware/authMiddleware");
+const ROLES = require("../config/roles");
 
 // 创建用户
 router.post('/', UserController.createUser);
@@ -12,9 +14,9 @@ router.get('/', UserController.getUsers);
 router.get('/:user_id', UserController.getUserById);
 
 // 更新用户
-router.put('/:user_id', UserController.updateUser);
+router.put('/:user_id', checkAuth(), UserController.updateUser);
 
 // 删除用户
-router.delete('/:user_id', UserController.deleteUser);
+router.delete('/:user_id', checkAuth([ROLES.ORG,ROLES.ADMIN]), UserController.deleteUser);
 
 module.exports = router;

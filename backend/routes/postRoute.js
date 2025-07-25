@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const PostController = require('../controllers/postController');
+const checkAuth = require("../middleware/authMiddleware");
 
 // 获取所有帖子
 router.get('/', PostController.getAllPosts);
@@ -27,12 +28,12 @@ router.get('/requestPost/:user_id', PostController.getRequestPostByUserId)
 router.get('/:post_id', PostController.getPostById);
 
 // 创建帖子
-router.post('/', PostController.createPost);
+router.post('/', checkAuth(), PostController.createPost);
 
 // 更新帖子
-router.put('/:post_id', PostController.updatePost);
+router.put('/:post_id', checkAuth(), PostController.updatePost);
 
 // 删除帖子
-router.delete('/:post_id', PostController.deletePost);
+router.delete('/:post_id', checkAuth(), PostController.deletePost);
 
 module.exports = router;

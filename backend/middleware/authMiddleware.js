@@ -1,23 +1,38 @@
 const jwt = require('jsonwebtoken');
+const { User } = require('../models/index');
 
-const authMiddleware = (req, res, next) => {
-    // 从请求头中获取 token
-    const token = req.header('Authorization')?.replace('Bearer ', '');
+const checkAuth = (roles = []) => {
+    return async (req, res, next) => {
+        const authHeader = req.headers.authorization;
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return res.status(401).json({ message: '认证失败：无有效Token' });
+        }
+        const token = authHeader.split(' ')[1];
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    if (!token) {
-        return res.status(401).json({ message: '未提供 token，访问被拒绝' });
+            const user = await User.findByPk(decoded.userId, {
+                attributes: {exclude: ['password']}
+            });
+
+            if (!user) {
+                return res.status(401).json({message: '认证失败：用户不存在'});
+            }
+            if (roles.length > 0) {
+                const userRole = user.role;
+                if (!userRole || !roles.includes(userRole)) {
+                    return res.status(403).json({message: '权限不足'})
+                }
+            }
+            req.user = user;
+            next()
+        } catch (error) {
+            if (error.name === 'TokenExpiredError') {
+                return res.status(401).json({ message: '认证失败：Token已过期' });
+            }
+            return res.status(401).json({ message: '认证失败：无效的Token' });
+        }
     }
+}
 
-    try {
-        // 验证 token
-        // 将用户信息附加到请求对象中
-        req.user = jwt.verify(token, process.env.JWT_SECRET); // { userId, role }
-
-        // 继续执行下一个中间件或路由
-        next();
-    } catch (error) {
-        res.status(401).json({ message: '无效的 token', error: error.message });
-    }
-};
-
-module.exports = authMiddleware;
+module.exports = checkAuth;

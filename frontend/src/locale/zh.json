@@ -12,6 +12,7 @@
       "logoutSuccess": "已退出登录"
     }
   },
+
   "loginDialog": {
     "username": "用户名/邮箱",
     "password": "密码",
@@ -20,6 +21,7 @@
     "enterUsername": "输入用户名或邮箱",
     "enterPassword": "输入密码"
   },
+
   "home": {
     "by": "发帖人",
     "announcement": "公告",
@@ -31,6 +33,7 @@
       "day": "天"
     }
   },
+
   "post": {
     "by": "发帖人",
     "placeholder": "输入你的评论",
@@ -57,6 +60,7 @@
     "noTitle": "暂无中文标题 (>_<)",
     "noContent": "<p> 抱歉！暂无中文内容 (>_<) </p>"
   },
+
   "forum": {
     "submit": "创建",
     "cancel": "取消",
@@ -74,6 +78,7 @@
     "create": "发帖",
     "selectType": "请选择帖子类型"
   },
+
   "mapUpload": {
     "dropText": "拖动文件到这里 或",
     "clickText": " 点击选择文件",
@@ -83,5 +88,27 @@
     "warning": "请选择文件",
     "success": "成功上传",
     "upload": "确认上传"
+  },
+
+  "user": {
+    "info": {
+      "info": "信息",
+      "uid": "UID",
+      "osuUid": "Osu! UID",
+      "status": "帐号状态",
+      "regTime": "注册时间",
+      "role": "角色",
+      "osuPage": "Osu! 主页",
+      "roleName": {
+        "admin": "管理",
+        "org": "组织策划",
+        "user": "用户"
+      },
+      "statusName": {
+        "active": "正常",
+        "restricted": "受限",
+        "banned": "封禁"
+      }
+    }
   }
 }

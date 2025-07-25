@@ -15,7 +15,7 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.set('trust proxy', true);
+app.set('trust proxy', 'loopback');
 app.get('/ip', (request, response) => response.send(request.ip))
 
 // 安全中间件
@@ -31,7 +31,7 @@ app.use(cors({
 // API限流
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15分钟
-    max: 100, // 每个IP允许的请求数
+    max: 200, // 每个IP允许的请求数
     standardHeaders: true,
     legacyHeaders: false,
 });

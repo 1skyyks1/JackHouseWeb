@@ -13,7 +13,7 @@
     </template>
     <div>
       <el-scrollbar max-height="90%">
-        <el-table :data="homeImgs" class="announcement-table" v-loading="tableLoading">
+        <el-table :data="homeImgs" class="homeImg-table" v-loading="tableLoading">
           <el-table-column prop="img_id" label="ID" align="center" width="150px"></el-table-column>
           <el-table-column prop="sort_order" label="头图顺序" align="center" width="150px"></el-table-column>
           <el-table-column prop="description" label="描述" align="center" width="300px"></el-table-column>
@@ -106,5 +106,8 @@ onBeforeMount(() => {
 .card-header{
   display: flex;
   justify-content: space-between;
+}
+.homeImg-table{
+  margin-bottom: 10px;
 }
 </style>

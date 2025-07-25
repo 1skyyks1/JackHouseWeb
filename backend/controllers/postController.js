@@ -1,6 +1,7 @@
 const { Post, PostTranslation,User } = require('../models/index');
 const sequelize = require('../config/db')
 const { Op } = require('sequelize');
+const ROLES = require("../config/roles");
 
 // 获取所有帖子
 exports.getAllPosts = async (req, res) => {
@@ -254,7 +255,8 @@ exports.getPostById = async (req, res) => {
 
 // 创建帖子
 exports.createPost = async (req, res) => {
-    const { user_id, type, status, translations } = req.body;
+    const { type, status, translations } = req.body;
+    const user_id = req.user.user_id;
 
     const t = await sequelize.transaction();
 
@@ -286,50 +288,58 @@ exports.createPost = async (req, res) => {
 exports.updatePost = async (req, res) => {
     const { post_id } = req.params;
     const { type, status, translations } = req.body;
+    const user_id = req.user.user_id;
+    const role = req.user.role;
     try {
         const existingPost = await Post.findByPk(post_id);
         if (!existingPost) {
             return res.status(404).json({ message: '帖子不存在' });
         }
-        existingPost.type = type ?? existingPost.type;
-        existingPost.status = status ?? existingPost.status;
-        await existingPost.save();
+        const isAdmin = role === ROLES.ADMIN;
+        const isOwner = existingPost.user_id === user_id;
+        if (isAdmin || isOwner) {
+            existingPost.type = type ?? existingPost.type;
+            existingPost.status = status ?? existingPost.status;
+            await existingPost.save();
 
-        let translationModified = false;
+            let translationModified = false;
 
-        if (translations && Array.isArray(translations)) {
-            for (const { language, title, content } of translations) {
+            if (translations && Array.isArray(translations)) {
+                for (const { language, title, content } of translations) {
 
-                // 如果指定了语言，则更新相应语言的翻译
-                if (language && (title || content)) {
-                    const existingTranslation = await PostTranslation.findOne({
-                        where: { post_id, language }
-                    });
-
-                    if (existingTranslation) {
-                        // 更新已有的翻译
-                        existingTranslation.title = title || existingTranslation.title;
-                        existingTranslation.content = content || existingTranslation.content;
-                        await existingTranslation.save();
-                        translationModified = true;
-                    } else {
-                        // 如果没有找到该语言的翻译，创建新的翻译记录
-                        await PostTranslation.create({
-                            post_id,
-                            language,
-                            title,
-                            content
+                    // 如果指定了语言，则更新相应语言的翻译
+                    if (language && (title || content)) {
+                        const existingTranslation = await PostTranslation.findOne({
+                            where: { post_id, language }
                         });
-                        translationModified = true;
+
+                        if (existingTranslation) {
+                            // 更新已有的翻译
+                            existingTranslation.title = title || existingTranslation.title;
+                            existingTranslation.content = content || existingTranslation.content;
+                            await existingTranslation.save();
+                            translationModified = true;
+                        } else {
+                            // 如果没有找到该语言的翻译，创建新的翻译记录
+                            await PostTranslation.create({
+                                post_id,
+                                language,
+                                title,
+                                content
+                            });
+                            translationModified = true;
+                        }
                     }
                 }
+                if (translationModified){ // 当修改帖子内容时，触发updated_time更新
+                    existingPost.changed('updated_time', true);
+                    await existingPost.save();
+                }
             }
-            if (translationModified){ // 当修改帖子内容时，触发updated_time更新
-                existingPost.changed('updated_time', true);
-                await existingPost.save();
-            }
+            res.json({ message: '帖子更新成功' });
+        } else {
+            res.status(403).json({ message: '权限不足，无法修改' });
         }
-        res.json({ message: '帖子更新成功' });
     } catch (error) {
         res.status(500).json({ message: '更新帖子失败', error });
     }
@@ -338,13 +348,21 @@ exports.updatePost = async (req, res) => {
 // 删除帖子
 exports.deletePost = async (req, res) => {
     const { post_id } = req.params;
+    const user_id = req.user.user_id;
+    const role = req.user.role;
     try {
         const post = await Post.findByPk(post_id);
         if (!post) {
             return res.status(404).json({ message: '帖子不存在' });
         }
-        await post.destroy();
-        res.json({ message: '帖子删除成功' });
+        const isAdmin = role === ROLES.ADMIN;
+        const isOwner = post.user_id === user_id;
+        if (isAdmin || isOwner) {
+            await post.destroy();
+            res.json({ message: '帖子删除成功' });
+        } else {
+            res.status(403).json({ message: '权限不足，无法删除' });
+        }
     } catch (error) {
         res.status(500).json({ message: '删除帖子失败', error });
     }
