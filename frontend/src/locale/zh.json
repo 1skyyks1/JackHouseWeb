@@ -108,7 +108,14 @@
         "active": "正常",
         "restricted": "受限",
         "banned": "封禁"
-      }
+      },
+      "post": "帖子",
+      "postFile": "投稿",
+      "noPost": "{username} 还没有发布过帖子",
+      "noPostFile": "{username} 没有投稿记录",
+      "pending": "待审核",
+      "approved": "通过审核",
+      "rejected": "未通过审核"
     }
   }
 }

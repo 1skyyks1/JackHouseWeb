@@ -36,6 +36,10 @@ const PostFile = sequelize.define('PostFile', {
         allowNull: false,
         defaultValue: 0,
     },
+    feedback: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+    }
 }, {
     tableName: 'post_file',
     timestamps: false,

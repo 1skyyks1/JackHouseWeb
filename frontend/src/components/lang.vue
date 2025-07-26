@@ -41,7 +41,7 @@ const langChange = () => {
 
 <style scoped>
 .select-box{
-  width: 120px;
+  width: 130px;
   height: 40px;
   margin: 8px 20px;
   border-radius: 10px;

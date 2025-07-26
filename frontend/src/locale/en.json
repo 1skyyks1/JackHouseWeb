@@ -108,7 +108,14 @@
         "active": "Active",
         "restricted": "Restricted",
         "banned": "Banned"
-      }
+      },
+      "post": "Posts",
+      "postFile": "Submissions",
+      "noPost": "{username} hasn't shared anything yet.",
+      "noPostFile": "{username} hasn't submitted any maps yet.",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected"
     }
   }
 }

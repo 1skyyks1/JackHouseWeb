@@ -4,8 +4,9 @@
            mode="horizontal"
            class="nav-menu"
            :ellipsis="false">
-    <div class="avatar">
-      <img alt="logo" src="../assets/pic/jackhouse.svg" />
+    <div class="logo">
+      <img alt="logo" src="../assets/pic/jackHouseDark.png" v-if="isDark"/>
+      <img alt="logo" src="../assets/pic/jackHouseLight.png" v-else/>
     </div>
     <div v-if="isMobile" style="">
       <el-menu-item @click="openDrawer">
@@ -268,7 +269,7 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-  window.removeEventListener("resize", updateMenuMode);  // 移除事件监听
+  window.removeEventListener("resize", updateMenuMode);
 });
 
 const updateMenuMode = () => {
@@ -293,11 +294,14 @@ const updateMenuMode = () => {
 .darkModeSvg{
   display: flex;
 }
-.avatar{
+.logo{
   padding: 0 15px 0 15px;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.logo img{
+  height: 80%
 }
 .menu-item{
   padding: 0 30px;
