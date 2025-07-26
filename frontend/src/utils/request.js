@@ -2,7 +2,7 @@ import axios from "axios";
 import router from "../router/index";
 
 const service = axios.create({
-    baseURL: process.env.VUE_APP_BASE_URL, // 后端的基础请求地址
+    baseURL: import.meta.env.VITE_BASE_URL, // 后端的基础请求地址
     timeout: 50000 // 请求超时时间
 });
 
