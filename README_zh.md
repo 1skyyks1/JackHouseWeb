@@ -94,7 +94,7 @@ backend
 | Dotenv       | 环境变量管理                      |
 
 
-## 🚀 Setup
+## 🚀 安装
 开始前，请确保您的开发环境已安装以下软件：
 Node.js（推荐 v18.x 或更高版本）、NPM 或 Yarn、MariaDB 数据库服务...
 
