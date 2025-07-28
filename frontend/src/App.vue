@@ -1,12 +1,19 @@
 <template>
   <div id="app">
-    <RouterView></RouterView>
+    <AuroraBackground>
+      <div class="main-content-wrapper px-2">
+        <RouterView></RouterView>
+      </div>
+    </AuroraBackground>
   </div>
 </template>
 
 <script>
+import AuroraBackground from "@/components/ui/AuroraBackground.vue";
+
 export default {
   name: 'App',
+  components: {AuroraBackground},
 }
 </script>
 
@@ -21,8 +28,12 @@ export default {
 }*/
 body {
   font-family: Manrope, sans-serif;
+  margin: 0;
 }
-#app {
-  padding-top: 30px;
+.main-content-wrapper {
+  padding-top: 70px;
+}
+html, body {
+  overflow-x: hidden;
 }
 </style>

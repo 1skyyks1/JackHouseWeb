@@ -8,6 +8,7 @@ import '@/assets/font/font.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import 'element-plus/theme-chalk/dark/css-vars.css'
 import './style/dark/css-vars.css'
+import './style/tailwind.css'
 import { createI18n } from 'vue-i18n'
 import messages from './locale/index'
 
