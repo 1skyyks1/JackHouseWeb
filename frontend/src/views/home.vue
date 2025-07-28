@@ -2,10 +2,10 @@
   <div>
     <navMenu></navMenu>
     <el-row justify="center">
-      <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
-        <el-carousel :interval="4000" height="180px" indicator-position="none">
+      <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="12">
+        <el-carousel :interval="4000" indicator-position="none" class="responsive-carousel">
           <el-carousel-item v-for="homeImg in homeImgs" :key="homeImg.img_id" @click="goToPage(homeImg.redirect_url)">
-            <img :src="homeImg.signedUrl" :alt="homeImg.description" style="object-fit: scale-down; width: 100%; height: 100%">
+            <img :src="homeImg.signedUrl" :alt="homeImg.description">
           </el-carousel-item>
         </el-carousel>
       </el-col>
@@ -28,9 +28,9 @@
               <div>
                 <el-carousel height="150px" direction="vertical" :autoplay="true" :interval="4000">
                   <el-carousel-item v-for="(notice, index) in notices" :key="index" @click="goToPost(notice.post_id)">
-                    <div v-loading="noticeLoading">
-                      <div class="notice-title">{{ getTitle(notice) }}</div>
-                      <div class="notice-content" v-html="getContent(notice)"></div>
+                    <div v-loading="noticeLoading" class="notice-carousel">
+                      <div class="notice-title line-clamp-1">{{ getTitle(notice) }}</div>
+                      <div class="notice-content line-clamp-5" v-html="getContent(notice)"></div>
                     </div>
                   </el-carousel-item>
                 </el-carousel>
@@ -215,7 +215,7 @@ onBeforeMount(() => {
   cursor: pointer;
 }
 .post-item:hover{
-  transform: scale(1.02);
+  transform: scale(1.01);
   transition: all 0.2s ease;
 }
 .post-item:last-child{
@@ -248,5 +248,40 @@ onBeforeMount(() => {
 }
 .dashboard-stat .el-col:last-child {
   margin-bottom: 0;
+}
+.responsive-carousel :deep(.el-carousel__container) {
+  aspect-ratio: 4 / 1;
+  height: auto !important;
+  max-height: 220px !important;
+  &:hover{
+    cursor: pointer;
+    transform: scale(1.01);
+    transition: all 0.2s ease-in-out;
+  }
+}
+.responsive-carousel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.notice-carousel {
+  &:hover{
+    cursor: pointer;
+  }
+}
+.line-clamp-1,
+.line-clamp-5 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+}
+.line-clamp-1 {
+  -webkit-line-clamp: 1;
+}
+
+.line-clamp-5 {
+  -webkit-line-clamp: 5;
 }
 </style>

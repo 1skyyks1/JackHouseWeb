@@ -2,7 +2,7 @@
   <el-select @change="langChange" v-model="recentLang" :popper-append-to-body="false" class="select-box">
     <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
         <span style="float: left">
-          <img :src="item.icon" alt="" height="20px" style="padding-top: 7px">
+          <img :src="item.icon" alt="" style="padding-top: 7px">
         </span>
       <span style="float: left; padding-left: 5px">{{ item.label }}</span>
     </el-option>
@@ -45,5 +45,11 @@ const langChange = () => {
   height: 40px;
   margin: 8px 20px;
   border-radius: 10px;
+}
+.select-box :deep(.el-select__prefix img){
+  display: block !important;
+  visibility: visible !important;
+  height: 20px !important;
+  width: 20px !important;
 }
 </style>

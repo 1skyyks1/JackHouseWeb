@@ -291,7 +291,11 @@ const updateMenuMode = () => {
   display: flex;
   justify-content: space-between;
 }
+html.dark .darkModeSvg{
+  color: #fff
+}
 .darkModeSvg{
+  color: #000;
   display: flex;
 }
 .logo{
@@ -299,6 +303,7 @@ const updateMenuMode = () => {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 220px;
 }
 .logo img{
   height: 80%
