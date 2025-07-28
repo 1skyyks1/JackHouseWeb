@@ -1,4 +1,4 @@
-const { Post, PostTranslation,User } = require('../models/index');
+const { Post, PostTranslation, User } = require('../models/index');
 const sequelize = require('../config/db')
 const { Op } = require('sequelize');
 const ROLES = require("../config/roles");

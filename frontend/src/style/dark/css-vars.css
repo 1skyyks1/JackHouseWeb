@@ -1,4 +1,4 @@
-html.dark, html.dark body{
+html.dark{
     --el-color-primary: #EE7B33;
     --el-color-primary-light-9: #232323;
     --el-menu-bg-color: #121212;
@@ -7,13 +7,4 @@ html.dark, html.dark body{
 
 :root {
     background-color: #f1f1f1;
-}
-
-@media (prefers-color-scheme: dark) {
-    body {
-        --el-color-primary: #EE7B33;
-        --el-color-primary-light-9: #232323;
-        --el-menu-bg-color: #121212;
-        background-color: #191919;
-    }
 }

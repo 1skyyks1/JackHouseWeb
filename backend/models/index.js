@@ -4,6 +4,9 @@ const PostFile = require('../models/postFile');
 const PostComment = require('../models/postComment');
 const User = require('../models/user');
 const HomeImg = require('../models/homeImg')
+const Pack = require('../models/pack');
+const Tag = require('../models/tag');
+const PackComment = require('../models/packComment');
 
 Post.hasMany(PostTranslation, { foreignKey: 'post_id', onDelete: 'CASCADE', as: 'translations' });
 Post.hasMany(PostFile, { foreignKey: 'post_id', onDelete: 'CASCADE', as: 'files' });
@@ -22,8 +25,26 @@ User.hasMany(Post, { foreignKey: 'user_id', onDelete: 'CASCADE' })
 User.hasMany(PostFile, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 User.hasMany(PostComment, { foreignKey: 'user_id', onDelete: 'CASCADE' })
 User.hasMany(HomeImg, { foreignKey: 'user_id', onDelete: 'CASCADE' })
+User.hasMany(Pack, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 
 HomeImg.belongsTo(User, {foreignKey: 'user_id'})
+
+Pack.belongsToMany(Tag, {
+    through: 'pack_tags',
+    foreignKey: 'pack_id',
+    otherKey: 'tag_id',
+})
+Pack.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+Pack.hasMany(PackComment, { foreignKey: 'pack_id' });
+
+Tag.belongsToMany(Pack, {
+    through: 'pack_tags',
+    foreignKey: 'tag_id',
+    otherKey: 'pack_id'
+})
+
+PackComment.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+PackComment.belongsTo(Pack, { foreignKey: 'pack_id' });
 
 module.exports = {
     Post,
@@ -31,5 +52,8 @@ module.exports = {
     PostFile,
     PostComment,
     User,
-    HomeImg
+    HomeImg,
+    Pack,
+    Tag,
+    PackComment,
 };
