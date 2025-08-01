@@ -11,7 +11,7 @@ const createUser = async (req, res) => {
         const user = await User.create({ user_name, password: hashedPassword, email, role, status, osu_uid, avatar });
         res.status(201).json({ message: '用户创建成功' });
     } catch (err) {
-        res.status(500).json({ message: '创建用户失败', error: err.message });
+        res.status(500).json({ message: '创建用户失败' });
     }
 };
 
@@ -39,7 +39,7 @@ const getUsers = async (req, res) => {
         const totalPages = Math.ceil(count / limit);
         res.status(200).json({ data: rows, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (err) {
-        res.status(500).json({ message: '获取用户列表失败', error: err.message });
+        res.status(500).json({ message: '获取用户列表失败' });
     }
 };
 
@@ -54,7 +54,7 @@ const getUserById = async (req, res) => {
         }
         res.status(200).json({ data: user });
     } catch (err) {
-        res.status(500).json({ message: '获取用户失败', error: err.message });
+        res.status(500).json({ message: '获取用户失败' });
     }
 };
 
@@ -82,7 +82,7 @@ const updateUser = async (req, res) => {
             res.status(403).json({ message: '权限不足，无法修改' });
         }
     } catch (err) {
-        res.status(500).json({ message: '更新用户信息失败', error: err.message });
+        res.status(500).json({ message: '更新用户信息失败' });
     }
 };
 
@@ -96,7 +96,7 @@ const deleteUser = async (req, res) => {
         await user.destroy();
         res.status(200).json({ message: '用户删除成功' });
     } catch (err) {
-        res.status(500).json({ message: '删除用户失败', error: err.message });
+        res.status(500).json({ message: '删除用户失败' });
     }
 };
 

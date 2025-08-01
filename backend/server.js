@@ -6,6 +6,9 @@ const postCommentRoutes = require('./routes/postCommentRoute');
 const postFileRoutes = require('./routes/postFileRoute');
 const homeImgRoutes = require('./routes/homeImgRoute')
 const dashboardRoutes = require('./routes/dashboardRoute')
+const packRoutes = require('./routes/packRoute')
+const tagRoutes = require('./routes/tagRoute')
+const packCommentRoutes = require('./routes/packCommentRoute')
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -48,6 +51,9 @@ app.use('/comment', postCommentRoutes);
 app.use('/postFile', postFileRoutes);
 app.use('/homeImg', homeImgRoutes);
 app.use('/dashboard', dashboardRoutes);
+app.use('/pack', packRoutes);
+app.use('/tag', tagRoutes);
+app.use('/packCom', packCommentRoutes);
 
 app.listen(port, '0.0.0.0', () => {
     console.log(`Server running on http://localhost:${port}`);

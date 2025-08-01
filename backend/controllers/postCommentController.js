@@ -34,7 +34,7 @@ exports.getCommentsByPostId = async (req, res) => {
 
         res.json({ data: result, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error) {
-        res.status(500).json({ message: '获取评论失败', error });
+        res.status(500).json({ message: '获取评论失败' });
     }
 };
 
@@ -50,7 +50,7 @@ exports.getAllComments = async (req, res) => {
         const totalPages = Math.ceil(count / limit)
         res.json({data: rows, page: parseInt(page, 10), pageSize: limit, totalPages, total: count});
     } catch (error) {
-        res.status(500).json({ message: '获取评论失败', error });
+        res.status(500).json({ message: '获取评论失败' });
     }
 };
 
@@ -70,7 +70,7 @@ exports.getCommentsByUserId = async (req, res) => {
         const totalPages = Math.ceil(count / limit);
         res.json({ data: rows, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error){
-        res.status(500).json({ message: '获取评论失败', error });
+        res.status(500).json({ message: '获取评论失败' });
     }
 }
 
@@ -87,7 +87,7 @@ exports.createComment = async (req, res) => {
         });
         res.status(201).json({ message: '创建评论成功' });
     } catch (error) {
-        res.status(500).json({ message: '创建评论失败', error });
+        res.status(500).json({ message: '创建评论失败' });
     }
 };
 
@@ -104,7 +104,7 @@ exports.updateComment = async (req, res) => {
         await existingComment.save();
         res.json({ data: existingComment });
     } catch (error) {
-        res.status(500).json({ message: '更新评论失败', error });
+        res.status(500).json({ message: '更新评论失败' });
     }
 };
 
@@ -127,6 +127,6 @@ exports.deleteComment = async (req, res) => {
             res.status(403).json({ message: '权限不足，无法删除' });
         }
     } catch (error) {
-        res.status(500).json({ message: '删除评论失败', error });
+        res.status(500).json({ message: '删除评论失败' });
     }
 };

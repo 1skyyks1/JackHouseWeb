@@ -70,7 +70,7 @@ const authCallback = async (req, res) => {
         // 重定向到前端完成页面
         res.redirect(`${process.env.FRONTEND_URL}/oauth/complete?token=${token}&userId=${user.user_id}`);
     } catch (error) {
-        res.status(500).json({ message: 'Authentication failed', error: error.message });
+        res.status(500).json({ message: 'Authentication failed' });
     }
 };
 
@@ -101,7 +101,7 @@ const register = async (req, res) => {
 
         res.status(201).json({ message: '用户注册成功', token, userId: user.user_id });
     } catch (error) {
-        res.status(500).json({ message: '注册失败', error: error.message });
+        res.status(500).json({ message: '注册失败' });
     }
 };
 
@@ -135,7 +135,7 @@ const login = async (req, res) => {
 
         res.json({ message: '登录成功', token, userId: user.user_id });
     } catch (error) {
-        res.status(500).json({ message: '登录失败', error: error.message });
+        res.status(500).json({ message: '登录失败' });
     }
 };
 

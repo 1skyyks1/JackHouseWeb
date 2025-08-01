@@ -5,7 +5,7 @@ const checkAuth = (roles = []) => {
     return async (req, res, next) => {
         const authHeader = req.headers.authorization;
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            return res.status(401).json({ message: '认证失败：无有效Token' });
+            return res.status(401).json({ message: 'Please Login' });
         }
         const token = authHeader.split(' ')[1];
         try {
@@ -16,12 +16,12 @@ const checkAuth = (roles = []) => {
             });
 
             if (!user) {
-                return res.status(401).json({message: '认证失败：用户不存在'});
+                return res.status(401).json({ message: 'User not found' });
             }
             if (roles.length > 0) {
                 const userRole = user.role;
                 if (!userRole || !roles.includes(userRole)) {
-                    return res.status(403).json({message: '权限不足'})
+                    return res.status(403).json({ message: '权限不足' })
                 }
             }
             req.user = user;

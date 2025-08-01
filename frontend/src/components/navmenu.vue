@@ -153,7 +153,7 @@
       <el-divider style="margin-bottom: 5px"><span class="else-login">{{ t('loginDialog.elseLogin') }}</span></el-divider>
       <div class="else-login">
         <el-button class="osu-button" @click="osuLogin">
-          <img src="../assets/pic/osu/osu.svg" width="40" />
+          <img src="../assets/pic/osu/osu.svg" alt="osu!" width="40" />
         </el-button>
       </div>
     </form>
@@ -328,6 +328,7 @@ html.dark .darkModeSvg{
   border: none;
   width: 50px;
   height: 50px;
+  padding: 0
 }
 .lang-option{
   margin: 4px 0 0 0;

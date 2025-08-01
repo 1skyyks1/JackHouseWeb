@@ -27,16 +27,16 @@ exports.createPack = async (req, res) => {
         await pack.addTags(tags, { transaction: t });
         await t.commit();
 
-        res.status(201).json({data: pack});
+        res.status(201).json({ data: pack });
     } catch (error) {
         await t.rollback();
-        res.status(500).json({ message: '创建图包失败', error: error.message });
+        res.status(500).json({ message: '创建图包失败' });
     }
 };
 
 // 获取图包列表（带筛选和分页）
 exports.getAllPacks = async (req, res) => {
-    const { page, pageSize, tags } = req.query;
+    const { page, pageSize, searchKeys ,tags } = req.query;
     const offset = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
     const limit = parseInt(pageSize, 10);
     try {
@@ -45,6 +45,7 @@ exports.getAllPacks = async (req, res) => {
             limit,
             offset,
             order: [['created_time', 'DESC']],
+            attributes: { exclude: ['user_id', 'intro'] },
             include: [
                 {
                     model: Tag,
@@ -60,9 +61,18 @@ exports.getAllPacks = async (req, res) => {
             ]
         };
 
+        if (searchKeys) {
+            findOptions.where = {
+                [Op.or]: [
+                    { title: { [Op.like]: `%${searchKeys}%` } },
+                    { creator: { [Op.like]: `%${searchKeys}%` } }
+                ]
+            };
+        }
+
         if (tags) {
             const tagIdArray = Array.isArray(tags) ? tags.map(Number) : [Number(tags)];
-            findOptions.include[0].where = { id: { [Op.in]: tagIdArray } };
+            findOptions.include[0].where = { tag_id: { [Op.in]: tagIdArray } };
         }
 
         const { count, rows } = await Pack.findAndCountAll(findOptions);
@@ -76,7 +86,7 @@ exports.getAllPacks = async (req, res) => {
             data: rows
         });
     } catch (error) {
-        res.status(500).json({ message: '查询图包失败', error: error.message });
+        res.status(500).json({ message: '查询图包失败' });
     }
 };
 
@@ -92,7 +102,7 @@ exports.getPackById = async (req, res) => {
                 },
                 {
                     model: Tag,
-                    as: 'tag',
+                    as: 'tags',
                     attributes: ['tag_id', 'tag_name'],
                     through: { attributes: [] }
                 }
@@ -105,6 +115,6 @@ exports.getPackById = async (req, res) => {
 
         res.status(200).json(pack);
     } catch (error) {
-        res.status(500).json({ message: '获取图包详情失败', error: error.message });
+        res.status(500).json({ message: '获取图包详情失败' });
     }
 };

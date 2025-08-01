@@ -32,7 +32,7 @@ exports.getAllPosts = async (req, res) => {
         const totalPages = Math.ceil(count / limit)
         res.json({ data: result, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error) {
-        res.status(500).json({ message: '获取帖子列表失败', error });
+        res.status(500).json({ message: '获取帖子列表失败' });
     }
 };
 
@@ -69,7 +69,7 @@ exports.getPostByType = async (req, res) => {
         const totalPages = Math.ceil(count / limit);
         res.json({ data: result, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error) {
-        res.status(500).json({ message: '获取帖子列表失败', error });
+        res.status(500).json({ message: '获取帖子列表失败' });
     }
 }
 
@@ -133,7 +133,7 @@ exports.getPostWithContentByType = async (req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({ message: '获取帖子列表失败', error });
+        res.status(500).json({ message: '获取帖子列表失败' });
     }
 }
 
@@ -170,7 +170,7 @@ exports.getPostsByUserId = async (req, res) => {
         const totalPages = Math.ceil(count / limit);
         res.json({ data: result, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error) {
-        res.status(500).json({ message: '获取用户帖子列表失败', error });
+        res.status(500).json({ message: '获取用户帖子列表失败' });
     }
 };
 
@@ -198,7 +198,7 @@ exports.getRequestPostByUserId = async (req, res) => {
         const result = rows.length ? processPosts(rows) : [];
         res.json({ data: result })
     } catch(error){
-        res.status(500).json({ message: '获取用户征稿帖子列表失败', error });
+        res.status(500).json({ message: '获取用户征稿帖子列表失败' });
     }
 }
 
@@ -249,7 +249,7 @@ exports.getPostById = async (req, res) => {
             res.status(404).json({ message: '帖子不存在' });
         }
     } catch (error) {
-        res.status(500).json({ message: '获取帖子失败', error });
+        res.status(500).json({ message: '获取帖子失败' });
     }
 };
 
@@ -280,7 +280,7 @@ exports.createPost = async (req, res) => {
     } catch (error) {
         await t.rollback();
         console.error(error)
-        res.status(500).json({ message: '创建帖子失败', error });
+        res.status(500).json({ message: '创建帖子失败' });
     }
 };
 
@@ -341,7 +341,7 @@ exports.updatePost = async (req, res) => {
             res.status(403).json({ message: '权限不足，无法修改' });
         }
     } catch (error) {
-        res.status(500).json({ message: '更新帖子失败', error });
+        res.status(500).json({ message: '更新帖子失败' });
     }
 };
 
@@ -364,7 +364,7 @@ exports.deletePost = async (req, res) => {
             res.status(403).json({ message: '权限不足，无法删除' });
         }
     } catch (error) {
-        res.status(500).json({ message: '删除帖子失败', error });
+        res.status(500).json({ message: '删除帖子失败' });
     }
 };
 
@@ -413,7 +413,7 @@ exports.searchPosts = async (req, res) => {
         const totalPages = Math.ceil(count / limit);
         res.status(200).json({ data: result, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error) {
-        res.status(500).json({ message: '搜索帖子失败', error });
+        res.status(500).json({ message: '搜索帖子失败' });
     }
 };
 
@@ -449,6 +449,6 @@ exports.getAllType3Posts = async (req, res) => {
 
         res.json({ data: results });
     } catch (error) {
-        res.status(500).json({ message: '获取帖子列表失败', error });
+        res.status(500).json({ message: '获取帖子列表失败' });
     }
 };

@@ -21,7 +21,7 @@ exports.addComment = async (req, res) => {
         });
         res.status(201).json({ message: '创建评论成功' });
     } catch (error) {
-        res.status(500).json({ message: '发表评论失败', error: error.message });
+        res.status(500).json({ message: '发表评论失败' });
     }
 };
 
@@ -53,6 +53,7 @@ exports.getCommentsByPackId = async (req, res) => {
             delete commentData.user;
             return commentData
         })
+
         const totalPages = Math.ceil(count / limit)
 
         res.status(200).json({
@@ -64,6 +65,6 @@ exports.getCommentsByPackId = async (req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({ message: '获取评论列表失败', error: error.message });
+        res.status(500).json({ message: '获取评论列表失败' });
     }
 };

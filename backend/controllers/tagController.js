@@ -6,8 +6,8 @@ exports.getAllTags = async (req, res) => {
         const tags = await Tag.findAll({
             order: [['tag_id', 'ASC']],
         })
-        res.status(200).json(tags);
+        res.status(200).json({ data: tags });
     } catch (err) {
-        res.status(500).json({ message: '获取标签列表失败', error: err.message });
+        res.status(500).json({ message: '获取标签列表失败' });
     }
 }

@@ -11,6 +11,9 @@ import 'element-plus/theme-chalk/dark/css-vars.css'
 import './style/tailwind.css'
 import { createI18n } from 'vue-i18n'
 import messages from './locale/index'
+import { setStore } from "@/utils/request.js";
+
+setStore(store);
 
 const app = createApp(App)
 app.use(ElementPlus)

@@ -36,7 +36,7 @@ exports.getFileByPostId = async (req, res) => {
         const totalPages = Math.ceil(count / limit)
         res.json({ data: result, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error){
-        res.status(500).json({ message: '获取投稿失败', error });
+        res.status(500).json({ message: '获取投稿失败' });
     }
 }
 
@@ -56,7 +56,7 @@ exports.getFileByUserId = async (req, res) => {
         const totalPages = Math.ceil(count / limit)
         res.json({ data: rows, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error){
-        res.status(500).json({ message: '获取投稿失败', error });
+        res.status(500).json({ message: '获取投稿失败' });
     }
 }
 
@@ -74,7 +74,7 @@ exports.getAllPostFiles = async (req, res) => {
         const totalPages = Math.ceil(count / limit);
         res.json({ data: rows, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error) {
-        res.status(500).json({ message: '获取投稿失败', error });
+        res.status(500).json({ message: '获取投稿失败' });
     }
 };
 
@@ -91,7 +91,7 @@ exports.createPostFile = async (req, res) => {
         });
         res.status(201).json({ message: '上传成功' })
     } catch (error) {
-        res.status(500).json({ message: '上传失败', error });
+        res.status(500).json({ message: '上传失败' });
     }
 }
 
@@ -136,7 +136,7 @@ exports.uploadPostFile = [
             if (fs.existsSync(filePath)) {
                 fs.unlinkSync(filePath);
             }
-            res.status(500).json({ message: '文件上传失败', error: error.message });
+            res.status(500).json({ message: '文件上传失败' });
         }
     }
 ];
@@ -156,7 +156,7 @@ exports.postFileUrl = async (req, res) => {
         res.status(200).json({ data: { fileUrl } })
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: '获取投稿URL失败', error: error.message });
+        res.status(500).json({ message: '获取投稿URL失败' });
     }
 }
 
@@ -173,7 +173,7 @@ exports.updatePostFile = async (req, res) => {
         await originalPostFile.update({ file_name, file_url, status });
         res.status(200).json({ message: '投稿更新成功'});
     } catch (err) {
-        res.status(500).json({ message: '更新失败', error: err.message });
+        res.status(500).json({ message: '更新失败' });
     }
 }
 
@@ -189,7 +189,7 @@ exports.reviewPostFile = async (req, res) => {
         await originalPostFile.update({ status });
         res.status(200).json({ message: '投稿审核成功'});
     } catch (err) {
-        res.status(500).json({ message: '更新失败', error: err.message });
+        res.status(500).json({ message: '更新失败' });
     }
 }
 
@@ -213,6 +213,6 @@ exports.deletePostFile = async (req, res) => {
             res.status(403).json({ message: '权限不足，无法删除' });
         }
     } catch (error) {
-        res.status(500).json({ message: '删除失败', error });
+        res.status(500).json({ message: '删除失败' });
     }
 };

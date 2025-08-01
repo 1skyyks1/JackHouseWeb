@@ -25,11 +25,6 @@ const Pack = sequelize.define('Pack', {
         allowNull: false,
         comment: '上传者ID'
     },
-    created_time: {
-        type: DataTypes.DATE,
-        defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
-        comment: '上传时间'
-    },
     osu_bid: {
         type: DataTypes.INTEGER,
         allowNull: true,
@@ -45,11 +40,22 @@ const Pack = sequelize.define('Pack', {
         type: DataTypes.TEXT,
         allowNull: true,
         comment: '介绍'
-    }
+    },
+    created_time: {
+        type: DataTypes.DATE,
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+        comment: '上传时间'
+    },
+    updated_time: {
+        type: DataTypes.DATE,
+        defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
+        comment: '更新时间'
+    },
 },{
     tableName: 'pack',
     timestamps: true,
-    createdAt: 'upload_time',
+    createdAt: 'created_time',
+    updatedAt: 'updated_time',
 });
 
 module.exports = Pack;

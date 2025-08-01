@@ -33,6 +33,7 @@ Pack.belongsToMany(Tag, {
     through: 'pack_tags',
     foreignKey: 'pack_id',
     otherKey: 'tag_id',
+    as: 'tags'
 })
 Pack.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 Pack.hasMany(PackComment, { foreignKey: 'pack_id' });
@@ -40,7 +41,8 @@ Pack.hasMany(PackComment, { foreignKey: 'pack_id' });
 Tag.belongsToMany(Pack, {
     through: 'pack_tags',
     foreignKey: 'tag_id',
-    otherKey: 'pack_id'
+    otherKey: 'pack_id',
+    as: 'packs'
 })
 
 PackComment.belongsTo(User, { foreignKey: 'user_id', as: 'user' });

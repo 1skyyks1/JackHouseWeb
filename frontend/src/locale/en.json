@@ -76,7 +76,8 @@
     },
     "by": "by",
     "create": "Create",
-    "selectType": "Please select a post type"
+    "selectType": "Please select a post type",
+    "noResult": "No result"
   },
 
   "mapUpload": {
@@ -117,5 +118,30 @@
       "approved": "Approved",
       "rejected": "Rejected"
     }
+  },
+
+  "pack": {
+    "pattern": "Pattern:",
+    "difficulty": "Difficulty:",
+    "bpm": "BPM:",
+    "add": "Add",
+    "title": "Title",
+    "creator": "Creator",
+    "addDialogTitle": "Add a unrecorded pack",
+    "refresh": "Reset Tags",
+    "refreshSuccess": "Filters are now reset!",
+    "searchPlaceholder": "Please input pack title or creator keywords...",
+    "osuBID": "Osu! Beatmap Set ID (e.g. 2380503)",
+    "tags": "Tags",
+    "url": "Additional download link (Optional)",
+    "intro": "Description (Optional)",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "validate": {
+      "title": "Please input pack title",
+      "creator": "Please input creator",
+      "osuBID": "Please input Osu! Beatmap Set ID"
+    },
+    "submitSuccess": "Pack added successfully. Thanks for your contribution!"
   }
 }

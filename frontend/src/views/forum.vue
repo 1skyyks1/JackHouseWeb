@@ -12,7 +12,7 @@
                          class="search-input">
           <template #default="{ item }">
             <div v-if="item.isNoResult" class="search-result-item no-result">
-              无结果
+              {{ t('forum.noResult') }}
             </div>
             <div v-else class="search-result-item">
               <div class="search-result-title">{{ item.value }}</div>
@@ -132,6 +132,7 @@
         </el-card>
       </el-col>
     </el-row>
+
     <el-dialog v-model="newPost" style="padding-top: 10px">
       <el-select v-model="postForm.type" :placeholder="t('forum.placeholder.selectPostType')" style="width: 50%">
         <el-option
@@ -148,7 +149,6 @@
               placeholder="请输入标题"
               style="margin-bottom: 10px"></el-input>
           <wangEditor v-model="postForm.content_zh"></wangEditor>
-<!--          <editor v-model:content="postForm.content_zh"></editor>-->
         </el-tab-pane>
         <el-tab-pane label="English" name="en">
           <el-input
@@ -156,7 +156,6 @@
               placeholder="Please input the title"
               style="margin-bottom: 10px"></el-input>
           <wangEditor v-model="postForm.content_en"></wangEditor>
-<!--          <editor v-model:content="postForm.content_en" style="min-height: 300px"></editor>-->
         </el-tab-pane>
       </el-tabs>
       <div style="margin-top: 10px">
@@ -357,6 +356,7 @@ onBeforeMount(() => {
 :deep(.el-input .el-input__wrapper){
   height: 38px;
   border-radius: 7px;
+  margin-top: 1px;
 }
 :deep(.el-input .el-input__inner){
   padding: 0 6px;

@@ -76,7 +76,8 @@
     },
     "by": "发帖人",
     "create": "发帖",
-    "selectType": "请选择帖子类型"
+    "selectType": "请选择帖子类型",
+    "noResult": "无结果"
   },
 
   "mapUpload": {
@@ -117,5 +118,30 @@
       "approved": "通过审核",
       "rejected": "未通过审核"
     }
+  },
+
+  "pack": {
+    "pattern": "键型：",
+    "difficulty": "难度：",
+    "bpm": "BPM：",
+    "add": "添加",
+    "title": "图包名",
+    "creator": "作者",
+    "addDialogTitle": "添加未收录的图包",
+    "refresh": "重置标签",
+    "refreshSuccess": "标签已重置",
+    "searchPlaceholder": "请输入图包名或作者关键词...",
+    "osuBID": "Osu! Beatmap Set ID (如：2380503)",
+    "tags": "标签",
+    "url": "其他图包下载链接 (可选，如谷歌网盘)",
+    "intro": "介绍 (可选)",
+    "cancel": "取消",
+    "confirm": "确认",
+    "validate": {
+      "title": "请输入图包名",
+      "creator": "请输入图包作者",
+      "osuBID": "请输入Osu! Beatmap Set ID"
+    },
+    "submitSuccess": "图包已添加. 感谢你帮助我们收集叠包!"
   }
 }

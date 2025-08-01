@@ -33,7 +33,7 @@ exports.getAllHomeImg = async (req, res) => {
         const totalPages = Math.ceil(count / limit)
         res.json({ data: rows, page: parseInt(page, 10), pageSize: limit, totalPages, total: count })
     } catch (error) {
-        res.status(500).json({ message: '获取头图列表失败', error })
+        res.status(500).json({ message: '获取头图列表失败' })
     }
 }
 
@@ -64,7 +64,7 @@ exports.getHomeImg = async (req, res) => {
 
         res.json({ data: homeImgsPreSigned })
     } catch (error) {
-        res.status(500).json({ message: '获取头图失败', error });
+        res.status(500).json({ message: '获取头图失败' });
     }
 }
 
@@ -109,7 +109,7 @@ exports.uploadHomeImg = [
             if (fs.existsSync(filePath)) {
                 fs.unlinkSync(filePath);
             }
-            res.status(500).json({ message: '头图上传失败', error: error.message });
+            res.status(500).json({ message: '头图上传失败' });
         }
     }
 ];
@@ -130,9 +130,9 @@ exports.updateHomeImg = async (req, res) => {
             return res.status(404).json({ message: '头图不存在' });
         }
         await originalImg.update({ redirect_url, sort_order, description })
-        res.status(200).json({ message: '更新成功'});
+        res.status(200).json({ message: '更新成功' });
     } catch (err) {
-        res.status(500).json({ message: '更新失败', error: err.message });
+        res.status(500).json({ message: '更新失败' });
     }
 }
 
@@ -148,6 +148,6 @@ exports.deleteHomeImg = async (req, res) => {
         await img.destroy();
         res.json({ message: '删除成功' })
     } catch (error) {
-        res.status(500).json({ message: '删除失败', error });
+        res.status(500).json({ message: '删除失败' });
     }
 }
