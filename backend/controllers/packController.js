@@ -113,7 +113,7 @@ exports.getPackById = async (req, res) => {
             return res.status(404).json({ message: '未找到指定的图包' });
         }
 
-        res.status(200).json(pack);
+        res.status(200).json({ data: pack });
     } catch (error) {
         res.status(500).json({ message: '获取图包详情失败' });
     }

@@ -131,17 +131,36 @@
     "refresh": "重置标签",
     "refreshSuccess": "标签已重置",
     "searchPlaceholder": "请输入图包名或作者关键词...",
-    "osuBID": "Osu! Beatmap Set ID (如：2380503)",
+    "osuBID": "Osu! BeatmapSet ID (如：2380503)",
     "tags": "标签",
-    "url": "其他图包下载链接 (可选，如谷歌网盘)",
+    "url": "备用下载链接 (可选，如谷歌网盘)",
     "intro": "介绍 (可选)",
     "cancel": "取消",
     "confirm": "确认",
     "validate": {
       "title": "请输入图包名",
       "creator": "请输入图包作者",
-      "osuBID": "请输入Osu! Beatmap Set ID"
+      "osuBID": "请输入Osu! BeatmapSet ID"
     },
-    "submitSuccess": "图包已添加. 感谢你帮助我们收集叠包!"
+    "submitSuccess": "图包已添加. 感谢你帮助我们收集叠包!",
+    "drawer": {
+      "drawerTitle": "图包信息",
+      "title": "图包名",
+      "creator": "作者",
+      "osuLink": "Osu!",
+      "tags": "标签",
+      "url": "备用下载链接",
+      "intro": "介绍",
+      "added": "添加者",
+      "comment": "评论",
+      "com": {
+        "placeholder": "输入你的评论",
+        "createComment": "发表评论",
+        "login": "请登录后发表评论",
+        "postSuccess": "成功发表评论",
+        "deleteComment": "删除评论",
+        "deleteCommentSuccess": "删除评论成功"
+      }
+    }
   }
 }

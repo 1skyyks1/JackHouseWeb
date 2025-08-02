@@ -1,4 +1,5 @@
 const { PackComment, Pack, User } = require('../models');
+const ROLES = require("../config/roles");
 
 // 在图包下发表评论
 exports.addComment = async (req, res) => {
@@ -66,5 +67,28 @@ exports.getCommentsByPackId = async (req, res) => {
 
     } catch (error) {
         res.status(500).json({ message: '获取评论列表失败' });
+    }
+};
+
+// 删除评论
+exports.deleteComment = async (req, res) => {
+    const { comment_id } = req.params;
+    const user_id = req.user.user_id;
+    const role = req.user.role;
+    try {
+        const comment = await PackComment.findByPk(comment_id);
+        if (!comment) {
+            return res.status(404).json({ message: '评论不存在' });
+        }
+        const isAdmin = role === ROLES.ADMIN;
+        const isOwner = comment.user_id === user_id;
+        if (isAdmin || isOwner) {
+            await comment.destroy();
+            res.json({ message: '评论删除成功' });
+        } else {
+            res.status(403).json({ message: '权限不足，无法删除' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: '删除评论失败' });
     }
 };

@@ -9,4 +9,7 @@ router.post('/', checkAuth(), PackCommentController.addComment)
 // 获取图包评论
 router.get('/:pack_id', PackCommentController.getCommentsByPackId)
 
+// 删除评论
+router.delete('/:comment_id', checkAuth(), PackCommentController.deleteComment);
+
 module.exports = router;

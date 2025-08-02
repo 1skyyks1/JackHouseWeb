@@ -43,7 +43,7 @@
             <div class="rich-text-content" v-html="t('post.content')"></div>
           </div>
         </el-card>
-        <el-card style="margin-top: 10px;" v-loading="commentLoading" shadow="never">
+        <el-card style="margin: 10px 0;" v-loading="commentLoading" shadow="never">
           <div class="comments">
             <div class="comment-form">
               <el-input

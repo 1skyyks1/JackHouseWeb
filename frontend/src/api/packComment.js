@@ -20,4 +20,11 @@ export function packCommentList(page, pageSize, pack_id) {
         }
     })
 }
-router.get('/:pack_id', PackCommentController.getCommentsByPackId)
+
+// 删除图包评论
+export function packCommentDelete(commentId){
+    return request({
+        url: '/packCom/' + commentId,
+        method: 'DELETE',
+    })
+}

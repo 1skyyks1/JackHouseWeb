@@ -34,7 +34,7 @@ async function exchangeCodeForToken(code) {
     return {
         access_token: data.access_token,
         refresh_token: data.refresh_token, // 获取 refresh_token
-        expires_in: data.expires_in, // 获取过期时间
+        expires_in: data.expires_in,
     };
 }
 

@@ -131,17 +131,36 @@
     "refresh": "Reset Tags",
     "refreshSuccess": "Filters are now reset!",
     "searchPlaceholder": "Please input pack title or creator keywords...",
-    "osuBID": "Osu! Beatmap Set ID (e.g. 2380503)",
+    "osuBID": "Osu! BeatmapSet ID (e.g. 2380503)",
     "tags": "Tags",
-    "url": "Additional download link (Optional)",
+    "url": "Backup download link (Optional, e.g. Google Drive)",
     "intro": "Description (Optional)",
     "cancel": "Cancel",
     "confirm": "Confirm",
     "validate": {
       "title": "Please input pack title",
       "creator": "Please input creator",
-      "osuBID": "Please input Osu! Beatmap Set ID"
+      "osuBID": "Please input Osu! BeatmapSet ID"
     },
-    "submitSuccess": "Pack added successfully. Thanks for your contribution!"
+    "submitSuccess": "Pack added successfully. Thanks for your contribution!",
+    "drawer": {
+      "drawerTitle": "Pack Info",
+      "title": "Title",
+      "creator": "Creator",
+      "osuLink": "Osu!",
+      "tags": "Tags",
+      "url": "Backup Link",
+      "intro": "Description",
+      "added": "Added by",
+      "comment": "Comment",
+      "com": {
+        "placeholder": "Enter your comment",
+        "createComment": "Post",
+        "login": "Log in to leave a comment",
+        "postSuccess": "Comment posted successfully",
+        "deleteComment": "Delete",
+        "deleteCommentSuccess": "Deleted Successfully"
+      }
+    }
   }
 }

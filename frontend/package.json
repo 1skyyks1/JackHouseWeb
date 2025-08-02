@@ -20,6 +20,7 @@
     "element-plus": "^2.10.4",
     "lodash": "^4.17.21",
     "lucide-vue-next": "^0.526.0",
+    "qss": "^3.0.0",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.11",
     "tw-animate-css": "^1.3.6",

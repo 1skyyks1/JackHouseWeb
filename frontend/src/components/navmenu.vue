@@ -290,6 +290,7 @@ const updateMenuMode = () => {
   width: 100%;
   display: flex;
   justify-content: space-between;
+  backdrop-filter: blur(8px);
 }
 html.dark .darkModeSvg{
   color: #fff
