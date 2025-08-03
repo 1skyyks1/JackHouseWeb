@@ -391,7 +391,7 @@ const createComment = () => {
     return
   }
   let comment = {
-    pack_id: drawerData.pack_id,
+    pack_id: drawerData.value.pack_id,
     content: newComment.value
   }
   packCommentCreate(comment).then(() => {

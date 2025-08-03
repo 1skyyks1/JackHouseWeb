@@ -81,17 +81,20 @@ backend
 
 ### Backend
 
-| Tech              | Description                                |
-|-------------------|--------------------------------------------|
-| Node.js           | JavaScript runtime environment             |
-| Express.js        | Web application framework for Node.js      |
-| Sequelize         | Promise-based Node.js ORM                  |
-| MariaDB           | Open-source relational database            |
-| JWT               | For implementing JWT-based authentication  |
-| Bcrypt.js         | Password hashing library                   |
-| Multer & MinIO    | File upload handling & object storage      |
-| Helmet & CORS     | App security & cross-origin handling       |
-| Dotenv            | Environment variable management            |
+| Technology           | Description                             |
+|---------------------|---------------------------------------|
+| Node.js             | JavaScript runtime environment        |
+| Express.js          | Node.js web application framework     |
+| Sequelize           | Promise-based Node.js ORM              |
+| MariaDB             | Open-source relational database       |
+| JWT                 | User authentication                   |
+| Bcrypt.js           | Password hashing library               |
+| Multer & MinIO      | File upload handling and object storage |
+| Helmet & CORS       | Application security and cross-origin handling |
+| Dotenv              | Environment variable management        |
+| express-rate-limit  | Basic rate limiting middleware         |
+| i18next             | Internationalization framework         |
+
 
 
 ## 🚀 Setup
