@@ -40,7 +40,7 @@
             </el-button>
           </div>
           <div>
-            <div class="prose max-w-none" v-html="t('post.content')"></div>
+            <div class="prose max-w-none dark:prose-invert" v-html="t('post.content')"></div>
           </div>
         </el-card>
         <el-card style="margin: 10px 0;" v-loading="commentLoading" shadow="never">
