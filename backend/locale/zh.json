@@ -1,0 +1,109 @@
+{
+  "auth": {
+    "invalidState": "无效的 state",
+    "getTokenFailed": "获取 access_token 失败",
+    "getUserFailed": "获取用户信息失败",
+    "authFailed": "授权失败",
+    "emailRegistered": "邮箱已被注册",
+    "registerFailed": "注册失败",
+    "registerSuccess": "用户注册成功",
+    "userNotFound": "用户未找到",
+    "wrongPassword": "密码错误",
+    "loginSuccess": "登录成功",
+    "loginFailed": "登录失败"
+  },
+  "dashboard": {
+    "getCountFailed": "获取用户及帖子数量失败"
+  },
+  "homeImg": {
+    "getListFailed": "获取头图列表失败",
+    "getFailed": "获取头图失败",
+    "uploadNoFile": "没有图片上传",
+    "uploadSuccess": "头图上传成功",
+    "uploadFailed": "头图上传失败",
+    "notFound": "头图不存在",
+    "updateSuccess": "更新成功",
+    "updateFailed": "更新失败",
+    "deleteSuccess": "删除成功",
+    "deleteFailed": "删除失败"
+  },
+  "packComment": {
+    "empty": "评论内容不能为空",
+    "notFound": "要评论的图包不存在",
+    "createSuccess": "创建评论成功",
+    "createFailed": "发表评论失败",
+    "getFailed": "获取评论列表失败",
+    "commentNotExist": "评论不存在",
+    "deleteSuccess": "评论删除成功",
+    "noPermission": "权限不足，无法删除",
+    "deleteFailed": "删除评论失败"
+  },
+  "pack": {
+    "createMissing": "图包名和标签为必填项",
+    "createFailed": "创建图包失败",
+    "getListFailed": "查询图包失败",
+    "notFound": "未找到指定的图包",
+    "getDetailFailed": "获取图包详情失败"
+  },
+  "postComment": {
+    "fetchFailed": "获取评论失败",
+    "notFound": "评论不存在",
+    "createSuccess": "创建评论成功",
+    "createFailed": "创建评论失败",
+    "updateFailed": "更新评论失败",
+    "deleteSuccess": "评论删除成功",
+    "deleteFailed": "删除评论失败",
+    "unauthorized": "权限不足，无法删除"
+  },
+  "post": {
+    "listFailed": "获取帖子列表失败",
+    "notFound": "帖子不存在",
+    "createFailed": "创建帖子失败",
+    "createSuccess": "帖子创建成功",
+    "updateFailed": "更新帖子失败",
+    "updateSuccess": "帖子更新成功",
+    "updateForbidden": "权限不足，无法修改",
+    "deleteFailed": "删除帖子失败",
+    "deleteSuccess": "帖子删除成功",
+    "deleteForbidden": "权限不足，无法删除",
+    "searchFailed": "搜索帖子失败"
+  },
+  "postFile": {
+    "getFailed": "获取投稿失败",
+    "notFound": "投稿不存在",
+    "createSuccess": "上传成功",
+    "createFailed": "上传失败",
+    "uploadSuccess": "文件上传成功",
+    "uploadFailed": "文件上传失败",
+    "noFile": "没有文件上传",
+    "getUrlFailed": "获取投稿URL失败",
+    "updateSuccess": "投稿更新成功",
+    "updateFailed": "更新失败",
+    "reviewSuccess": "投稿审核成功",
+    "deleteSuccess": "删除成功",
+    "deleteFailed": "删除失败",
+    "deleteForbidden": "权限不足，无法删除"
+  },
+  "tag": {
+    "getFailed": "获取标签列表失败"
+  },
+  "user": {
+    "createSuccess": "用户创建成功",
+    "createFailed": "创建用户失败",
+    "listFailed": "获取用户列表失败",
+    "getFailed": "获取用户失败",
+    "notFound": "用户未找到",
+    "updateSuccess": "用户信息更新成功",
+    "updateFailed": "更新用户信息失败",
+    "deleteSuccess": "用户删除成功",
+    "deleteFailed": "删除用户失败",
+    "noPermission": "权限不足，无法修改"
+  },
+  "authMid": {
+    "pleaseLogin": "请登录",
+    "userNotFound": "用户未找到",
+    "permissionDenied": "权限不足",
+    "tokenExpired": "认证失败：Token已过期",
+    "tokenInvalid": "认证失败：无效的Token"
+  }
+}

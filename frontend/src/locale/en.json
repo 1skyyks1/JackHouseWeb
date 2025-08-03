@@ -162,5 +162,14 @@
         "deleteCommentSuccess": "Deleted Successfully"
       }
     }
+  },
+
+  "request": {
+    "unknown": "Unknown Error",
+    "pleaseLogin": "Please Login",
+    "notFound": "Resource Not Found",
+    "networkError": "Network Error, please check your connection",
+    "requestError": "Request Error",
+    "serverError": "Server Exception"
   }
 }

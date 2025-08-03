@@ -32,7 +32,7 @@ exports.getAllPosts = async (req, res) => {
         const totalPages = Math.ceil(count / limit)
         res.json({ data: result, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error) {
-        res.status(500).json({ message: '获取帖子列表失败' });
+        res.status(500).json({ message: req.t('post.listFailed') });
     }
 };
 
@@ -69,7 +69,7 @@ exports.getPostByType = async (req, res) => {
         const totalPages = Math.ceil(count / limit);
         res.json({ data: result, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error) {
-        res.status(500).json({ message: '获取帖子列表失败' });
+        res.status(500).json({ message: req.t('post.listFailed') });
     }
 }
 
@@ -133,7 +133,7 @@ exports.getPostWithContentByType = async (req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({ message: '获取帖子列表失败' });
+        res.status(500).json({ message: req.t('post.listFailed') });
     }
 }
 
@@ -170,7 +170,7 @@ exports.getPostsByUserId = async (req, res) => {
         const totalPages = Math.ceil(count / limit);
         res.json({ data: result, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error) {
-        res.status(500).json({ message: '获取用户帖子列表失败' });
+        res.status(500).json({ message: req.t('post.listFailed') });
     }
 };
 
@@ -198,7 +198,7 @@ exports.getRequestPostByUserId = async (req, res) => {
         const result = rows.length ? processPosts(rows) : [];
         res.json({ data: result })
     } catch(error){
-        res.status(500).json({ message: '获取用户征稿帖子列表失败' });
+        res.status(500).json({ message: req.t('post.listFailed') });
     }
 }
 
@@ -246,10 +246,10 @@ exports.getPostById = async (req, res) => {
         if (post) {
             res.json({ data: post });
         } else {
-            res.status(404).json({ message: '帖子不存在' });
+            res.status(404).json({ message: req.t('post.notFound') });
         }
     } catch (error) {
-        res.status(500).json({ message: '获取帖子失败' });
+        res.status(500).json({ message: req.t('post.listFailed') });
     }
 };
 
@@ -280,7 +280,7 @@ exports.createPost = async (req, res) => {
     } catch (error) {
         await t.rollback();
         console.error(error)
-        res.status(500).json({ message: '创建帖子失败' });
+        res.status(500).json({ message: req.t('post.createFailed') });
     }
 };
 
@@ -293,7 +293,7 @@ exports.updatePost = async (req, res) => {
     try {
         const existingPost = await Post.findByPk(post_id);
         if (!existingPost) {
-            return res.status(404).json({ message: '帖子不存在' });
+            return res.status(404).json({ message: req.t('post.notFound') });
         }
         const isAdmin = role === ROLES.ADMIN;
         const isOwner = existingPost.user_id === user_id;
@@ -336,12 +336,12 @@ exports.updatePost = async (req, res) => {
                     await existingPost.save();
                 }
             }
-            res.json({ message: '帖子更新成功' });
+            res.json({ message: req.t('post.updateSuccess') });
         } else {
-            res.status(403).json({ message: '权限不足，无法修改' });
+            res.status(403).json({ message: req.t('post.updateForbidden') });
         }
     } catch (error) {
-        res.status(500).json({ message: '更新帖子失败' });
+        res.status(500).json({ message: req.t('post.updateFailed') });
     }
 };
 
@@ -359,12 +359,12 @@ exports.deletePost = async (req, res) => {
         const isOwner = post.user_id === user_id;
         if (isAdmin || isOwner) {
             await post.destroy();
-            res.json({ message: '帖子删除成功' });
+            res.json({ message: req.t('post.deleteSuccess') });
         } else {
-            res.status(403).json({ message: '权限不足，无法删除' });
+            res.status(403).json({ message: req.t('post.deleteForbidden') });
         }
     } catch (error) {
-        res.status(500).json({ message: '删除帖子失败' });
+        res.status(500).json({ message: req.t('post.deleteFailed') });
     }
 };
 
@@ -413,7 +413,7 @@ exports.searchPosts = async (req, res) => {
         const totalPages = Math.ceil(count / limit);
         res.status(200).json({ data: result, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error) {
-        res.status(500).json({ message: '搜索帖子失败' });
+        res.status(500).json({ message: req.t('post.searchFailed') });
     }
 };
 
@@ -449,6 +449,6 @@ exports.getAllType3Posts = async (req, res) => {
 
         res.json({ data: results });
     } catch (error) {
-        res.status(500).json({ message: '获取帖子列表失败' });
+        res.status(500).json({ message: req.t('post.listFailed') });
     }
 };

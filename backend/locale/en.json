@@ -1,0 +1,109 @@
+{
+  "auth": {
+    "invalidState": "Invalid state",
+    "getTokenFailed": "Failed to get access token",
+    "getUserFailed": "Failed to get user info",
+    "authFailed": "Authentication failed",
+    "emailRegistered": "Email already registered",
+    "registerFailed": "Registration failed",
+    "registerSuccess": "User registered successfully",
+    "userNotFound": "User not found",
+    "wrongPassword": "Incorrect password",
+    "loginSuccess": "Login successful",
+    "loginFailed": "Login failed"
+  },
+  "dashboard": {
+    "getCountFailed": "Failed to fetch user and post count"
+  },
+  "homeImg": {
+    "getListFailed": "Failed to fetch home image list",
+    "getFailed": "Failed to fetch home images",
+    "uploadNoFile": "No image uploaded",
+    "uploadSuccess": "Home image uploaded successfully",
+    "uploadFailed": "Failed to upload home image",
+    "notFound": "Home image not found",
+    "updateSuccess": "Update successful",
+    "updateFailed": "Update failed",
+    "deleteSuccess": "Delete successful",
+    "deleteFailed": "Delete failed"
+  },
+  "packComment": {
+    "empty": "Comment content cannot be empty",
+    "notFound": "The pack you want to comment on does not exist",
+    "createSuccess": "Comment created successfully",
+    "createFailed": "Failed to post comment",
+    "getFailed": "Failed to fetch comment list",
+    "commentNotExist": "Comment does not exist",
+    "deleteSuccess": "Comment deleted successfully",
+    "noPermission": "Insufficient permissions to delete",
+    "deleteFailed": "Failed to delete comment"
+  },
+  "pack": {
+    "createMissing": "Title and tags are required",
+    "createFailed": "Failed to create pack",
+    "getListFailed": "Failed to fetch packs",
+    "notFound": "Specified pack not found",
+    "getDetailFailed": "Failed to fetch pack details"
+  },
+  "postComment": {
+    "fetchFailed": "Failed to fetch comments",
+    "notFound": "Comment not found",
+    "createSuccess": "Comment created successfully",
+    "createFailed": "Failed to create comment",
+    "updateFailed": "Failed to update comment",
+    "deleteSuccess": "Comment deleted successfully",
+    "deleteFailed": "Failed to delete comment",
+    "unauthorized": "Insufficient permissions to delete"
+  },
+  "post": {
+    "listFailed": "Failed to get post list",
+    "notFound": "Post not found",
+    "createFailed": "Failed to create post",
+    "createSuccess": "Post created successfully",
+    "updateFailed": "Failed to update post",
+    "updateSuccess": "Post updated successfully",
+    "updateForbidden": "Permission denied to modify post",
+    "deleteFailed": "Failed to delete post",
+    "deleteSuccess": "Post deleted successfully",
+    "deleteForbidden": "Permission denied to delete post",
+    "searchFailed": "Failed to search posts"
+  },
+  "postFile": {
+    "getFailed": "Failed to get post files",
+    "notFound": "Post file not found",
+    "createSuccess": "Upload successful",
+    "createFailed": "Upload failed",
+    "uploadSuccess": "File uploaded successfully",
+    "uploadFailed": "File upload failed",
+    "noFile": "No file uploaded",
+    "getUrlFailed": "Failed to get post file URL",
+    "updateSuccess": "Post file updated successfully",
+    "updateFailed": "Update failed",
+    "reviewSuccess": "Post file reviewed successfully",
+    "deleteSuccess": "Deleted successfully",
+    "deleteFailed": "Delete failed",
+    "deleteForbidden": "Permission denied to delete"
+  },
+  "tag": {
+    "getFailed": "Failed to retrieve tag list"
+  },
+  "user": {
+    "createSuccess": "User created successfully",
+    "createFailed": "Failed to create user",
+    "listFailed": "Failed to fetch user list",
+    "getFailed": "Failed to fetch user",
+    "notFound": "User not found",
+    "updateSuccess": "User information updated successfully",
+    "updateFailed": "Failed to update user",
+    "deleteSuccess": "User deleted successfully",
+    "deleteFailed": "Failed to delete user",
+    "noPermission": "Insufficient permissions to update"
+  },
+  "authMid": {
+    "pleaseLogin": "Please login",
+    "userNotFound": "User not found",
+    "permissionDenied": "Permission denied",
+    "tokenExpired": "Authentication failed: Token expired",
+    "tokenInvalid": "Authentication failed: Invalid token"
+  }
+}

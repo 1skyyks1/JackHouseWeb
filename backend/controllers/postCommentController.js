@@ -34,7 +34,7 @@ exports.getCommentsByPostId = async (req, res) => {
 
         res.json({ data: result, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error) {
-        res.status(500).json({ message: '获取评论失败' });
+        res.status(500).json({ message: req.t('postComment.fetchFailed') });
     }
 };
 
@@ -50,7 +50,7 @@ exports.getAllComments = async (req, res) => {
         const totalPages = Math.ceil(count / limit)
         res.json({data: rows, page: parseInt(page, 10), pageSize: limit, totalPages, total: count});
     } catch (error) {
-        res.status(500).json({ message: '获取评论失败' });
+        res.status(500).json({ message: req.t('postComment.fetchFailed') });
     }
 };
 
@@ -70,7 +70,7 @@ exports.getCommentsByUserId = async (req, res) => {
         const totalPages = Math.ceil(count / limit);
         res.json({ data: rows, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error){
-        res.status(500).json({ message: '获取评论失败' });
+        res.status(500).json({ message: req.t('postComment.fetchFailed') });
     }
 }
 
@@ -85,9 +85,9 @@ exports.createComment = async (req, res) => {
             user_id,
             comment,
         });
-        res.status(201).json({ message: '创建评论成功' });
+        res.status(201).json({ message: req.t('postComment.createSuccess') });
     } catch (error) {
-        res.status(500).json({ message: '创建评论失败' });
+        res.status(500).json({ message: req.t('postComment.createFailed') });
     }
 };
 
@@ -98,13 +98,13 @@ exports.updateComment = async (req, res) => {
     try {
         const existingComment = await PostComment.findByPk(comment_id);
         if (!existingComment) {
-            return res.status(404).json({ message: '评论不存在' });
+            return res.status(404).json({ message: req.t('postComment.notFound') });
         }
         existingComment.comment = comment || existingComment.comment;
         await existingComment.save();
         res.json({ data: existingComment });
     } catch (error) {
-        res.status(500).json({ message: '更新评论失败' });
+        res.status(500).json({ message: req.t('postComment.updateFailed') });
     }
 };
 
@@ -116,17 +116,17 @@ exports.deleteComment = async (req, res) => {
     try {
         const comment = await PostComment.findByPk(comment_id);
         if (!comment) {
-            return res.status(404).json({ message: '评论不存在' });
+            return res.status(404).json({ message: req.t('postComment.notFound') });
         }
         const isAdmin = role === ROLES.ADMIN;
         const isOwner = comment.user_id === user_id;
         if (isAdmin || isOwner) {
             await comment.destroy();
-            res.json({ message: '评论删除成功' });
+            res.json({ message: req.t('postComment.deleteSuccess') });
         } else {
-            res.status(403).json({ message: '权限不足，无法删除' });
+            res.status(403).json({ message: req.t('postComment.unauthorized') });
         }
     } catch (error) {
-        res.status(500).json({ message: '删除评论失败' });
+        res.status(500).json({ message: req.t('postComment.deleteFailed') });
     }
 };

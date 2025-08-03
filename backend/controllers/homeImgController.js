@@ -33,7 +33,7 @@ exports.getAllHomeImg = async (req, res) => {
         const totalPages = Math.ceil(count / limit)
         res.json({ data: rows, page: parseInt(page, 10), pageSize: limit, totalPages, total: count })
     } catch (error) {
-        res.status(500).json({ message: '获取头图列表失败' })
+        res.status(500).json({ message: req.t('homeImg.getListFailed') })
     }
 }
 
@@ -64,7 +64,7 @@ exports.getHomeImg = async (req, res) => {
 
         res.json({ data: homeImgsPreSigned })
     } catch (error) {
-        res.status(500).json({ message: '获取头图失败' });
+        res.status(500).json({ message: req.t('homeImg.getFailed') });
     }
 }
 
@@ -77,7 +77,7 @@ exports.uploadHomeImg = [
         const file = req.file;
 
         if (!file) {
-            return res.status(400).json({ message: '没有图片上传' });
+            return res.status(400).json({ message: req.t('homeImg.uploadNoFile') });
         }
 
         const filePath = file.path;
@@ -103,13 +103,13 @@ exports.uploadHomeImg = [
             // 删除临时文件
             fs.unlinkSync(filePath);
 
-            res.status(201).json({ message: '头图上传成功', data: homeImg });
+            res.status(201).json({ message: req.t('homeImg.uploadSuccess'), data: homeImg });
         } catch (error) {
             // 如果上传失败，删除临时文件
             if (fs.existsSync(filePath)) {
                 fs.unlinkSync(filePath);
             }
-            res.status(500).json({ message: '头图上传失败' });
+            res.status(500).json({ message: req.t('homeImg.uploadFailed') });
         }
     }
 ];
@@ -127,12 +127,12 @@ exports.updateHomeImg = async (req, res) => {
     try{
         const originalImg = await HomeImg.findByPk(img_id);
         if(!originalImg){
-            return res.status(404).json({ message: '头图不存在' });
+            return res.status(404).json({ message: req.t('homeImg.notFound') });
         }
         await originalImg.update({ redirect_url, sort_order, description })
-        res.status(200).json({ message: '更新成功' });
+        res.status(200).json({ message: req.t('homeImg.updateSuccess') });
     } catch (err) {
-        res.status(500).json({ message: '更新失败' });
+        res.status(500).json({ message: req.t('homeImg.updateFailed') });
     }
 }
 
@@ -142,12 +142,12 @@ exports.deleteHomeImg = async (req, res) => {
     try {
         const img = await HomeImg.findByPk(img_id);
         if (!img) {
-            return res.status(404).json({ message: '头图不存在' });
+            return res.status(404).json({ message: req.t('homeImg.notFound') });
         }
         await mc.removeObject(process.env.MINIO_HOMEIMG_BUCKET, img.minio_img_name);
         await img.destroy();
-        res.json({ message: '删除成功' })
+        res.json({ message: req.t('homeImg.deleteSuccess') })
     } catch (error) {
-        res.status(500).json({ message: '删除失败' });
+        res.status(500).json({ message: req.t('homeImg.deleteFailed') });
     }
 }

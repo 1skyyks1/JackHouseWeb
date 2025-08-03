@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ElMessage } from 'element-plus';
+import i18n from '../locale/i18n.js'
 
 const service = axios.create({
     baseURL: import.meta.env.VITE_BASE_URL, // 后端的基础请求地址
@@ -15,6 +16,10 @@ export const setStore = (s) => {
 // 请求拦截器
 service.interceptors.request.use(
     (config) => {
+        if (i18n.global.locale.value) {
+            config.headers['Accept-Language'] = i18n.global.locale.value;
+        }
+
         const token = localStorage.getItem('token');
         if (token) {
             config.headers['Authorization'] = 'Bearer ' + token;
@@ -22,11 +27,12 @@ service.interceptors.request.use(
         return config;
     },
     (error) => {
-        this.$message({
-            message: '服务器异常',
+        const t = i18n.global.t.bind(i18n.global);
+        ElMessage({
+            message: t('errors.serverError'),
             type: 'error'
         });
-        console.log(error)
+        return Promise.reject(error);
     }
 );
 
@@ -36,31 +42,32 @@ service.interceptors.response.use(
         return response.data;
     },
     (error) => {
-        let message = 'Unknown Error';
+        const t = i18n.global.t.bind(i18n.global);
+        let message = t('errors.unknown');
         if (error.response) {
             const status = error.response.status;
             const backendMessage = error.response.data.message;
             switch (status) {
                 case 401:
-                    message = backendMessage || 'Please Login';
+                    message = backendMessage || t('errors.pleaseLogin');
                     if (store) {
                         store.dispatch('logout');
                         store.commit('SET_LOGIN_DIALOG', true);
                     }
                     break;
                 case 404:
-                    message = backendMessage || 'Not Found';
+                    message = backendMessage || t('errors.notFound');
                     break;
                 case 500:
-                    message = backendMessage || `${status}`;
+                    message = backendMessage || `${status} - ${t('errors.unknown')}`;
                     break;
                 default:
-                    message = backendMessage || `${status}`;
+                    message = backendMessage || `${status} - ${t('errors.unknown')}`;
             }
         } else if (error.request) {
-            message = 'Network Error';
+            message = t('errors.networkError');
         } else {
-            message = 'Request Error';
+            message = t('errors.requestError');
         }
         ElMessage({
             message: message,

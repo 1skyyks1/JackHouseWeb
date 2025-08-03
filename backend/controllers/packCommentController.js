@@ -7,12 +7,12 @@ exports.addComment = async (req, res) => {
         const { pack_id, content } = req.body;
         const user_id = req.user.user_id;
         if (!content) {
-            return res.status(400).json({ message: '评论内容不能为空' });
+            return res.status(400).json({ message: req.t('packComment.empty') });
         }
 
         const pack = await Pack.findByPk(pack_id);
         if (!pack) {
-            return res.status(404).json({ message: '要评论的图包不存在' });
+            return res.status(404).json({ message: req.t('packComment.notFound') });
         }
 
         const newComment = await PackComment.create({
@@ -20,9 +20,9 @@ exports.addComment = async (req, res) => {
             user_id,
             content
         });
-        res.status(201).json({ message: '创建评论成功' });
+        res.status(201).json({ message: req.t('packComment.createSuccess') });
     } catch (error) {
-        res.status(500).json({ message: '发表评论失败' });
+        res.status(500).json({ message: req.t('packComment.createFailed') });
     }
 };
 
@@ -66,7 +66,7 @@ exports.getCommentsByPackId = async (req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({ message: '获取评论列表失败' });
+        res.status(500).json({ message: req.t('packComment.getFailed') });
     }
 };
 
@@ -78,17 +78,17 @@ exports.deleteComment = async (req, res) => {
     try {
         const comment = await PackComment.findByPk(comment_id);
         if (!comment) {
-            return res.status(404).json({ message: '评论不存在' });
+            return res.status(404).json({ message: req.t('packComment.commentNotExist') });
         }
         const isAdmin = role === ROLES.ADMIN;
         const isOwner = comment.user_id === user_id;
         if (isAdmin || isOwner) {
             await comment.destroy();
-            res.json({ message: '评论删除成功' });
+            res.json({ message: req.t('packComment.deleteSuccess') });
         } else {
-            res.status(403).json({ message: '权限不足，无法删除' });
+            res.status(403).json({ message: req.t('packComment.noPermission') });
         }
     } catch (error) {
-        res.status(500).json({ message: '删除评论失败' });
+        res.status(500).json({ message: req.t('packComment.deleteFailed') });
     }
 };

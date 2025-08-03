@@ -8,6 +8,6 @@ exports.getAllTags = async (req, res) => {
         })
         res.status(200).json({ data: tags });
     } catch (err) {
-        res.status(500).json({ message: '获取标签列表失败' });
+        res.status(500).json({ message: req.t('tag.getFailed') });
     }
 }

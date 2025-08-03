@@ -36,7 +36,7 @@ exports.getFileByPostId = async (req, res) => {
         const totalPages = Math.ceil(count / limit)
         res.json({ data: result, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error){
-        res.status(500).json({ message: '获取投稿失败' });
+        res.status(500).json({ message: req.t('postFile.getFailed') });
     }
 }
 
@@ -56,7 +56,7 @@ exports.getFileByUserId = async (req, res) => {
         const totalPages = Math.ceil(count / limit)
         res.json({ data: rows, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error){
-        res.status(500).json({ message: '获取投稿失败' });
+        res.status(500).json({ message: req.t('postFile.getFailed') });
     }
 }
 
@@ -74,7 +74,7 @@ exports.getAllPostFiles = async (req, res) => {
         const totalPages = Math.ceil(count / limit);
         res.json({ data: rows, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error) {
-        res.status(500).json({ message: '获取投稿失败' });
+        res.status(500).json({ message: req.t('postFile.getFailed') });
     }
 };
 
@@ -89,9 +89,9 @@ exports.createPostFile = async (req, res) => {
             file_url,
             status
         });
-        res.status(201).json({ message: '上传成功' })
+        res.status(201).json({ message: req.t('postFile.createSuccess') })
     } catch (error) {
-        res.status(500).json({ message: '上传失败' });
+        res.status(500).json({ message: req.t('postFile.createFailed') });
     }
 }
 
@@ -104,7 +104,7 @@ exports.uploadPostFile = [
         const file = req.file;
 
         if (!file) {
-            return res.status(400).json({ message: '没有文件上传' });
+            return res.status(400).json({ message: req.t('postFile.noFile') });
         }
 
         const filePath = file.path;
@@ -130,13 +130,13 @@ exports.uploadPostFile = [
             // 删除临时文件
             fs.unlinkSync(filePath);
 
-            res.status(201).json({ message: '文件上传成功', data: postFile });
+            res.status(201).json({ message: req.t('postFile.uploadSuccess'), data: postFile });
         } catch (error) {
             // 如果上传失败，删除临时文件
             if (fs.existsSync(filePath)) {
                 fs.unlinkSync(filePath);
             }
-            res.status(500).json({ message: '文件上传失败' });
+            res.status(500).json({ message: req.t('postFile.uploadFailed') });
         }
     }
 ];
@@ -148,7 +148,7 @@ exports.postFileUrl = async (req, res) => {
     try{
         const postFile = await PostFile.findByPk(file_id);
         if(!postFile) {
-            return res.status(404).json({ message: '投稿不存在' });
+            return res.status(404).json({ message: req.t('postFile.notFound') });
         }
         const fileName = postFile.minio_file_name;
 
@@ -156,7 +156,7 @@ exports.postFileUrl = async (req, res) => {
         res.status(200).json({ data: { fileUrl } })
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: '获取投稿URL失败' });
+        res.status(500).json({ message: req.t('postFile.getUrlFailed') });
     }
 }
 
@@ -168,12 +168,12 @@ exports.updatePostFile = async (req, res) => {
     try {
         const originalPostFile = await PostFile.findByPk(file_id);
         if(!originalPostFile) {
-            return res.status(404).json({ message: '投稿不存在' });
+            return res.status(404).json({ message: req.t('postFile.notFound') });
         }
         await originalPostFile.update({ file_name, file_url, status });
-        res.status(200).json({ message: '投稿更新成功'});
+        res.status(200).json({ message: req.t('postFile.updateSuccess') });
     } catch (err) {
-        res.status(500).json({ message: '更新失败' });
+        res.status(500).json({ message: req.t('postFile.updateFailed') });
     }
 }
 
@@ -184,12 +184,12 @@ exports.reviewPostFile = async (req, res) => {
     try {
         const originalPostFile = await PostFile.findByPk(file_id);
         if(!originalPostFile) {
-            return res.status(404).json({ message: '投稿不存在' });
+            return res.status(404).json({ message: req.t('postFile.notFound') });
         }
         await originalPostFile.update({ status });
-        res.status(200).json({ message: '投稿审核成功'});
+        res.status(200).json({ message: req.t('postFile.reviewSuccess') });
     } catch (err) {
-        res.status(500).json({ message: '更新失败' });
+        res.status(500).json({ message: req.t('postFile.updateFailed') });
     }
 }
 
@@ -201,18 +201,18 @@ exports.deletePostFile = async (req, res) => {
     try {
         const file = await PostFile.findByPk(file_id);
         if (!file) {
-            return res.status(404).json({ message: '投稿不存在' });
+            return res.status(404).json({ message: req.t('postFile.notFound') });
         }
         const isAdmin = (role === ROLES.ADMIN || role === ROLES.ORG);
         const isOwner = file.user_id === user_id;
         if (isAdmin || isOwner) {
             await mc.removeObject(process.env.MINIO_HOMEIMG_BUCKET, file.minio_file_name);
             await file.destroy();
-            res.json({ message: '删除成功' });
+            res.json({ message: req.t('postFile.deleteSuccess') });
         } else {
-            res.status(403).json({ message: '权限不足，无法删除' });
+            res.status(403).json({ message: req.t('postFile.deleteForbidden') });
         }
     } catch (error) {
-        res.status(500).json({ message: '删除失败' });
+        res.status(500).json({ message: req.t('postFile.deleteFailed') });
     }
 };

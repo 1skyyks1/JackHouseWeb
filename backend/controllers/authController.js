@@ -34,20 +34,20 @@ const authCallback = async (req, res) => {
     const { code, state } = req.query;
 
     if (!state) {
-        return res.status(400).json({ message: 'Invalid state' });
+        return res.status(400).json({ message: req.t('auth.invalidState') });
     }
 
     try {
         // 使用 code 换取 access_token
         const tokenResponse = await exchangeCodeForToken(code);
         if (!tokenResponse.access_token) {
-            return res.status(400).json({ message: 'Failed to get access token' });
+            return res.status(400).json({ message: req.t('auth.getTokenFailed') });
         }
 
         // 获取用户信息
         const userInfo = await getUserInfo(tokenResponse.access_token);
         if (!userInfo) {
-            return res.status(400).json({ message: 'Failed to get user info' });
+            return res.status(400).json({ message: req.t('auth.getUserFailed') });
         }
 
         // 查找或创建用户
@@ -70,11 +70,11 @@ const authCallback = async (req, res) => {
         // 重定向到前端完成页面
         res.redirect(`${process.env.FRONTEND_URL}/oauth/complete?token=${token}&userId=${user.user_id}`);
     } catch (error) {
-        res.status(500).json({ message: 'Authentication failed' });
+        res.status(500).json({ message: req.t('auth.authFailed') });
     }
 };
 
-//邮箱注册
+// 邮箱注册
 const register = async (req, res) => {
     const { username, email, password } = req.body;
 
@@ -82,7 +82,7 @@ const register = async (req, res) => {
         // 检查邮箱是否已注册
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser) {
-            return res.status(400).json({ message: '邮箱已被注册' });
+            return res.status(400).json({ message: req.t('auth.emailRegistered') });
         }
 
         // 调用 createUser 创建用户
@@ -99,13 +99,13 @@ const register = async (req, res) => {
         // 生成 JWT
         const token = jwt.sign({ userId: user.user_id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
-        res.status(201).json({ message: '用户注册成功', token, userId: user.user_id });
+        res.status(201).json({ message: req.t('auth.registerSuccess'), token, userId: user.user_id });
     } catch (error) {
-        res.status(500).json({ message: '注册失败' });
+        res.status(500).json({ message: req.t('auth.registerFailed') });
     }
 };
 
-//用户名或邮箱登录
+// 用户名或邮箱登录
 const login = async (req, res) => {
     const { identifier, password } = req.body; // identifier 可以是用户名或邮箱
 
@@ -121,21 +121,21 @@ const login = async (req, res) => {
         });
 
         if (!user) {
-            return res.status(400).json({ message: '用户未找到' });
+            return res.status(400).json({ message: req.t('auth.userNotFound') });
         }
 
         // 验证密码
         const isValidPassword = await bcrypt.compare(password, user.password);
         if (!isValidPassword) {
-            return res.status(400).json({ message: '密码错误' });
+            return res.status(400).json({ message: req.t('auth.wrongPassword') });
         }
 
         // 生成 JWT
         const token = jwt.sign({ userId: user.user_id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
-        res.json({ message: '登录成功', token, userId: user.user_id });
+        res.json({ message: req.t('auth.loginSuccess'), token, userId: user.user_id });
     } catch (error) {
-        res.status(500).json({ message: '登录失败' });
+        res.status(500).json({ message: req.t('auth.loginFailed') });
     }
 };
 

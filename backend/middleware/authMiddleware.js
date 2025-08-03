@@ -5,7 +5,7 @@ const checkAuth = (roles = []) => {
     return async (req, res, next) => {
         const authHeader = req.headers.authorization;
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            return res.status(401).json({ message: 'Please Login' });
+            return res.status(401).json({ message: req.t('authMid.pleaseLogin') });
         }
         const token = authHeader.split(' ')[1];
         try {
@@ -16,21 +16,21 @@ const checkAuth = (roles = []) => {
             });
 
             if (!user) {
-                return res.status(401).json({ message: 'User not found' });
+                return res.status(401).json({ message: req.t('authMid.userNotFound') });
             }
             if (roles.length > 0) {
                 const userRole = user.role;
                 if (!userRole || !roles.includes(userRole)) {
-                    return res.status(403).json({ message: '权限不足' })
+                    return res.status(403).json({ message: req.t('authMid.permissionDenied') })
                 }
             }
             req.user = user;
             next()
         } catch (error) {
             if (error.name === 'TokenExpiredError') {
-                return res.status(401).json({ message: '认证失败：Token已过期' });
+                return res.status(401).json({ message: req.t('auth.pleaseLogin') });
             }
-            return res.status(401).json({ message: '认证失败：无效的Token' });
+            return res.status(401).json({ message: req.t('auth.pleaseLogin') });
         }
     }
 }

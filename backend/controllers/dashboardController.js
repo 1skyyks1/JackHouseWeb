@@ -6,6 +6,6 @@ exports.userAndPostCount = async (req, res) => {
         const userCount = await User.count();
         res.status(200).json({ postCount: postCount, userCount: userCount });
     } catch (err) {
-        res.status(500).json({ message: '获取用户及帖子数量失败' });
+        res.status(500).json({ message: req.t('dashboard.getCountFailed') });
     }
 }

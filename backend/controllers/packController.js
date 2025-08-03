@@ -8,7 +8,7 @@ exports.createPack = async (req, res) => {
     const user_id = req.user.user_id;
 
     if (!title || !Array.isArray(tags)) {
-        return res.status(400).json({ message: '图包名和标签为必填项' });
+        return res.status(400).json({ message: req.t('pack.createMissing') });
     }
 
     const t = await sequelize.transaction();
@@ -30,7 +30,7 @@ exports.createPack = async (req, res) => {
         res.status(201).json({ data: pack });
     } catch (error) {
         await t.rollback();
-        res.status(500).json({ message: '创建图包失败' });
+        res.status(500).json({ message: req.t('pack.createFailed') });
     }
 };
 
@@ -86,7 +86,7 @@ exports.getAllPacks = async (req, res) => {
             data: rows
         });
     } catch (error) {
-        res.status(500).json({ message: '查询图包失败' });
+        res.status(500).json({ message: req.t('pack.getListFailed') });
     }
 };
 
@@ -110,11 +110,11 @@ exports.getPackById = async (req, res) => {
         });
 
         if (!pack) {
-            return res.status(404).json({ message: '未找到指定的图包' });
+            return res.status(404).json({ message: req.t('pack.notFound') });
         }
 
         res.status(200).json({ data: pack });
     } catch (error) {
-        res.status(500).json({ message: '获取图包详情失败' });
+        res.status(500).json({ message: req.t('pack.getDetailFailed') });
     }
 };

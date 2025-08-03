@@ -9,9 +9,9 @@ const createUser = async (req, res) => {
         const { user_name, password, email, role, status, osu_uid, avatar } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await User.create({ user_name, password: hashedPassword, email, role, status, osu_uid, avatar });
-        res.status(201).json({ message: '用户创建成功' });
+        res.status(201).json({ message: req.t('user.createSuccess') });
     } catch (err) {
-        res.status(500).json({ message: '创建用户失败' });
+        res.status(500).json({ message: req.t('user.createFailed') });
     }
 };
 
@@ -39,7 +39,7 @@ const getUsers = async (req, res) => {
         const totalPages = Math.ceil(count / limit);
         res.status(200).json({ data: rows, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (err) {
-        res.status(500).json({ message: '获取用户列表失败' });
+        res.status(500).json({ message: req.t('user.listFailed') });
     }
 };
 
@@ -50,11 +50,11 @@ const getUserById = async (req, res) => {
             attributes: { exclude: ['password'] }
         });
         if (!user) {
-            return res.status(404).json({ message: '用户未找到' });
+            return res.status(404).json({ message: req.t('user.notFound') });
         }
         res.status(200).json({ data: user });
     } catch (err) {
-        res.status(500).json({ message: '获取用户失败' });
+        res.status(500).json({ message: req.t('user.getFailed') });
     }
 };
 
@@ -65,7 +65,7 @@ const updateUser = async (req, res) => {
     try {
         const user = await User.findByPk(req.params.user_id);
         if (!user) {
-            return res.status(404).json({ message: '用户未找到' });
+            return res.status(404).json({ message: req.t('user.notFound') });
         }
         const isAdmin = role === ROLES.ADMIN;
         const isOwner = user.user_id === user_id;
@@ -77,12 +77,12 @@ const updateUser = async (req, res) => {
             } else {
                 await user.update({ user_name, email, role, status, osu_uid, avatar });
             }
-            res.status(200).json({ message: '用户信息更新成功' });
+            res.status(200).json({ message: req.t('user.updateSuccess') });
         } else {
-            res.status(403).json({ message: '权限不足，无法修改' });
+            res.status(403).json({ message: req.t('user.noPermission') });
         }
     } catch (err) {
-        res.status(500).json({ message: '更新用户信息失败' });
+        res.status(500).json({ message: req.t('user.updateFailed') });
     }
 };
 
@@ -91,12 +91,12 @@ const deleteUser = async (req, res) => {
     try {
         const user = await User.findByPk(req.params.user_id);
         if (!user) {
-            return res.status(404).json({ message: '用户未找到' });
+            return res.status(404).json({ message: req.t('user.notFound') });
         }
         await user.destroy();
-        res.status(200).json({ message: '用户删除成功' });
+        res.status(200).json({ message: req.t('user.deleteSuccess') });
     } catch (err) {
-        res.status(500).json({ message: '删除用户失败' });
+        res.status(500).json({ message: req.t('user.deleteFailed') });
     }
 };
 
