@@ -13,6 +13,7 @@
         :defaultConfig="editorConfig"
         :mode="mode"
         @onCreated="handleCreated"
+        class="prose max-w-none"
     />
   </div>
 </template>
