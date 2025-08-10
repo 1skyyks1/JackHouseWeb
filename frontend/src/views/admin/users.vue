@@ -3,17 +3,16 @@
     <el-card shadow="never" class="main-card">
       <template #header>
         <div class="card-header">
-          <span>用户管理</span>
+          <span class="title">用户管理</span>
           <div>
             <el-input
                 v-model="searchQuery"
                 placeholder="用户名搜索"
-                size="small"
                 style="width: 200px; margin-right: 10px"
                 @input="handleSearchInput"
                 :suffix-icon="Search"
             />
-            <el-button type="primary" plain size="small" @click="userAdd = true">
+            <el-button type="primary" plain @click="userAdd = true">
               <el-icon style="margin-right: 3px"><Plus /></el-icon>
               新增用户
             </el-button>
@@ -23,7 +22,7 @@
       <div>
         <el-scrollbar max-height="90%">
           <el-table :data="users" class="user-table" v-loading="userTableLoading">
-            <el-table-column prop="user_id" label="ID" align="center" width="100px"></el-table-column>
+            <el-table-column prop="user_id" label="ID" align="center" width="63px"></el-table-column>
             <el-table-column prop="avatar" label="头像" align="center" width="100px">
               <template v-slot:default="scope">
                 <el-avatar shape="square" :src="scope.row.avatar" style="margin-top: 5px"/>
@@ -46,7 +45,10 @@
             </el-table-column>
             <el-table-column prop="role" label="Osu!" align="center" width="100px">
               <template v-slot:default="scope">
-                <span>{{ scope.row.osu_uid || '未绑定' }}</span>
+                <el-link :href="osuPage(scope.row.osu_uid)" target="_blank" v-if="scope.row.osu_uid">
+                  {{ scope.row.osu_uid }}
+                </el-link>
+                <span v-else>未绑定</span>
               </template>
             </el-table-column>
             <el-table-column prop="created_time" label="注册时间" align="center" width="150px">
@@ -59,7 +61,7 @@
                 {{ formatDate(scope.row.updated_time) }}
               </template>
             </el-table-column>
-            <el-table-column prop="created_time" label="操作" align="center" width="210px">
+            <el-table-column prop="created_time" label="操作" align="center" width="250px">
               <template v-slot:default="scope">
                 <el-button type="primary" plain size="small" @click="enterUserPage(scope.row.user_id)">主页</el-button>
                 <el-button type="success" plain size="small" @click="editUser(scope.row.user_id)">修改</el-button>
@@ -159,7 +161,7 @@ import { debounce } from 'lodash';
 const users = ref([])
 const searchQuery = ref('');
 const currentPage = ref(1)
-const pageSize = ref(8)
+const pageSize = ref(9)
 const totalUsers = ref(0)
 
 const userTableLoading = ref(false)
@@ -190,6 +192,9 @@ const formRules = reactive({
   ],
 })
 
+const osuPage = (osuUid) => {
+  return 'https://osu.ppy.sh/users/' + osuUid
+}
 
 const getUserList = () => {
   userTableLoading.value = true;
@@ -324,5 +329,9 @@ onBeforeMount(() => {
 }
 .user-table{
   margin-bottom: 10px;
+}
+.title{
+  display: flex;
+  align-items: center;
 }
 </style>

@@ -31,7 +31,7 @@ export function homeImgCreate(data){
 
 export function homeImgUpdate(imgId, data){
     return request({
-        url: '/homeImg' + imgId,
+        url: '/homeImg/' + imgId,
         method: 'PUT',
         data: data
     })

@@ -170,7 +170,7 @@ exports.updatePostFile = async (req, res) => {
         if(!originalPostFile) {
             return res.status(404).json({ message: req.t('postFile.notFound') });
         }
-        await originalPostFile.update({ file_name, file_url, status });
+        await originalPostFile.update({ file_name, file_url });
         res.status(200).json({ message: req.t('postFile.updateSuccess') });
     } catch (err) {
         res.status(500).json({ message: req.t('postFile.updateFailed') });
@@ -179,14 +179,14 @@ exports.updatePostFile = async (req, res) => {
 
 // 审核投稿
 exports.reviewPostFile = async (req, res) => {
-    const { status } = req.body;
+    const { status, feedback } = req.body;
     const { file_id } = req.params;
     try {
         const originalPostFile = await PostFile.findByPk(file_id);
         if(!originalPostFile) {
             return res.status(404).json({ message: req.t('postFile.notFound') });
         }
-        await originalPostFile.update({ status });
+        await originalPostFile.update({ status, feedback });
         res.status(200).json({ message: req.t('postFile.reviewSuccess') });
     } catch (err) {
         res.status(500).json({ message: req.t('postFile.updateFailed') });
@@ -206,7 +206,7 @@ exports.deletePostFile = async (req, res) => {
         const isAdmin = (role === ROLES.ADMIN || role === ROLES.ORG);
         const isOwner = file.user_id === user_id;
         if (isAdmin || isOwner) {
-            await mc.removeObject(process.env.MINIO_HOMEIMG_BUCKET, file.minio_file_name);
+            await mc.removeObject(process.env.MINIO_POSTFILES_BUCKET, file.minio_file_name);
             await file.destroy();
             res.json({ message: req.t('postFile.deleteSuccess') });
         } else {

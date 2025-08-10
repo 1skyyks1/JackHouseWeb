@@ -94,11 +94,17 @@
           <div v-for="(file, index) in postFileList" :key="index" class="post-item">
             <div class="post-title">{{ file.file_name }}
               <div class="post-info">
-                <div>
-                  <el-tag v-if="file.status === 0" type="warning">{{ t('user.info.pending') }}</el-tag>
-                  <el-tag v-else-if="file.status === 1" type="success">{{ t('user.info.approved') }}</el-tag>
-                  <el-tag v-else type="danger">{{ t('user.info.rejected') }}</el-tag>
-                </div>
+                <el-popover
+                    placement="top-start"
+                    :width="200"
+                    trigger="hover"
+                    :content="file.feedback">
+                  <template #reference>
+                    <el-tag v-if="file.status === 0" type="warning">{{ t('user.info.pending') }}</el-tag>
+                    <el-tag v-else-if="file.status === 1" type="success">{{ t('user.info.approved') }}</el-tag>
+                    <el-tag v-else type="danger">{{ t('user.info.rejected') }}</el-tag>
+                  </template>
+                </el-popover>
                 <span class="post-time">{{ formatDate(file.created_time) }}</span>
               </div>
             </div>

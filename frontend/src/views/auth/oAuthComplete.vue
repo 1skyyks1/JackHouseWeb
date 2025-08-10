@@ -7,6 +7,8 @@ import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { ElMessage } from "element-plus";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n()
 
 const router = useRouter()
 const store = useStore()
@@ -23,11 +25,10 @@ onBeforeMount(() => {
     localStorage.setItem('userId', userId);
     store.commit('setLogin', userId)
     router.push(redirectTo)
-    ElMessage.success('授权登录成功')
+    ElMessage.success(t('menu.message.loginSuccess'))
   }
   else{
     router.push('/')
-    ElMessage.error('授权登录错误')
   }
 })
 </script>

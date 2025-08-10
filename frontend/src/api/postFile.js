@@ -66,7 +66,7 @@ export function postFileReview(fileId, data){
 // 删除投稿
 export function postFileDelete(fileId){
     return request({
-        url: '/post/' + fileId,
+        url: '/postFile/' + fileId,
         method: 'DELETE'
     })
 }

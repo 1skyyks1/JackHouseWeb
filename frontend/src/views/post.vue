@@ -34,7 +34,7 @@
             </div>
           </div>
           <el-divider></el-divider>
-          <div v-if="postType === 1">
+          <div v-if="postType === 1" style="margin-bottom: 8px">
             <el-button type="danger" plain :icon="Upload" @click="uploadFile">
               {{ t('post.upload') }}
             </el-button>

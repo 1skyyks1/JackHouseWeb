@@ -2,9 +2,9 @@
   <el-card shadow="never" class="main-card">
     <template #header>
       <div class="card-header">
-        <span>投稿审核</span>
+        <span class="title">投稿审核</span>
         <div>
-          <el-select v-model="selectPostId" style="width: 240px;" size="small" @change="selectRequest">
+          <el-select v-model="selectPostId" style="width: 240px;" @change="selectRequest">
             <el-option v-for="post in requestList"
                        :key="post.post_id"
                        :value="post.post_id"
@@ -17,7 +17,7 @@
     <div>
       <el-scrollbar max-height="90%">
         <el-table :data="fileList" class="file-table" v-loading="fileTableLoading">
-          <el-table-column prop="file_name" label="文件名" align="center" width="550px"></el-table-column>
+          <el-table-column prop="file_name" label="文件名" align="center" width="573px"></el-table-column>
           <el-table-column prop="user_name" label="投稿人" align="center" width="200px"></el-table-column>
           <el-table-column prop="status" label="状态" align="center" width="100px">
             <template v-slot:default="scope">
@@ -26,16 +26,16 @@
               <el-tag v-else type="danger">不通过</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="uploaded_time" label="上传时间" align="center" width="150px">
+          <el-table-column prop="uploaded_time" label="上传时间" align="center" width="120px">
             <template v-slot:default="scope">
               {{ formatDate(scope.row.created_time) }}
             </template>
           </el-table-column>
-          <el-table-column prop="created_time" label="操作" align="center" width="240px">
+          <el-table-column prop="created_time" label="操作" align="center" width="250px">
             <template v-slot:default="scope">
               <el-button type="primary" plain size="small" @click="downloadFile(scope.row.file_id)">下载</el-button>
-              <el-button type="success" plain size="small" @click="approve(scope.row.file_id)" :disabled="scope.row.status === 1">通过</el-button>
-              <el-button type="danger" plain size="small" @click="reject(scope.row.file_id)" :disabled="scope.row.status === 2">不通过</el-button>
+              <el-button type="warning" plain size="small" @click="reviewFile(scope.row.file_id)" :disabled="scope.row.status !== 0">审核</el-button>
+              <el-button type="danger" plain size="small" @click="deleteFile(scope.row.file_id)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -48,13 +48,32 @@
       </el-scrollbar>
     </div>
   </el-card>
+
+  <el-dialog v-model="fileReview" style="padding-top: 10px" width="400px">
+    <el-form :model="reviewForm">
+      <el-form-item>
+        <el-radio-group v-model="reviewForm.result">
+          <el-radio value="1">通过</el-radio>
+          <el-radio value="2">不通过</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="反馈">
+        <el-input type="textarea" v-model="reviewForm.feedback" :rows="2"></el-input>
+      </el-form-item>
+    </el-form>
+    <div>
+      <el-button type="success" @click="submitReview">
+        <span>确定审核</span>
+      </el-button>
+    </div>
+  </el-dialog>
 </template>
 
 <script setup>
 import { computed, onBeforeMount, reactive, ref } from "vue";
 import { dayjs, ElMessage, ElMessageBox } from "element-plus";
 import router from "@/router";
-import { postFileList, postFileByPostId, postFileReview, postFileUrl } from "@/api/postFile"
+import { postFileList, postFileByPostId, postFileReview, postFileUrl, postFileDelete } from "@/api/postFile"
 import { requestByUserId } from "@/api/post"
 import { useStore } from "vuex"
 import { useI18n } from 'vue-i18n';
@@ -71,6 +90,13 @@ const userId = computed(() => store.state.userId);
 const requestList = ref([])
 const selectPostId = ref()
 const fileTableLoading = ref(false)
+
+const fileReview = ref(false)
+const reviewForm = reactive({
+  file_id: null,
+  result: null,
+  feedback: ''
+})
 
 const formatDate = (dateString) => {
   return dayjs(dateString).format('YYYY-MM-DD');
@@ -103,30 +129,49 @@ const handlePageChange = (page) => {
   getPostFileByPostId();
 };
 
-const approve = async (fileId) => {
-  const newStatus = {
-    status: 1
-  }
-  await postFileReview(fileId, newStatus).then(() => {
-    ElMessage.success('审核成功')
-  })
-  getPostFileByPostId();
-}
-
-const reject = async (fileId) => {
-  const newStatus = {
-    status: 2
-  }
-  await postFileReview(fileId, newStatus).then(() => {
-    ElMessage.success('审核成功')
-  })
-  getPostFileByPostId();
-}
-
 const downloadFile = (fileId) => {
   postFileUrl(fileId).then(response => {
     const url = response.data.fileUrl;
     window.open(url);
+  })
+}
+
+const resetForm = () => {
+  reviewForm.file_id = null;
+  reviewForm.result = null;
+  reviewForm.feedback = '';
+}
+
+const reviewFile = (fileId) => {
+  fileReview.value = true;
+  reviewForm.file_id = fileId;
+}
+
+const submitReview = () => {
+  const updateData = {
+    status: reviewForm.result,
+    feedback: reviewForm.feedback,
+  };
+  postFileReview(reviewForm.file_id, updateData).then(response => {
+    fileReview.value = false;
+    resetForm();
+    getPostFileByPostId();
+  })
+}
+
+const deleteFile = (fileId) => {
+  ElMessageBox.confirm(
+      '请注意删除不可还原，确认删除？',
+      'Warning',
+      {
+        confirmButtonText: '确认删除',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+  ).then(() => {
+    postFileDelete(fileId).then(response => {
+      getPostFileByPostId();
+    })
   })
 }
 
@@ -145,5 +190,9 @@ onBeforeMount(() => {
 }
 .file-table{
   margin-bottom: 10px;
+}
+.title{
+  display: flex;
+  align-items: center;
 }
 </style>

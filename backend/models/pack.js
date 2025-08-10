@@ -36,10 +36,21 @@ const Pack = sequelize.define('Pack', {
         allowNull: true,
         comment: '其他下载url'
     },
+    type: {
+        type: DataTypes.TINYINT,
+        allowNull: false,
+        comment: '图包类型（0：练习包，1：综合包，2：段位类）'
+    },
     intro: {
         type: DataTypes.TEXT,
         allowNull: true,
         comment: '介绍'
+    },
+    is_recommend:{
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+        comment: '是否推荐（true：推荐）'
     },
     created_time: {
         type: DataTypes.DATE,

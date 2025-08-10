@@ -10,7 +10,7 @@
     </el-menu-item>
     <el-menu-item index="announcement" route="/admin/announcement">
       <el-icon><Bell /></el-icon>
-      <span>公告发布</span>
+      <span>公告管理</span>
     </el-menu-item>
     <el-menu-item index="homeImgs" route="/admin/homeImgs">
       <el-icon><Postcard /></el-icon>
