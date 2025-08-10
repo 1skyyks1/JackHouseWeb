@@ -124,6 +124,11 @@
     "pattern": "Pattern:",
     "difficulty": "Difficulty:",
     "bpm": "BPM:",
+    "practice": "Practice",
+    "collection": "Collection",
+    "dan": "Dan",
+    "typePopover": "Collection: various patterns, BPMs, diffs in single pack",
+    "type": "Type",
     "add": "Add",
     "title": "Title",
     "creator": "Creator",
@@ -140,7 +145,8 @@
     "validate": {
       "title": "Please input pack title",
       "creator": "Please input creator",
-      "osuBID": "Please input Osu! BeatmapSet ID"
+      "osuBID": "Please input Osu! BeatmapSet ID",
+      "type": "Please select type"
     },
     "submitSuccess": "Pack added successfully. Thanks for your contribution!",
     "drawer": {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <navMenu></navMenu>
-    <el-row justify="center" :gutter="4" style="margin-bottom: 10px">
+    <el-row justify="center" :gutter="4" style="margin-bottom: 6px">
       <el-col :xs="18" :sm="18" :md="12" :lg="12" :xl="12">
         <el-input v-model="searchKeyword"
                   :prefix-icon="Search"
@@ -24,20 +24,32 @@
         </el-button>
       </el-col>
     </el-row>
-    <el-row justify="center" style="margin-bottom: 10px" :gutter="10" v-show="showTags">
+    <el-row justify="center" style="margin-bottom: 6px" :gutter="4" v-show="showTags">
       <el-col :xs="24" :sm="24" :md="12" :lg="14" :xl="14">
         <el-card shadow="never" class="tag-card">
+          <div class="tag-box ml-2">
+            <el-radio-group v-model="packType" @change="refreshTagsWhenChangeType">
+              <el-radio :value="0">{{ t('pack.practice') }}</el-radio>
+              <el-radio :value="1">{{ t('pack.collection') }}</el-radio>
+              <el-radio :value="2">{{ t('pack.dan') }}</el-radio>
+            </el-radio-group>
+            <el-popover placement="bottom-end" :content="t('pack.typePopover')">
+              <template #reference>
+                <el-icon><QuestionFilled /></el-icon>
+              </template>
+            </el-popover>
+          </div>
           <div class="tag-box">
             <p>{{ t('pack.pattern') }}</p>
-            <el-check-tag v-for="tag in tags.slice(0, 7)" v-model:checked="tag.checked" @change="handleTagSelect">{{ tag.tag_name }}</el-check-tag>
+            <el-check-tag v-for="tag in tags.slice(0, 7)" v-model:checked="tag.checked" @change="handleTagSelect" :disabled="packType === 1 || packType === 2">{{ tag.tag_name }}</el-check-tag>
           </div>
           <div class="tag-box">
             <p>{{ t('pack.bpm') }}</p>
-            <el-check-tag v-for="tag in tags.slice(7, 19)" v-model:checked="tag.checked" @change="handleTagSelect">{{ tag.tag_name }}</el-check-tag>
+            <el-check-tag v-for="tag in tags.slice(7, 19)" v-model:checked="tag.checked" @change="handleTagSelect" :disabled="packType === 1 || packType === 2">{{ tag.tag_name }}</el-check-tag>
           </div>
           <div class="tag-box">
             <p>{{ t('pack.difficulty') }}</p>
-            <el-check-tag v-for="tag in tags.slice(19)" v-model:checked="tag.checked" @change="handleTagSelect">{{ tag.tag_name }}</el-check-tag>
+            <el-check-tag v-for="tag in tags.slice(19)" v-model:checked="tag.checked" @change="handleTagSelect" :disabled="packType === 1">{{ tag.tag_name }}</el-check-tag>
           </div>
         </el-card>
       </el-col>
@@ -83,13 +95,27 @@
               check
             </LinkPreview>
           </el-form-item>
-          <el-collapse>
+          <el-form-item :label="t('pack.type')" prop="type">
+            <div style="width: 240px; display: flex; align-items: center; gap: 10px">
+              <el-select v-model="packForm.type">
+                <el-option :value="0" :label="t('pack.practice')" :key="0"></el-option>
+                <el-option :value="1" :label="t('pack.collection')" :key="1"></el-option>
+                <el-option :value="2" :label="t('pack.dan')" :key="2"></el-option>
+              </el-select>
+              <el-popover placement="bottom-end" :content="t('pack.typePopover')">
+                <template #reference>
+                  <el-icon><QuestionFilled /></el-icon>
+                </template>
+              </el-popover>
+            </div>
+          </el-form-item>
+          <el-collapse v-if="packForm.type === 0 || packForm.type === 2">
             <el-collapse-item :title="t('pack.tags')">
-              <div class="tag-box">
+              <div class="tag-box" v-if="packForm.type === 0">
                 <p>{{ t('pack.pattern') }}</p>
                 <el-check-tag v-for="tag in addPackTags.slice(0, 7)" v-model:checked="tag.checked">{{ tag.tag_name }}</el-check-tag>
               </div>
-              <div class="tag-box">
+              <div class="tag-box" v-if="packForm.type === 0">
                 <p>{{ t('pack.bpm') }}</p>
                 <el-check-tag v-for="tag in addPackTags.slice(7, 19)" v-model:checked="tag.checked">{{ tag.tag_name }}</el-check-tag>
               </div>
@@ -124,6 +150,9 @@
         </el-descriptions-item>
         <el-descriptions-item :label="t('pack.drawer.creator')">
           {{ drawerData.creator }}
+        </el-descriptions-item>
+        <el-descriptions-item :label="t('pack.type')">
+          {{ switchTypeNumber(drawerData.type) }}
         </el-descriptions-item>
         <el-descriptions-item>
           <div class="tag-box">
@@ -197,7 +226,7 @@
 
 <script setup>
 import navMenu from "../components/navmenu.vue";
-import { Plus, Search, RefreshLeft, Link, Pointer, InfoFilled, Download, ArrowDown, ArrowUp } from "@element-plus/icons-vue";
+import { Plus, Search, RefreshLeft, Link, Pointer, InfoFilled, Download, ArrowDown, ArrowUp, QuestionFilled } from "@element-plus/icons-vue";
 import { onBeforeMount, ref, reactive, computed } from "vue";
 import { useI18n } from 'vue-i18n';
 import { packList, packCreate, packById } from "@/api/pack"
@@ -223,6 +252,7 @@ const packs = ref([]);
 const tableLoading = ref(false)
 const newPackDialog = ref(false)
 const showTags = ref(false)
+const packType = ref(0)
 const packForm = reactive({
   title: '',
   creator: '',
@@ -230,11 +260,13 @@ const packForm = reactive({
   url: '',
   tags: [],
   intro: '',
+  type: null
 })
 const rules = {
   title: [{ required: true, message: t('pack.validate.title'), trigger: "blur" }],
   creator: [{ required: true, message: t('pack.validate.creator'), trigger: "blur" }],
   osuBID: [{ required: true, message: t('pack.validate.osuBID'), trigger: "blur" }],
+  type: [{ required: true, message: t('pack.validate.type'), trigger: "blur" }],
 }
 const formRef = ref(null);
 const drawerOpen = ref(false);
@@ -262,7 +294,7 @@ const formatDate = (dateString) => {
 
 const getPackList = () => {
   tableLoading.value = true;
-  packList(page.value, pageSize.value, searchKeyword.value, getCheckedTagIds(tags.value)).then((res) => {
+  packList(page.value, pageSize.value, searchKeyword.value, getCheckedTagIds(tags.value), packType.value).then((res) => {
     packs.value = res.data;
     tableLoading.value = false;
   }).catch(err => {
@@ -305,6 +337,22 @@ const refreshTags = () => {
   })
   debouncedSearch();
   ElMessage.success(t('pack.refreshSuccess'))
+}
+
+const refreshTagsWhenChangeType = () => {
+  let rangeStart = 0
+  let rangeEnd = tags.value.length
+
+  if (packType.value === 1) {
+    rangeStart = 0
+  } else if (packType.value === 2) {
+    rangeStart = 0
+    rangeEnd = 19
+  }
+  tags.value.slice(rangeStart, rangeEnd).forEach(tag => {
+    tag.checked = false
+  })
+  debouncedSearch()
 }
 
 const resetForm = () => {
@@ -368,6 +416,17 @@ const getPackInfo = async (packId) => {
   const res = await packById(packId);
   drawerData.value = JSON.parse(JSON.stringify(res.data));
   await getCommentsByPackId()
+}
+
+const switchTypeNumber = (type) => {
+  switch (type) {
+    case 0:
+      return t('pack.practice');
+    case 1:
+      return t('pack.collection');
+    case 2:
+      return t('pack.dan');
+  }
 }
 
 const getDrawerWidth = computed(() => {

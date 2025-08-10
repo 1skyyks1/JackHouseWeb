@@ -4,7 +4,7 @@ const { Op } = require('sequelize');
 
 // 创建新图包
 exports.createPack = async (req, res) => {
-    const { title, creator, osuBID, url, tags, intro } = req.body;
+    const { title, creator, osuBID, url, tags, intro, type } = req.body;
     const user_id = req.user.user_id;
 
     if (!title || !Array.isArray(tags)) {
@@ -20,7 +20,8 @@ exports.createPack = async (req, res) => {
             user_id,
             osu_bid: osuBID,
             other_url: url,
-            intro
+            intro,
+            type
         }, { transaction: t });
 
         // 关联标签
@@ -36,7 +37,7 @@ exports.createPack = async (req, res) => {
 
 // 获取图包列表（带筛选和分页）
 exports.getAllPacks = async (req, res) => {
-    const { page, pageSize, searchKeys ,tags } = req.query;
+    const { page, pageSize, searchKeys ,tags, type } = req.query;
     const offset = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
     const limit = parseInt(pageSize, 10);
     try {
@@ -46,6 +47,7 @@ exports.getAllPacks = async (req, res) => {
             offset,
             order: [['created_time', 'DESC']],
             attributes: { exclude: ['user_id', 'intro'] },
+            where: {},
             include: [
                 {
                     model: Tag,
@@ -68,6 +70,10 @@ exports.getAllPacks = async (req, res) => {
                     { creator: { [Op.like]: `%${searchKeys}%` } }
                 ]
             };
+        }
+
+        if (type) {
+            findOptions.where.type = Number(type);
         }
 
         if (tags) {
