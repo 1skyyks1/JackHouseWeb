@@ -171,14 +171,21 @@ const totalComments = ref(0)
 
 const getPostInfo = () => {
   postById(postId).then(response => {
-    response.data.translations.forEach(translation => {
-      mergeLocaleMessage(translation.language, {
-        post: {
-          title: translation.title || t('post.noTitle'),
-          content: translation.content || t('post.noContent')
-        }
-      });
+    const zhTranslation = response.data.translations.find(t => t.language === 'zh');
+    const enTranslation = response.data.translations.find(t => t.language === 'en');
+
+    const zhTitle = zhTranslation?.title || enTranslation?.title || t('post.noTitle');
+    const zhContent = zhTranslation?.content || enTranslation?.content || t('post.noContent');
+    const enTitle = enTranslation?.title || zhTranslation?.title || t('post.noTitle');
+    const enContent = enTranslation?.content || zhTranslation?.content || t('post.noContent');
+
+    mergeLocaleMessage('zh', {
+      post: { title: zhTitle, content: zhContent }
     });
+    mergeLocaleMessage('en', {
+      post: { title: enTitle, content: enContent }
+    });
+
     postUserId.value = response.data.user_id
     time.value = response.data.created_time
     userName.value = response.data.user.user_name;

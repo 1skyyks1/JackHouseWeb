@@ -3,6 +3,7 @@
     <AuroraBackground>
       <div class="main-content-wrapper px-2">
         <RouterView></RouterView>
+        <el-backtop :right="20" :bottom="40" />
       </div>
     </AuroraBackground>
   </div>
@@ -18,14 +19,6 @@ export default {
 </script>
 
 <style>
-/*#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}*/
 body {
   font-family: Manrope, sans-serif;
   margin: 0;

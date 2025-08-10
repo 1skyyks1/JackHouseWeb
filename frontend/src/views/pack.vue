@@ -1,8 +1,8 @@
 <template>
   <div>
     <navMenu></navMenu>
-    <el-row justify="center" :gutter="10" style="margin-bottom: 10px">
-      <el-col :xs="18" :sm="20" :md="12" :lg="14" :xl="14">
+    <el-row justify="center" :gutter="4" style="margin-bottom: 10px">
+      <el-col :xs="18" :sm="18" :md="12" :lg="12" :xl="12">
         <el-input v-model="searchKeyword"
                   :prefix-icon="Search"
                   class="search-input"
@@ -10,14 +10,21 @@
                   :placeholder="t('pack.searchPlaceholder')">
         </el-input>
       </el-col>
-      <el-col :xs="6" :sm="4" :md="4" :lg="2" :xl="2">
+      <el-col :xs="3" :sm="3" :md="2" :lg="2" :xl="2">
+        <el-button size="large" class="create-button" plain @click="showTags = !showTags">
+          <el-icon v-if="!showTags"><ArrowDown /></el-icon>
+          <el-icon v-else><ArrowUp /></el-icon>
+          <span v-if="!isMobile">{{ t('pack.tags') }}</span>
+        </el-button>
+      </el-col>
+      <el-col :xs="3" :sm="3" :md="2" :lg="2" :xl="2">
         <el-button size="large" class="create-button" plain @click="openCreateDialog">
           <el-icon><Plus /></el-icon>
-          <span>{{ t('pack.add') }}</span>
+          <span v-if="!isMobile">{{ t('pack.add') }}</span>
         </el-button>
       </el-col>
     </el-row>
-    <el-row justify="center" style="margin-bottom: 10px" :gutter="10">
+    <el-row justify="center" style="margin-bottom: 10px" :gutter="10" v-show="showTags">
       <el-col :xs="24" :sm="24" :md="12" :lg="14" :xl="14">
         <el-card shadow="never" class="tag-card">
           <div class="tag-box">
@@ -190,7 +197,7 @@
 
 <script setup>
 import navMenu from "../components/navmenu.vue";
-import { Plus, Search, RefreshLeft, Link, Pointer, InfoFilled, Download } from "@element-plus/icons-vue";
+import { Plus, Search, RefreshLeft, Link, Pointer, InfoFilled, Download, ArrowDown, ArrowUp } from "@element-plus/icons-vue";
 import { onBeforeMount, ref, reactive, computed } from "vue";
 import { useI18n } from 'vue-i18n';
 import { packList, packCreate, packById } from "@/api/pack"
@@ -215,6 +222,7 @@ const addPackTags = ref([])
 const packs = ref([]);
 const tableLoading = ref(false)
 const newPackDialog = ref(false)
+const showTags = ref(false)
 const packForm = reactive({
   title: '',
   creator: '',
