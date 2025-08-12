@@ -105,7 +105,7 @@ const formatDate = (dateString) => {
 const getRequestList = () => {
   requestByUserId(userId.value).then(response => {
     requestList.value = response.data
-    console.log(requestList.value)
+    // console.log(requestList.value)
   })
 }
 

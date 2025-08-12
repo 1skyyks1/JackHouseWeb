@@ -237,7 +237,7 @@ const getAllType3Post = () => {
     request.value = response.data[1].posts;
     event.value = response.data[2].posts;
     notice.value = response.data[3].posts;
-    console.log(response.data[0])
+    // console.log(response.data[0])
   })
 }
 

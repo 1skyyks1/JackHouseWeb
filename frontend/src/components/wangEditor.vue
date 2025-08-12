@@ -91,7 +91,7 @@ const handleCreated = (editor) => {
   editorRef.value = editor
   nextTick(() => {
     const toolbar = DomEditor.getToolbar(editor);
-    console.log(toolbar.getConfig().toolbarKeys)
+    // console.log(toolbar.getConfig().toolbarKeys)
   })
 }
 

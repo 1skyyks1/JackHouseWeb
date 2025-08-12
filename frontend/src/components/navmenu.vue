@@ -198,7 +198,6 @@ const showLoginDialog = computed({
 
 const openDrawer = () => {
   drawerVisible.value = true
-  console.log(drawerVisible)
 }
 
 const toggleDarkMode = () => {

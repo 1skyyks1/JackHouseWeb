@@ -28,10 +28,12 @@
       <el-col :xs="24" :sm="24" :md="12" :lg="14" :xl="14">
         <el-card shadow="never" class="tag-card">
           <div class="tag-box ml-2">
-            <el-radio-group v-model="packType" @change="refreshTagsWhenChangeType">
-              <el-radio :value="0">{{ t('pack.practice') }}</el-radio>
-              <el-radio :value="1">{{ t('pack.collection') }}</el-radio>
-              <el-radio :value="2">{{ t('pack.dan') }}</el-radio>
+            <el-radio-group v-model="packType" @change="refreshTagsWhenChangeType" text-color="#626aef"
+                            fill="rgb(239, 240, 253)">
+              <el-radio-button :value="0">{{ t('pack.practice') }}</el-radio-button>
+              <el-radio-button :value="1">{{ t('pack.collection') }}</el-radio-button>
+              <el-radio-button :value="2">{{ t('pack.dan') }}</el-radio-button>
+              <el-radio-button :value="-1">{{ t('pack.all') }}</el-radio-button>
             </el-radio-group>
             <el-popover placement="bottom-end" :content="t('pack.typePopover')">
               <template #reference>
@@ -75,6 +77,16 @@
               </template>
             </el-table-column>
           </el-table>
+          <el-pagination
+              style="margin-top: 8px; justify-content: center"
+              background
+              layout="prev, pager, next"
+              :current-page="page"
+              :page-size="pageSize"
+              :total="totalPage"
+              @current-change="handlePageChange"
+              hide-on-single-page
+          />
         </el-card>
       </el-col>
     </el-row>
@@ -216,7 +228,7 @@
               layout="prev, pager, next"
               :page-size="commentPageSize"
               :total="totalComments"
-              @current-change="handlePageChange"
+              @current-change="handleCommentPageChange"
           ></el-pagination>
         </div>
       </el-card>
@@ -246,13 +258,14 @@ const userId = computed(() => store.state.userId);
 const searchKeyword = ref('');
 const page = ref(1);
 const pageSize = ref(10);
+const totalPage = ref(0)
 const tags = ref([]);
 const addPackTags = ref([])
 const packs = ref([]);
 const tableLoading = ref(false)
 const newPackDialog = ref(false)
 const showTags = ref(false)
-const packType = ref(0)
+const packType = ref(-1)
 const packForm = reactive({
   title: '',
   creator: '',
@@ -294,8 +307,13 @@ const formatDate = (dateString) => {
 
 const getPackList = () => {
   tableLoading.value = true;
-  packList(page.value, pageSize.value, searchKeyword.value, getCheckedTagIds(tags.value), packType.value).then((res) => {
+  let type = null;
+  if(packType.value !== -1){
+    type = packType.value;
+  }
+  packList(page.value, pageSize.value, searchKeyword.value, getCheckedTagIds(tags.value), type).then((res) => {
     packs.value = res.data;
+    totalPage.value = res.total;
     tableLoading.value = false;
   }).catch(err => {
     ElMessage.error(err)
@@ -360,6 +378,11 @@ const resetForm = () => {
   formRef.value.resetFields();
 }
 
+const handlePageChange = (packPage) => {
+  page.value = packPage;
+  getPackList();
+}
+
 const openCreateDialog = () => {
   resetForm();
   addPackTags.value.forEach((tag) => {
@@ -369,7 +392,7 @@ const openCreateDialog = () => {
 }
 
 const submitPack = async () => {
-  console.log(formRef.value);
+  // console.log(formRef.value);
   if (!formRef.value) return;
   try {
     await formRef.value.validate();
@@ -380,7 +403,7 @@ const submitPack = async () => {
     resetForm();
     getPackList();
   } catch (error) {
-    console.log('Validation failed!', error);
+    // console.log('Validation failed!', error);
   }
 }
 
@@ -475,7 +498,7 @@ const deletePackComment = (commentId) => {
   })
 }
 
-const handlePageChange = (page) => {
+const handleCommentPageChange = (page) => {
   commentPage.value = page;
   getCommentsByPackId();
 }
