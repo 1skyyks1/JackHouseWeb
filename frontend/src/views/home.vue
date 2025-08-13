@@ -30,7 +30,7 @@
                   <el-carousel-item v-for="(notice, index) in notices" :key="index" @click="goToPost(notice.post_id)">
                     <div v-loading="noticeLoading" class="notice-carousel">
                       <div class="notice-title line-clamp-1">{{ getTitle(notice) }}</div>
-                      <div class="notice-content line-clamp-5" v-html="getContent(notice)"></div>
+                      <div class="notice-content" v-html="getContent(notice)"></div>
                     </div>
                   </el-carousel-item>
                 </el-carousel>
@@ -64,7 +64,7 @@
           </el-col>
         </el-row>
       </el-col>
-      <el-col :xs="24" :sm="24" :md="6" :lg="4" :xl="4">
+      <el-col :xs="24" :sm="24" :md="6" :lg="4" :xl="4" style="margin-bottom: 10px">
         <el-card shadow="never">
           <el-row justify="center" :gutter="10" class="dashboard-stat">
             <el-col :xs="12" :sm="12" :md="12" :lg="24" :xl="24">
@@ -202,6 +202,9 @@ onBeforeMount(() => {
 :deep(.el-card__header){
   padding: 10px 20px;
 }
+:deep(.el-card__body){
+  padding: 15px 20px;
+}
 .notice-title {
   font-size: 18px;
   font-weight: bold;
@@ -209,6 +212,10 @@ onBeforeMount(() => {
 }
 .notice-content {
   font-size: 14px;
+  max-height: calc(1.5em * 5);
+  overflow: hidden;
+  line-height: 1.5em;
+  word-break: break-word;
 }
 .post-item {
   padding: 5px 0 10px;
