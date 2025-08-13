@@ -43,6 +43,16 @@
                 {{ getRole(userInfo.role) }}
               </el-tag>
             </el-descriptions-item>
+            <el-descriptions-item label="QQ" :span="1">
+              <el-button type="text" @click="handleCopy(userInfo.qq)" class="copy-button">
+                {{ userInfo.qq }}
+              </el-button>
+            </el-descriptions-item>
+            <el-descriptions-item label="Discord" :span="1">
+              <el-button type="text" @click="handleCopy(userInfo.discord)" class="copy-button">
+                {{ userInfo.discord }}
+              </el-button>
+            </el-descriptions-item>
           </el-descriptions>
         </el-card>
       </el-col>
@@ -122,7 +132,7 @@ import navMenu from '../components/navmenu.vue'
 import { useRoute } from "vue-router";
 import { userById } from "@/api/user"
 import { reactive, onBeforeMount, computed, ref } from "vue";
-import { dayjs } from "element-plus";
+import { dayjs, ElMessage } from "element-plus";
 import { useBreakpoints } from '@vueuse/core';
 import { useI18n } from 'vue-i18n';
 import { postFileByUserId } from "@/api/postFile"
@@ -231,6 +241,12 @@ const getStatusTagType = (status) => {
   }
 }
 
+const handleCopy = (text) => {
+  navigator.clipboard.writeText(text).then(() => {
+    ElMessage.success(t('user.info.copy'));
+  })
+}
+
 const getPostFileByUserId = () => {
   postFileByUserId(userId, postFilePage.value, postFilePageSize.value).then(response => {
     postFileList.value = response.data;
@@ -316,5 +332,8 @@ onBeforeMount(() => {
 .post-item:hover{
   transform: scale(1.01);
   transition: all 0.2s ease;
+}
+.copy-button{
+  height: 24px;
 }
 </style>

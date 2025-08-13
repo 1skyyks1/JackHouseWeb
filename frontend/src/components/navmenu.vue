@@ -59,13 +59,14 @@
           <el-avatar shape="square" :src="avatar"/>
           <template #dropdown>
             <el-dropdown-menu>
-              <div>
-                <el-dropdown-item v-if="isLogged && userName"> {{ userName }} </el-dropdown-item>
-                <el-dropdown-item v-else @click="goLogin">{{ t('menu.login') }}</el-dropdown-item>
-              </div>
-              <el-dropdown-item v-if="isLogged && userId" @click="goUserInfo">{{ t('menu.userInfo') }}</el-dropdown-item>
-              <el-dropdown-item v-if="(role === 1 || role === 2) && isLogged" @click="goAdmin">{{ t('menu.admin') }}</el-dropdown-item>
-              <el-dropdown-item divided v-if="isLogged" @click="goLogout">{{ t('menu.logout') }}</el-dropdown-item>
+              <el-dropdown-item
+                  v-for="(item, index) in dropdownItems"
+                  :key="index"
+                  :divided="item.divided"
+                  @click="item.action && item.action()"
+              >
+                {{ item.label }}
+              </el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -84,13 +85,14 @@
           <el-avatar shape="square" :src="avatar"/>
           <template #dropdown>
             <el-dropdown-menu>
-              <div>
-                <el-dropdown-item v-if="isLogged && userName"> {{ userName }} </el-dropdown-item>
-                <el-dropdown-item v-else @click="goLogin">{{ t('menu.login') }}</el-dropdown-item>
-              </div>
-              <el-dropdown-item v-if="isLogged && userId" @click="goUserInfo">{{ t('menu.userInfo') }}</el-dropdown-item>
-              <el-dropdown-item v-if="(role === 1 || role === 2) && isLogged" @click="goAdmin">{{ t('menu.admin') }}</el-dropdown-item>
-              <el-dropdown-item divided v-if="isLogged" @click="goLogout">{{ t('menu.logout') }}</el-dropdown-item>
+              <el-dropdown-item
+                  v-for="(item, index) in dropdownItems"
+                  :key="index"
+                  :divided="item.divided"
+                  @click="item.action && item.action()"
+              >
+                {{ item.label }}
+              </el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -191,6 +193,34 @@ const loginForm = ref({
   password: ''
 });
 
+const dropdownItems = computed(() => {
+  const items = [];
+
+  if (isLogged.value && userName.value) {
+    items.push({ label: userName.value });
+  } else {
+    items.push({ label: t('menu.login'), action: goLogin });
+  }
+
+  if (isLogged.value && userId.value) {
+    items.push({ label: t('menu.userInfo'), action: goUserInfo });
+  }
+
+  if (isLogged.value) {
+    items.push({ label: t('menu.userEdit'), action: goUserEdit });
+  }
+
+  if ((role.value === 1 || role.value === 2) && isLogged.value) {
+    items.push({ label: t('menu.admin'), action: goAdmin });
+  }
+
+  if (isLogged.value) {
+    items.push({ label: t('menu.logout'), action: goLogout, divided: true });
+  }
+
+  return items;
+});
+
 const showLoginDialog = computed({
   get: () => store.state.showLoginDialog,
   set: (value) => store.commit('SET_LOGIN_DIALOG', value)
@@ -225,6 +255,10 @@ const goUserInfo = () => {
   router.push({ path: `/user/${userId.value}` })
 }
 
+const goUserEdit = () => {
+  router.push({ path: '/user/edit' })
+}
+
 const goAdmin = () => {
   router.push(({ path: '/admin/dashboard' }))
 }
@@ -233,11 +267,12 @@ const submitLogin = async () => {
   try{
     await store.dispatch('Login',
         { identifier: loginForm.value.username,
-          password: loginForm.value.password
-        });
+          password: loginForm.value.password });
     ElMessage.success(t('menu.message.loginSuccess'))
-  }
-  catch (error) {
+    store.commit('SET_LOGIN_DIALOG', false);
+    loginForm.value.username = '';
+    loginForm.value.password = '';
+  } catch (error) {
     console.log(error)
   }
 }
@@ -247,6 +282,8 @@ const goLogout = async () => {
     await store.dispatch('logout');
     ElMessage.success(t('menu.message.logoutSuccess'));
     avatar.value = null;
+    userName.value = null;
+    role.value = 0;
   }
   catch (error) {
     console.log(error)

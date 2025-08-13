@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { userInfo } from "@/api/user.js";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -25,6 +26,11 @@ const router = createRouter({
             component: () => import('../views/user.vue')
         },
         {
+            path: '/user/edit',
+            name: 'userEdit',
+            component: () => import('@/views/userEdit.vue'),
+        },
+        {
             path: '/forum',
             name: 'forum',
             component: () => import('../views/forum.vue')
@@ -38,6 +44,7 @@ const router = createRouter({
             path: '/admin',
             name: 'admin',
             component: () => import('../views/admin/admin.vue'),
+            meta: { requiresAdmin: true },
             children: [
                 {
                     path: 'dashboard',
@@ -72,6 +79,25 @@ const router = createRouter({
             ]
         }
     ]
+})
+
+router.beforeEach(async (to, from, next) => {
+    if(to.meta.requiresAdmin) {
+        try {
+            const res = await userInfo();
+            const role = res.data.role;
+            if (role === 1 || role === 2) {
+                next()
+            } else {
+                next(false)
+            }
+        }
+        catch (error) {
+            next(false)
+        }
+    } else {
+        next()
+    }
 })
 
 export default router;

@@ -5,6 +5,7 @@
     "pack": "叠包",
     "login": "登录",
     "userInfo": "个人资料",
+    "userEdit": "设置",
     "admin": "管理后台",
     "logout": "退出登录",
     "message": {
@@ -110,6 +111,7 @@
         "restricted": "受限",
         "banned": "封禁"
       },
+      "copy": "已复制到剪贴板",
       "post": "帖子",
       "postFile": "投稿",
       "noPost": "{username} 还没有发布过帖子",
@@ -117,6 +119,18 @@
       "pending": "待审核",
       "approved": "通过审核",
       "rejected": "未通过审核"
+    },
+    "edit": {
+      "title": "账户设置",
+      "password": "新密码",
+      "confirmPassword": "确认密码",
+      "editPassword": "修改密码",
+      "editInfo": "修改个人信息",
+      "save": "保存",
+      "passwordMinLength": "密码长度至少 6 位",
+      "passwordNotMatch": "两次输入的密码不一致",
+      "confirmPasswordRequired": "请确认密码",
+      "updateSuccess": "更新成功"
     }
   },
 

@@ -10,6 +10,9 @@ router.post('/', UserController.createUser);
 // 获取所有用户
 router.get('/', UserController.getUsers);
 
+// 根据token获取用户信息
+router.get('/info', checkAuth(), UserController.getUserInfo)
+
 // 获取单个用户
 router.get('/:user_id', UserController.getUserById);
 

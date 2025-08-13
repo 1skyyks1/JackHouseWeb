@@ -40,6 +40,16 @@ const User = sequelize.define('User', {
         unique: true,
         allowNull: true,
     },
+    qq: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: true,
+    },
+    discord: {
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: true,
+    },
     created_time: {
         type: DataTypes.DATE,
         defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
@@ -56,5 +66,4 @@ const User = sequelize.define('User', {
     updatedAt: 'updated_time'
 });
 
-// 导出模型
 module.exports = User;

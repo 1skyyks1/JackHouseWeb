@@ -46,3 +46,11 @@ export function userDelete(userId){
         method: 'DELETE'
     })
 }
+
+// 根据token获取用户信息
+export function userInfo(){
+    return request({
+        url: '/user/info',
+        method: 'GET'
+    })
+}

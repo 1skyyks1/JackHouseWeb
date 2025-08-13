@@ -70,12 +70,12 @@ const updateUser = async (req, res) => {
         const isAdmin = role === ROLES.ADMIN;
         const isOwner = user.user_id === user_id;
         if (isAdmin || isOwner) {
-            const { user_name, password, email, role, status, osu_uid, avatar } = req.body;
+            const { user_name, password, email, role, status, osu_uid, avatar, qq, discord } = req.body;
             if (password){
                 const hashedPassword = await bcrypt.hash(password, 10);
-                await user.update({ user_name, password: hashedPassword, email, role, status, osu_uid, avatar });
+                await user.update({ user_name, password: hashedPassword, email, role, status, osu_uid, avatar, qq, discord });
             } else {
-                await user.update({ user_name, email, role, status, osu_uid, avatar });
+                await user.update({ user_name, email, role, status, osu_uid, avatar, qq, discord });
             }
             res.status(200).json({ message: req.t('user.updateSuccess') });
         } else {
@@ -100,10 +100,25 @@ const deleteUser = async (req, res) => {
     }
 };
 
+// 根据token获取用户信息
+const getUserInfo = async (req, res) => {
+    const user_id = req.user.user_id;
+    try {
+        const user = await User.findByPk(user_id, {
+            attributes: { exclude: ['password'] }
+        });
+        if (!user) {
+            return res.status(404).json({ message: req.t('user.notFound') });
+        }
+        res.status(200).json({ data: user });
+    } catch (error) {}
+}
+
 module.exports = {
     createUser,
     getUsers,
     getUserById,
     updateUser,
     deleteUser,
+    getUserInfo,
 };

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-cloak>
     <navMenu></navMenu>
     <el-row justify="center">
       <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">

@@ -30,16 +30,12 @@ export default createStore({
             }
         },
         Login({ commit }, { identifier, password }) {
-            return new Promise((resolve, reject) => {
-                userLogin(identifier, password).then(response => {
-                    localStorage.setItem('token', response.data.token);
-                    const userId = response.data.userId;
-                    localStorage.setItem('userId', userId);
-                    commit('setLogin', userId);
-                    resolve();
-                }).catch(error => {
-                    reject(error);
-                })
+            return userLogin(identifier, password).then(response => {
+                console.log(response);
+                localStorage.setItem('token', response.data.token);
+                const userId = response.data.userId;
+                localStorage.setItem('userId', userId);
+                commit('setLogin', userId);
             })
         },
         logout({ commit }) {

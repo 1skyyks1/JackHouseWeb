@@ -5,6 +5,7 @@
     "pack": "Pack",
     "login": "Sign in",
     "userInfo": "My Profile",
+    "userEdit": "Setting",
     "admin": "Admin Sys.",
     "logout": "Sign out",
     "message": {
@@ -110,6 +111,7 @@
         "restricted": "Restricted",
         "banned": "Banned"
       },
+      "copy": "Copied to clipboard",
       "post": "Posts",
       "postFile": "Submissions",
       "noPost": "{username} hasn't shared anything yet.",
@@ -117,6 +119,18 @@
       "pending": "Pending",
       "approved": "Approved",
       "rejected": "Rejected"
+    },
+    "edit": {
+      "title": "Account setting",
+      "password": "New Password",
+      "confirmPassword": "Confirm Password",
+      "editPassword": "Change Password",
+      "editInfo": "Edit Profile",
+      "save": "Save",
+      "passwordMinLength": "Password must be at least 6 characters",
+      "passwordNotMatch": "Passwords do not match",
+      "confirmPasswordRequired": "Please confirm your password",
+      "updateSuccess": "Update successful"
     }
   },
 

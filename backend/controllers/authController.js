@@ -99,7 +99,7 @@ const register = async (req, res) => {
         // 生成 JWT
         const token = jwt.sign({ userId: user.user_id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
-        res.status(201).json({ message: req.t('auth.registerSuccess'), token, userId: user.user_id });
+        res.status(201).json({ data: { message: req.t('auth.registerSuccess'), token, userId: user.user_id } });
     } catch (error) {
         res.status(500).json({ message: req.t('auth.registerFailed') });
     }
@@ -133,7 +133,7 @@ const login = async (req, res) => {
         // 生成 JWT
         const token = jwt.sign({ userId: user.user_id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
-        res.json({ message: req.t('auth.loginSuccess'), token, userId: user.user_id });
+        res.json({ data: { message: req.t('auth.loginSuccess'), token, userId: user.user_id } });
     } catch (error) {
         res.status(500).json({ message: req.t('auth.loginFailed') });
     }
