@@ -43,7 +43,7 @@
     "createFailed": "Failed to create pack",
     "getListFailed": "Failed to fetch packs",
     "notFound": "Specified pack not found",
-    "getDetailFailed": "Failed to fetch pack details"
+    "getDetailFailed": "Failed to fetch pack details",
   },
   "postComment": {
     "fetchFailed": "Failed to fetch comments",
@@ -66,7 +66,8 @@
     "deleteFailed": "Failed to delete post",
     "deleteSuccess": "Post deleted successfully",
     "deleteForbidden": "Permission denied to delete post",
-    "searchFailed": "Failed to search posts"
+    "searchFailed": "Failed to search posts",
+    "noPermission": "No permission to create"
   },
   "postFile": {
     "getFailed": "Failed to get post files",

@@ -186,7 +186,7 @@ const dynamicColumn = computed(() => {
 });
 
 const osuPage = (osuUid) => {
-  return 'https://osu.ppy.sh/users/' + osuUid
+  return 'https://osu.ppy.sh/u/' + osuUid
 }
 
 const getRole = (role) => {

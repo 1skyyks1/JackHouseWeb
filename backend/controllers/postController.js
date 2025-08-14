@@ -257,6 +257,20 @@ exports.getPostById = async (req, res) => {
 exports.createPost = async (req, res) => {
     const { type, status, translations } = req.body;
     const user_id = req.user.user_id;
+    const userRole = req.user.role;
+
+    const roleTypePermissions = {
+        0: [0],         // USER 只能发常规帖
+        1: [0, 1, 2],   // ORG 可以发除了公告以外的帖子
+        2: 'all',       // ADMIN 可以发所有帖子
+    };
+
+    if (
+        roleTypePermissions[userRole] !== 'all' &&
+        !roleTypePermissions[userRole].includes(type)
+    ) {
+        return res.status(403).json({ message: req.t('post.noPermission') });
+    }
 
     const t = await sequelize.transaction();
 

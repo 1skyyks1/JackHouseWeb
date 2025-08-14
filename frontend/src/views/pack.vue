@@ -172,7 +172,7 @@
           </div>
         </el-descriptions-item>
         <el-descriptions-item :label="t('pack.drawer.intro')">
-          {{ drawerData.intro }}
+          <div class="multiline">{{ drawerData.intro }}</div>
         </el-descriptions-item>
         <el-descriptions-item :label="t('pack.drawer.osuLink')">
           <el-button @click="openOsuLink(drawerData.osu_bid)">
@@ -619,5 +619,9 @@ onBeforeMount(() => {
   font-size: 11px;
   margin: 1px 6px 0;
   padding: 0 6px;
+}
+.multiline{
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 </style>

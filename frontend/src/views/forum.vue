@@ -178,6 +178,7 @@ import { Edit, Search } from '@element-plus/icons-vue'
 import { dayjs, ElMessage } from 'element-plus'
 import { useStore } from "vuex"
 import wangEditor from "@/components/wangEditor.vue";
+import { userInfo } from "@/api/user.js";
 
 const store = useStore()
 
@@ -186,8 +187,15 @@ const searchKeyword = ref('');
 const page = ref(1);
 const pageSize = ref(5)
 const userId = computed(() => store.state.userId);
+const role = ref(null);
 
-const options = computed(() => [
+const roleTypeMap = {
+  0: [0],       // USER
+  1: [0, 1, 2], // ORG
+  2: [0, 1, 2], // ADMIN
+};
+
+const allOptions = [
   {
     value: 0,
     label: t('forum.postType.normal'),
@@ -200,7 +208,7 @@ const options = computed(() => [
     value: 2,
     label: t('forum.postType.event'),
   },
-]);
+];
 
 const newPost = ref(false)
 const tabName = ref('zh')
@@ -270,9 +278,21 @@ const handleSelect = (item) => {
   router.push(`/post/${item.post_id}`);
 };
 
-const createNewPost = () => {
+const getUserInfo = async () => {
+  const res = await userInfo();
+  role.value = res.data.role;
+}
+
+const createNewPost = async () => {
+  await getUserInfo();
   newPost.value = true
 }
+
+const options = computed(() => {
+  if (role.value === null) return [];
+  const allowedTypes = roleTypeMap[role.value];
+  return allOptions.filter(opt => allowedTypes.includes(opt.value));
+});
 
 const submitForm = () => {
   if(postForm.type === null){
