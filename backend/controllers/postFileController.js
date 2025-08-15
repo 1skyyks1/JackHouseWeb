@@ -70,9 +70,23 @@ exports.getAllPostFiles = async (req, res) => {
             limit,
             offset,
             order: [['uploaded_time', 'DESC']],
+            include: [
+                {
+                    model: User,
+                    as: 'user',
+                    attributes: ['user_name', 'role']
+                }
+            ]
         });
+        const result = rows.map(file => {
+            const fileData = file.toJSON();
+            fileData.user_name = fileData.user.user_name;
+            fileData.role = fileData.user.role;
+            delete fileData.user;
+            return fileData;
+        })
         const totalPages = Math.ceil(count / limit);
-        res.json({ data: rows, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
+        res.json({ data: result, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
     } catch (error) {
         res.status(500).json({ message: req.t('postFile.getFailed') });
     }
@@ -121,7 +135,7 @@ exports.uploadPostFile = [
             const postFile = await PostFile.create({
                 post_id,
                 user_id,
-                file_name: file.originalname,
+                file_name: Buffer.from(file.originalname, 'latin1').toString('utf8'),
                 minio_file_name: fileName,
                 file_url: fileUrl,
                 status,

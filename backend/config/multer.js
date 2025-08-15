@@ -6,9 +6,11 @@ const storage = multer.diskStorage({
         cb(null, 'uploads/'); // 文件上传的临时目录
     },
     filename: function (req, file, cb) {
+        let originalName = file.originalname;
+        originalName = Buffer.from(originalName, 'latin1').toString('utf8');
         const uniqueSuffix = Date.now()/*+ '-' + Math.round(Math.random() * 1E9)*/;
-        const fileExtension = path.extname(file.originalname);
-        const fileName = file.originalname.replace(fileExtension, '');
+        const fileExtension = path.extname(originalName);
+        const fileName = originalName.replace(fileExtension, '');
         cb(null, fileName + '-' + uniqueSuffix + fileExtension);
     }
 });

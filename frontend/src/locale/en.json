@@ -87,6 +87,7 @@
     "tip": "Upload one osz/mcz file at a time.",
     "tip2": "Upload 1.0x original map & required rate.",
     "tip3": "Rename your file to 'Artist - Song Title' before upload.",
+    "tip4": "Check feedback on profile page. Hover on status to see it.",
     "warning": "Please select a file",
     "success": "File uploaded successfully",
     "upload": "Submit"

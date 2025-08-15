@@ -111,7 +111,7 @@
       </div>
     </el-dialog>
     <el-dialog v-model="postFileUpload" style="padding-top: 20px; max-width: 400px">
-      <mapUpload :postId="Number(postId)" :userId="userId"></mapUpload>
+      <mapUpload :postId="Number(postId)" :userId="userId" v-model:postFileUpload="postFileUpload"></mapUpload>
     </el-dialog>
   </div>
 </template>

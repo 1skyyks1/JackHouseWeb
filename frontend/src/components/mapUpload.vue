@@ -26,6 +26,9 @@
           <div class="el-upload__tip">
             {{ t('mapUpload.tip3') }}
           </div>
+          <div class="el-upload__tip">
+            {{ t('mapUpload.tip4') }}
+          </div>
         </template>
       </el-upload>
     </div>
@@ -50,15 +53,12 @@ const selected = ref(false)
 const uploading = ref(false)
 
 const props = defineProps({
-  postId: {
-    type: Number,
-    required: true,
-  },
-  userId: {
-    type: Number,
-    required: true,
-  }
+  postId: { type: Number, required: true },
+  userId: { type: Number, required: true },
+  postFileUpload: { type: Boolean, required: true }
 })
+
+const emit = defineEmits(['update:postFileUpload']);
 
 const selectFile = () => {
   selected.value = true
@@ -83,7 +83,8 @@ const uploadFile = async (file) => {
 
   return await postFileUpload(formData).then(() => {
     ElMessage.success(t('mapUpload.success'));
-    uploading.value = false
+    uploading.value = false;
+    emit('update:postFileUpload', false);
   }).catch(err => {
     console.log(err)
     uploading.value = false

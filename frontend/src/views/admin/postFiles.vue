@@ -4,6 +4,7 @@
       <div class="card-header">
         <span class="title">投稿审核</span>
         <div>
+          <el-checkbox v-model="selectAll" label="All Files" size="large" @change="selectAllChange" style="margin-right: 20px" :disabled="selectAll" />
           <el-select v-model="selectPostId" style="width: 240px;" @change="selectRequest">
             <el-option v-for="post in requestList"
                        :key="post.post_id"
@@ -85,10 +86,11 @@ const fileList = ref([])
 const currentPage = ref(1)
 const pageSize = ref(15)
 const totalFiles = ref(0)
+const selectAll = ref(true)
 
 const userId = computed(() => store.state.userId);
 const requestList = ref([])
-const selectPostId = ref()
+const selectPostId = ref(null)
 const fileTableLoading = ref(false)
 
 const fileReview = ref(false)
@@ -111,6 +113,8 @@ const getRequestList = () => {
 
 const selectRequest = () => {
   if(selectPostId.value){
+    selectAll.value = false;
+    currentPage.value = 1
     getPostFileByPostId();
   }
 }
@@ -170,13 +174,33 @@ const deleteFile = (fileId) => {
       }
   ).then(() => {
     postFileDelete(fileId).then(response => {
-      getPostFileByPostId();
+      if(selectAll.value){
+        getAllFiles();
+      }
+      else{
+        getPostFileByPostId();
+      }
     })
   })
 }
 
+const getAllFiles = () => {
+  postFileList(currentPage.value, pageSize.value).then(response => {
+    fileList.value = response.data
+  })
+}
+
+const selectAllChange = () => {
+  if(selectAll.value){
+    selectPostId.value = null;
+    currentPage.value = 1;
+    getAllFiles();
+  }
+}
+
 onBeforeMount(() => {
   getRequestList()
+  getAllFiles();
 })
 </script>
 
