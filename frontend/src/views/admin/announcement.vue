@@ -14,24 +14,24 @@
     <div>
       <el-scrollbar max-height="90%">
         <el-table :data="announcements" class="announcement-table" v-loading="tableLoading">
-          <el-table-column prop="post_id" label="ID" align="center" width="63px"></el-table-column>
-          <el-table-column prop="user_name" label="发帖人" align="center" width="200px"></el-table-column>
-          <el-table-column label="标题" align="center" width="430px">
+          <el-table-column prop="post_id" label="ID" align="center" min-width="63px"></el-table-column>
+          <el-table-column prop="user_name" label="发帖人" align="center" min-width="200px"></el-table-column>
+          <el-table-column label="标题" align="center" min-width="430px">
             <template v-slot:default="scope">
               {{ scope.row.title_zh || scope.row.title_en }}
             </template>
           </el-table-column>
-          <el-table-column prop="created_time" label="创建时间" align="center" width="150px">
+          <el-table-column prop="created_time" label="创建时间" align="center" min-width="150px">
             <template v-slot:default="scope">
               {{ formatDate(scope.row.created_time) }}
             </template>
           </el-table-column>
-          <el-table-column prop="updated_time" label="最近更新时间" align="center" width="150px">
+          <el-table-column prop="updated_time" label="最近更新时间" align="center" min-width="150px">
             <template v-slot:default="scope">
               {{ formatDate(scope.row.updated_time) }}
             </template>
           </el-table-column>
-          <el-table-column prop="created_time" label="操作" align="center" width="250px">
+          <el-table-column prop="created_time" label="操作" align="center" min-width="210px">
             <template v-slot:default="scope">
               <el-button type="primary" plain size="small" @click="enterPostPage(scope.row.post_id)">查看</el-button>
               <el-button type="success" plain size="small" @click="editPost(scope.row.post_id)">修改</el-button>

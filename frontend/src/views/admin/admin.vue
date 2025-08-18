@@ -20,7 +20,8 @@ import AdminMenu from "@/components/adminMenu.vue";
 
 <style scoped>
 .admin-menu-col {
-  height: calc(100vh - 80px);
+  height: calc(100vh - 70px);
+  overflow-y: auto;
   position: sticky;
   top: 70px;
 }

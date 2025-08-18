@@ -7,7 +7,6 @@ import 'element-plus/dist/index.css'
 import '@/assets/font/font.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import 'element-plus/theme-chalk/dark/css-vars.css'
-import './style/dark/css-vars.css'
 import './style/tailwind.css'
 import { setStore } from "@/utils/request.js";
 import i18n from './locale/i18n.js'

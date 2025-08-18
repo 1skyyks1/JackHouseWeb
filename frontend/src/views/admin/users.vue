@@ -20,62 +20,62 @@
         </div>
       </template>
       <div>
-        <el-scrollbar max-height="90%">
-          <el-table :data="users" class="user-table" v-loading="userTableLoading">
-            <el-table-column prop="user_id" label="ID" align="center" width="63px"></el-table-column>
-            <el-table-column prop="avatar" label="头像" align="center" width="100px">
-              <template v-slot:default="scope">
-                <el-avatar shape="square" :src="scope.row.avatar" style="margin-top: 5px"/>
-              </template>
-            </el-table-column>
-            <el-table-column prop="user_name" label="用户名" align="center" width="200px"></el-table-column>
-            <el-table-column prop="role" label="身份" align="center" width="130px">
-              <template v-slot:default="scope">
-                <el-tag type="success" v-if="scope.row.role === 2">管理员</el-tag>
-                <el-tag type="info" v-else-if="scope.row.role === 0">普通用户</el-tag>
-                <el-tag type="primary" v-else>组织者</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column prop="status" label="账号状态" align="center" width="100px">
-              <template v-slot:default="scope">
-                <el-tag type="danger" v-if="scope.row.status === 2">封禁</el-tag>
-                <el-tag type="info" v-else-if="scope.row.status === 0">正常</el-tag>
-                <el-tag type="warning" v-else>限制</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column prop="role" label="Osu!" align="center" width="100px">
-              <template v-slot:default="scope">
-                <el-link :href="osuPage(scope.row.osu_uid)" target="_blank" v-if="scope.row.osu_uid">
-                  {{ scope.row.osu_uid }}
-                </el-link>
-                <span v-else>未绑定</span>
-              </template>
-            </el-table-column>
-            <el-table-column prop="created_time" label="注册时间" align="center" width="150px">
-              <template v-slot:default="scope">
-                {{ formatDate(scope.row.created_time) }}
-              </template>
-            </el-table-column>
-            <el-table-column prop="updated_time" label="最近更新时间" align="center" width="150px">
-              <template v-slot:default="scope">
-                {{ formatDate(scope.row.updated_time) }}
-              </template>
-            </el-table-column>
-            <el-table-column prop="created_time" label="操作" align="center" width="250px">
-              <template v-slot:default="scope">
-                <el-button type="primary" plain size="small" @click="enterUserPage(scope.row.user_id)">主页</el-button>
-                <el-button type="success" plain size="small" @click="editUser(scope.row.user_id)">修改</el-button>
-                <el-button type="danger" plain size="small" @click="deleteUser(scope.row)">删除</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
+        <el-table :data="users" class="user-table" v-loading="userTableLoading" :max-height="'calc(100vh - 220px)'">
+          <el-table-column prop="user_id" label="ID" align="center" min-width="63px"></el-table-column>
+          <el-table-column prop="avatar" label="头像" align="center" min-width="100px">
+            <template v-slot:default="scope">
+              <el-avatar shape="square" :src="scope.row.avatar" style="margin-top: 5px"/>
+            </template>
+          </el-table-column>
+          <el-table-column prop="user_name" label="用户名" align="center" min-width="210px"></el-table-column>
+          <el-table-column prop="role" label="身份" align="center" min-width="130px">
+            <template v-slot:default="scope">
+              <el-tag type="success" v-if="scope.row.role === 2">管理员</el-tag>
+              <el-tag type="info" v-else-if="scope.row.role === 0">普通用户</el-tag>
+              <el-tag type="primary" v-else>组织者</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column prop="status" label="账号状态" align="center" min-width="100px">
+            <template v-slot:default="scope">
+              <el-tag type="danger" v-if="scope.row.status === 2">封禁</el-tag>
+              <el-tag type="info" v-else-if="scope.row.status === 0">正常</el-tag>
+              <el-tag type="warning" v-else>限制</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column prop="role" label="Osu!" align="center" min-width="100px">
+            <template v-slot:default="scope">
+              <el-link :href="osuPage(scope.row.osu_uid)" target="_blank" v-if="scope.row.osu_uid">
+                {{ scope.row.osu_uid }}
+              </el-link>
+              <span v-else>未绑定</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="created_time" label="注册时间" align="center" min-width="150px">
+            <template v-slot:default="scope">
+              {{ formatDate(scope.row.created_time) }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="updated_time" label="最近更新时间" align="center" min-width="150px">
+            <template v-slot:default="scope">
+              {{ formatDate(scope.row.updated_time) }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="created_time" label="操作" align="center" min-width="200px" fixed="right">
+            <template v-slot:default="scope">
+              <el-button type="primary" plain size="small" @click="enterUserPage(scope.row.user_id)">主页</el-button>
+              <el-button type="success" plain size="small" @click="editUser(scope.row.user_id)">修改</el-button>
+              <el-button type="danger" plain size="small" @click="deleteUser(scope.row)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="pagination">
           <el-pagination
               :current-page="currentPage"
               :page-size="pageSize"
               :total="totalUsers"
               @current-change="handlePageChange"
           />
-        </el-scrollbar>
+        </div>
       </div>
     </el-card>
 
@@ -333,5 +333,9 @@ onBeforeMount(() => {
 .title{
   display: flex;
   align-items: center;
+}
+.pagination {
+  margin-top: 10px;
+  text-align: center;
 }
 </style>

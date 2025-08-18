@@ -16,37 +16,35 @@
       </div>
     </template>
     <div>
-      <el-scrollbar max-height="90%">
-        <el-table :data="fileList" class="file-table" v-loading="fileTableLoading">
-          <el-table-column prop="file_name" label="文件名" align="center" width="573px"></el-table-column>
-          <el-table-column prop="user_name" label="投稿人" align="center" width="200px"></el-table-column>
-          <el-table-column prop="status" label="状态" align="center" width="100px">
-            <template v-slot:default="scope">
-              <el-tag v-if="scope.row.status === 0" type="warning">未审核</el-tag>
-              <el-tag v-else-if="scope.row.status === 1" type="success">通过</el-tag>
-              <el-tag v-else type="danger">不通过</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column prop="uploaded_time" label="上传时间" align="center" width="120px">
-            <template v-slot:default="scope">
-              {{ formatDate(scope.row.created_time) }}
-            </template>
-          </el-table-column>
-          <el-table-column prop="created_time" label="操作" align="center" width="250px">
-            <template v-slot:default="scope">
-              <el-button type="primary" plain size="small" @click="downloadFile(scope.row.file_id)">下载</el-button>
-              <el-button type="warning" plain size="small" @click="reviewFile(scope.row.file_id)" :disabled="scope.row.status !== 0">审核</el-button>
-              <el-button type="danger" plain size="small" @click="deleteFile(scope.row.file_id)">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-pagination
-            :current-page="currentPage"
-            :page-size="pageSize"
-            :total="totalFiles"
-            @current-change="handlePageChange"
-        />
-      </el-scrollbar>
+      <el-table :data="fileList" class="file-table" v-loading="fileTableLoading" :max-height="'calc(100vh - 230px)'">
+        <el-table-column prop="file_name" label="文件名" align="center" min-width="533px"></el-table-column>
+        <el-table-column prop="user_name" label="投稿人" align="center" min-width="200px"></el-table-column>
+        <el-table-column prop="status" label="状态" align="center" min-width="100px">
+          <template v-slot:default="scope">
+            <el-tag v-if="scope.row.status === 0" type="warning">未审核</el-tag>
+            <el-tag v-else-if="scope.row.status === 1" type="success">通过</el-tag>
+            <el-tag v-else type="danger">不通过</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="上传时间" align="center" min-width="120px">
+          <template v-slot:default="scope">
+            {{ formatDate(scope.row.uploaded_time) }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="created_time" label="操作" align="center" min-width="250px">
+          <template v-slot:default="scope">
+            <el-button type="primary" plain size="small" @click="downloadFile(scope.row.file_id)">下载</el-button>
+            <el-button type="warning" plain size="small" @click="reviewFile(scope.row.file_id)" :disabled="scope.row.status !== 0">审核</el-button>
+            <el-button type="danger" plain size="small" @click="deleteFile(scope.row.file_id)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination
+          :current-page="currentPage"
+          :page-size="pageSize"
+          :total="totalFiles"
+          @current-change="handlePageChange"
+      />
     </div>
   </el-card>
 
@@ -84,7 +82,7 @@ const { locale } = useI18n();
 
 const fileList = ref([])
 const currentPage = ref(1)
-const pageSize = ref(15)
+const pageSize = ref(13)
 const totalFiles = ref(0)
 const selectAll = ref(true)
 
@@ -130,7 +128,12 @@ const getPostFileByPostId = () => {
 
 const handlePageChange = (page) => {
   currentPage.value = page;
-  getPostFileByPostId();
+  if(selectAll.value){
+    getAllFiles();
+  }
+  else{
+    getPostFileByPostId();
+  }
 };
 
 const downloadFile = (fileId) => {
@@ -185,8 +188,11 @@ const deleteFile = (fileId) => {
 }
 
 const getAllFiles = () => {
+  fileTableLoading.value = true;
   postFileList(currentPage.value, pageSize.value).then(response => {
-    fileList.value = response.data
+    fileList.value = response.data;
+    totalFiles.value = response.total;
+    fileTableLoading.value = false;
   })
 }
 

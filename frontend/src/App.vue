@@ -1,20 +1,16 @@
 <template>
   <div id="app">
-    <AuroraBackground>
-      <div class="main-content-wrapper px-2">
-        <RouterView></RouterView>
-        <el-backtop :right="20" :bottom="40" />
-      </div>
-    </AuroraBackground>
+    <div class="main-content-wrapper px-2">
+      <RouterView></RouterView>
+      <el-backtop :right="20" :bottom="40" />
+    </div>
   </div>
 </template>
 
 <script>
-import AuroraBackground from "@/components/ui/AuroraBackground.vue";
 
 export default {
   name: 'App',
-  components: {AuroraBackground},
 }
 </script>
 
@@ -28,5 +24,6 @@ body {
 }
 html, body {
   overflow-x: hidden;
+  height: 100%;
 }
 </style>

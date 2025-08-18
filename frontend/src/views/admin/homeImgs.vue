@@ -14,20 +14,20 @@
     <div>
       <el-scrollbar max-height="90%">
         <el-table :data="homeImgs" class="homeImg-table" v-loading="tableLoading">
-          <el-table-column prop="img_id" label="ID" align="center" width="153px"></el-table-column>
-          <el-table-column prop="sort_order" label="头图顺序" align="center" width="150px"></el-table-column>
-          <el-table-column prop="description" label="描述" align="center" width="300px"></el-table-column>
-          <el-table-column label="跳转链接" align="center" width="100px">
+          <el-table-column prop="img_id" label="ID" align="center" min-width="153px"></el-table-column>
+          <el-table-column prop="sort_order" label="头图顺序" align="center" min-width="150px"></el-table-column>
+          <el-table-column prop="description" label="描述" align="center" min-width="300px"></el-table-column>
+          <el-table-column label="跳转链接" align="center" min-width="100px">
             <template v-slot:default="scope">
               <el-button type="info" :icon="Link" plain size="small" @click="goToPage(scope.row.redirect_url)"></el-button>
             </template>
           </el-table-column>
-          <el-table-column prop="created_time" label="创建时间" align="center" width="200px">
+          <el-table-column prop="created_time" label="创建时间" align="center" min-width="200px">
             <template v-slot:default="scope">
               {{ formatDate(scope.row.created_time) }}
             </template>
           </el-table-column>
-          <el-table-column prop="created_time" label="操作" align="center" width="340px">
+          <el-table-column prop="created_time" label="操作" align="center" min-width="300px">
             <template v-slot:default="scope">
               <el-button type="success" plain size="small" @click="editHomeImg(scope.row)">修改</el-button>
               <el-button type="danger" plain size="small" @click="deleteHomeImg(scope.row)">删除</el-button>

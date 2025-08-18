@@ -4,48 +4,46 @@
       <span>帖子管理</span>
     </template>
     <div>
-      <el-scrollbar max-height="90%">
-        <el-table :data="posts" class="post-table" v-loading="postTableLoading">
-          <el-table-column prop="post_id" label="ID" align="center" width="63px"></el-table-column>
-          <el-table-column prop="user_name" label="发帖人" align="center" width="180px"></el-table-column>
-          <el-table-column prop="type" label="类型" align="center" width="100px">
-            <template v-slot:default="scope">
-              <el-tag v-if="scope.row.type === 0" type="info">普通</el-tag>
-              <el-tag v-else-if="scope.row.type === 1" type="primary">征稿</el-tag>
-              <el-tag v-else-if="scope.row.type === 2" type="warning">活动</el-tag>
-              <el-tag v-else type="danger">公告</el-tag>
-            </template>
-          </el-table-column>
-          <el-table-column label="标题" align="center" width="410px">
-            <template v-slot:default="scope">
-              {{ scope.row.title_zh || scope.row.title_en }}
-            </template>
-          </el-table-column>
-          <el-table-column prop="created_time" label="创建时间" align="center" width="120px">
-            <template v-slot:default="scope">
-              {{ formatDate(scope.row.created_time) }}
-            </template>
-          </el-table-column>
-          <el-table-column prop="updated_time" label="最近更新时间" align="center" width="120px">
-            <template v-slot:default="scope">
-              {{ formatDate(scope.row.updated_time) }}
-            </template>
-          </el-table-column>
-          <el-table-column prop="created_time" label="操作" align="center" width="250px">
-            <template v-slot:default="scope">
-              <el-button type="primary" plain size="small" @click="enterPostPage(scope.row.post_id)">查看</el-button>
-              <el-button type="success" plain size="small" @click="editPost(scope.row.post_id)">修改</el-button>
-              <el-button type="danger" plain size="small" @click="deletePost(scope.row)">删除</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-pagination
-            :current-page="currentPage"
-            :page-size="pageSize"
-            :total="totalPosts"
-            @current-change="handlePageChange"
-        />
-      </el-scrollbar>
+      <el-table :data="posts" class="post-table" v-loading="postTableLoading" :max-height="'calc(100vh - 220px)'">
+        <el-table-column prop="post_id" label="ID" align="center" min-width="63px"></el-table-column>
+        <el-table-column prop="user_name" label="发帖人" align="center" min-width="180px"></el-table-column>
+        <el-table-column prop="type" label="类型" align="center" min-width="100px">
+          <template v-slot:default="scope">
+            <el-tag v-if="scope.row.type === 0" type="info">普通</el-tag>
+            <el-tag v-else-if="scope.row.type === 1" type="primary">征稿</el-tag>
+            <el-tag v-else-if="scope.row.type === 2" type="warning">活动</el-tag>
+            <el-tag v-else type="danger">公告</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="标题" align="center" min-width="410px">
+          <template v-slot:default="scope">
+            {{ scope.row.title_zh || scope.row.title_en }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="created_time" label="创建时间" align="center" min-width="120px">
+          <template v-slot:default="scope">
+            {{ formatDate(scope.row.created_time) }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="updated_time" label="最近更新时间" align="center" min-width="120px">
+          <template v-slot:default="scope">
+            {{ formatDate(scope.row.updated_time) }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="created_time" label="操作" align="center" min-width="210px">
+          <template v-slot:default="scope">
+            <el-button type="primary" plain size="small" @click="enterPostPage(scope.row.post_id)">查看</el-button>
+            <el-button type="success" plain size="small" @click="editPost(scope.row.post_id)">修改</el-button>
+            <el-button type="danger" plain size="small" @click="deletePost(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination
+          :current-page="currentPage"
+          :page-size="pageSize"
+          :total="totalPosts"
+          @current-change="handlePageChange"
+      />
     </div>
   </el-card>
 
