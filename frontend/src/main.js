@@ -2,8 +2,6 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router/index'
 import store from './store/index'
-import ElementPlus from "element-plus";
-import 'element-plus/dist/index.css'
 import '@/assets/font/font.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import 'element-plus/theme-chalk/dark/css-vars.css'
@@ -14,7 +12,6 @@ import i18n from './locale/i18n.js'
 setStore(store);
 
 const app = createApp(App)
-app.use(ElementPlus)
 app.use(router)
 app.use(store)
 app.use(i18n)
