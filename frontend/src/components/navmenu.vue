@@ -322,6 +322,7 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   backdrop-filter: blur(8px);
+  --el-menu-bg-color: transparent;
 }
 html.dark .darkModeSvg{
   color: #fff

@@ -41,6 +41,11 @@
             </el-card>
           </el-col>
         </el-row>
+        <el-row style="margin-top: 4rem">
+          <el-col style="display: flex; justify-content: center">
+            <div style="font-size: 13px">© 2025 JackHouse. All rights reserved. Developed by <a href="https://osu.ppy.sh/users/26030234">yks1</a>.</div>
+          </el-col>
+        </el-row>
       </el-col>
     </el-row>
   </div>
