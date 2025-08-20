@@ -17,6 +17,7 @@
       <el-menu-item index="/" class="menu-item">{{ t('menu.home') }}</el-menu-item>
       <el-menu-item index="/forum" class="menu-item">{{ t('menu.forum') }}</el-menu-item>
       <el-menu-item index="/pack" class="menu-item">{{ t('menu.pack') }}</el-menu-item>
+      <el-menu-item index="/about" class="menu-item">{{ t('menu.about') }}</el-menu-item>
       <el-menu-item>
         <div class="darkModeSvg">
           <svg
@@ -100,6 +101,7 @@
       <el-menu-item index="/" class="menu-item">{{ t('menu.home') }}</el-menu-item>
       <el-menu-item index="/forum" class="menu-item">{{ t('menu.forum') }}</el-menu-item>
       <el-menu-item index="/pack" class="menu-item">{{ t('menu.pack') }}</el-menu-item>
+      <el-menu-item index="/about" class="menu-item">{{ t('menu.about') }}</el-menu-item>
     </el-menu>
 
     <div class="ver-option">
@@ -164,7 +166,7 @@
 
 <script setup>
 import { useRoute } from "vue-router";
-import { useDark, useToggle } from "@vueuse/core";
+import { useDark, useToggle, useBreakpoints } from "@vueuse/core";
 import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { userById } from "@/api/user"
 import router from "@/router";
@@ -179,7 +181,10 @@ const { t } = useI18n();
 
 const route = useRoute();
 const isDark = useDark();
-const isMobile = ref(false)
+const breakpoints = useBreakpoints({
+  mobile: 860,
+})
+const isMobile = breakpoints.smaller('mobile')
 const drawerVisible = ref(false)
 
 const store = useStore();
@@ -297,20 +302,10 @@ watch(userId, (newUserId) => {
 });
 
 onMounted(() => {
-  updateMenuMode();
-  window.addEventListener("resize", updateMenuMode);
   if(userId.value){
     getUserInfo(userId.value);
   }
 })
-
-onBeforeUnmount(() => {
-  window.removeEventListener("resize", updateMenuMode);
-});
-
-const updateMenuMode = () => {
-  isMobile.value = window.innerWidth < 768;
-};
 
 </script>
 

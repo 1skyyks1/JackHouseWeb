@@ -41,6 +41,11 @@ const router = createRouter({
             component: () => import('../views/auth/oAuthComplete.vue'),
         },
         {
+            path: '/about',
+            name: 'about',
+            component: () => import('../views/about.vue'),
+        },
+        {
             path: '/admin',
             name: 'admin',
             component: () => import('../views/admin/admin.vue'),
