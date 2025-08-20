@@ -78,6 +78,8 @@ toolbarConfig.toolbarKeys = [
   },
   "emotion",
   "divider",
+  'blockquote',
+  'codeBlock',
   '|',
   "undo",
   "redo",

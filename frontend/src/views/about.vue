@@ -56,54 +56,54 @@ const groups = [
   {
     title: "叠屋1群",
     pic: "https://pub-1d83badff2eb42d5be2db70eeb6a4b78.r2.dev/286a8026e7cdb48f93be5454ec508d45_720.png",
-    link: "https://qm.qq.com/cgi-bin/qm/qr?k=FxYUt1z6kmxf5F9vRuccU-yNBiHSLqjt&jump_from=webapi&authKey=tMRJ37A8nptrnDgxnkp12gj0QyJ7EcfT7He8N6CnPqUKutbTSeZvIePAF7AkLuKD"
+    link: "https://qm.qq.com/q/YH43Qvz48G"
   },
   {
     title: "叠屋2群",
     pic: "https://pub-1d83badff2eb42d5be2db70eeb6a4b78.r2.dev/10cd81aa5ee18a56fc4f57abf285f493_720.png",
-    link: "https://qm.qq.com/cgi-bin/qm/qr?k=ZpPsuqcyfuYc4HoB5LKRtksxVgbdfzs6&jump_from=webapi&authKey=sAG2vEojPOMO11909NwxQ5nhiwfZh2ozuzuYXpcCHRgkkAFn3Nq+0uwgDLH0u5tz"
+    link: "https://qm.qq.com/q/5ONvppOKWc"
   },
   {
     title: "REM Shop!",
     desc: "叠屋周边群",
     pic: "https://pub-1d83badff2eb42d5be2db70eeb6a4b78.r2.dev/shop.jpg",
-    link: "https://qm.qq.com/cgi-bin/qm/qr?k=pnoUfNBJa8Q7eccR6yHhAh5Sb4gS3y1k&jump_from=webapi&authKey=bZTanR34iMt2yQZ070PXVbq/fPOPz33ZIjJcxVv/hKi+EHs1s/old7mQpyfxCe0O"
+    link: "https://qm.qq.com/q/TLt8gQrqca"
   },
   {
     title: "JHC",
     desc: "osu!mania叠屋杯",
     pic: "https://pub-1d83badff2eb42d5be2db70eeb6a4b78.r2.dev/61cbd092c7136aa5e98a9aa19730bb7a_720.png",
-    link: "https://qm.qq.com/cgi-bin/qm/qr?k=voLj9_zLx3LGpsFyhX9cFJsgAkOgPDiL&jump_from=webapi&authKey=G01PdRgPKDtai+zpYpHo5Ga4O5o8twIT6hyQCk0AWNXZ8SgT/TcHK7HVxDkWFdvT"
+    link: "https://qm.qq.com/q/x8CpVXAB20"
   },
   {
     title: "MJHC",
     desc: "Malody叠屋杯",
     pic: "https://pub-1d83badff2eb42d5be2db70eeb6a4b78.r2.dev/mjhc.jpg",
-    link: "https://qm.qq.com/cgi-bin/qm/qr?k=TRx6gGPZbWRejbPNl6PEsfKhSjuupnWH&jump_from=webapi&authKey=riGfQrXhqqv8XiCOVkWvbdZdHtEofw7Xe8IQlPIW/rrOB1vPitg9AzAAUXIxYfHv"
+    link: "https://qm.qq.com/q/PRaI9t6P62"
   },
   {
     title: "AAASETU批发",
     desc: "setu群(R18)",
     pic: "https://pub-1d83badff2eb42d5be2db70eeb6a4b78.r2.dev/setu.jpg",
-    link: "https://qm.qq.com/cgi-bin/qm/qr?k=Ud7iGNTQ_jpwjrLDKyz64F8SuyUz1Vqs&jump_from=webapi&authKey=dPB7b68VOFJWeRGm2TLa/MGiPyQ20m4pUYBbZNtd440z+PnXDGWfVUI9O4W0R8u8"
+    link: "https://qm.qq.com/q/p6WB1o5bMY"
   },
   {
     title: "叠屋之三角洲",
     desc: "三角洲分群",
     pic: "https://pub-1d83badff2eb42d5be2db70eeb6a4b78.r2.dev/sjz.jpg",
-    link: "https://qm.qq.com/cgi-bin/qm/qr?k=7VErAhjuwdBqneJjPpxe1RzKI30ljPEh&jump_from=webapi&authKey=6m1G3CcSPVYJdJJL4rMbhLXmGHzJk1XbsPmbY6MGstrpedqbi/2hQZusTUEUCZC2"
+    link: "https://qm.qq.com/q/IjR5BlujWE"
   },
   {
     title: "Codm House",
     desc: "CODM分群&战队",
     pic: "https://pub-1d83badff2eb42d5be2db70eeb6a4b78.r2.dev/codm.jpg",
-    link: "https://qm.qq.com/cgi-bin/qm/qr?k=okGZaJNbsfv7PRHsFzVznopGvu01fViF&jump_from=webapi&authKey=YlTFULMtWSarVwI7cc7F+8ew0nY/+tyqDXB+QXjcmC3BJRFQ7uzBolRNwoY5WvTu"
+    link: "https://qm.qq.com/q/dh4elzESLm"
   },
   {
     title: "MC House",
     desc: "我的世界分群",
     pic: "https://pub-1d83badff2eb42d5be2db70eeb6a4b78.r2.dev/mc.jpg",
-    link: "https://qm.qq.com/cgi-bin/qm/qr?k=8U9H33ROaF75kntYPWbFaj4VvdjzQMvZ&jump_from=webapi&authKey=CBuX6W6ucrieiLOYLm3CUdCfTpMTXJCi86VOGYIoU7rlBzVgxdbb7p2xonbOMeHt"
+    link: "https://qm.qq.com/q/Er1DSoL7sm"
   }
 ]
 

@@ -15,7 +15,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const i18next = require('i18next');
 const Backend = require('i18next-fs-backend');
-const i18nextMiddleware = require('i18next-http-middleware')
+const i18nextMiddleware = require('i18next-http-middleware');
 require('dotenv').config();
 
 i18next.use(Backend).use(i18nextMiddleware.LanguageDetector).init({
@@ -24,7 +24,6 @@ i18next.use(Backend).use(i18nextMiddleware.LanguageDetector).init({
     },
     fallbackLng: 'en',
     preload: ['en', 'zh'],
-
 })
 
 const app = express();

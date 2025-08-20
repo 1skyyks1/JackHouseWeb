@@ -43,7 +43,7 @@
     "createFailed": "Failed to create pack",
     "getListFailed": "Failed to fetch packs",
     "notFound": "Specified pack not found",
-    "getDetailFailed": "Failed to fetch pack details",
+    "getDetailFailed": "Failed to fetch pack details"
   },
   "postComment": {
     "fetchFailed": "Failed to fetch comments",

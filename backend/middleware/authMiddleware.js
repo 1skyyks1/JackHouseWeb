@@ -12,7 +12,7 @@ const checkAuth = (roles = []) => {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
             const user = await User.findByPk(decoded.userId, {
-                attributes: {exclude: ['password']}
+                attributes: { exclude: ['password'] }
             });
 
             if (!user) {
