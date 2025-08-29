@@ -48,7 +48,7 @@
     "submit": "Save changes",
     "cancel": "Cancel",
     "deleteComment": "Delete",
-    "deleteCommentSuccess": "Deleted Successfully",
+    "deleteCommentSuccess": "Deleted Successful",
     "delete": {
       "text": "This operation cannot be undone. Are you sure you want to delete this post?",
       "warning": "Warning",
@@ -56,7 +56,7 @@
       "cancel": "Cancel",
       "cancelText": "Deletion cancelled",
       "isNotMyPost": "Sorry, you can only delete your own posts.",
-      "success": "Deleted Successfully"
+      "success": "Deleted Successful"
     },
     "upload": "Upload your map",
     "noTitle": "No EN title available (>_<)",
@@ -85,10 +85,7 @@
   "mapUpload": {
     "dropText": "Drop file here or",
     "clickText": "click to upload",
-    "tip": "Upload one osz/mcz file at a time.",
-    "tip2": "Upload 1.0x original map & required rate.",
-    "tip3": "Rename your file to 'Artist - Song Title' before upload.",
-    "tip4": "Check feedback on profile page. Hover on status to see it.",
+    "tip": "Upload 1.0x original map & required rate. Rename your file to 'Artist - Song Title' before upload.",
     "warning": "Please select a file",
     "success": "File uploaded successfully",
     "upload": "Submit"
@@ -120,7 +117,9 @@
       "noPostFile": "{username} hasn't submitted any maps yet.",
       "pending": "Pending",
       "approved": "Approved",
-      "rejected": "Rejected"
+      "rejected": "Rejected",
+      "delete": "Delete",
+      "deleteSuccess": "Deleted Successful"
     },
     "edit": {
       "title": "Account setting",
@@ -182,7 +181,7 @@
         "login": "Log in to leave a comment",
         "postSuccess": "Comment posted successfully",
         "deleteComment": "Delete",
-        "deleteCommentSuccess": "Deleted Successfully"
+        "deleteCommentSuccess": "Deleted Successful"
       }
     }
   },

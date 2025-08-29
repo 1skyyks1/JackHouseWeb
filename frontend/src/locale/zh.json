@@ -85,10 +85,7 @@
   "mapUpload": {
     "dropText": "拖动文件到这里 或",
     "clickText": " 点击选择文件",
-    "tip": "一次只能上传一个.osz/.mcz文件",
-    "tip2": "只传符合要求的 倍速 和 原速",
-    "tip3": "请将文件名改为“曲师 - 曲名”的格式再上传",
-    "tip4": "可在个人页中查看反馈，鼠标放到是否收录的标志上即可查看",
+    "tip": "只传 符合要求的倍速 和 原速，请将文件名改为“曲师 - 曲名”再上传",
     "warning": "请选择文件",
     "success": "成功上传",
     "upload": "确认上传"
@@ -120,7 +117,9 @@
       "noPostFile": "{username} 没有投稿记录",
       "pending": "待审核",
       "approved": "通过审核",
-      "rejected": "未通过审核"
+      "rejected": "未通过审核",
+      "delete": "删除投稿",
+      "deleteSuccess": "删除成功"
     },
     "edit": {
       "title": "账户设置",

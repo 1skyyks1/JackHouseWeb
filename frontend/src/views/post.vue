@@ -34,14 +34,12 @@
             </div>
           </div>
           <el-divider></el-divider>
-          <div v-if="postType === 1" style="margin-bottom: 8px">
-            <el-button type="danger" plain :icon="Upload" @click="uploadFile">
-              {{ t('post.upload') }}
-            </el-button>
-          </div>
           <div>
             <div class="prose max-w-none dark:prose-invert" v-html="t('post.content')"></div>
           </div>
+        </el-card>
+        <el-card style="margin: 10px 0;" shadow="never" v-if="postType === 1">
+          <mapUpload :postId="Number(postId)" :userId="userId"/>
         </el-card>
         <el-card style="margin: 10px 0;" v-loading="commentLoading" shadow="never">
           <div class="comments">
@@ -60,12 +58,18 @@
             <div class="comment-list">
               <div v-for="comment in comments" :key="comment.id">
                 <div class="comment-item">
-                  <div class="comment-user">
+                  <div class="comment-user" v-if="!isMobile">
                     <el-avatar shape="square" :src="comment.avatar"></el-avatar>
-                    <span>{{ comment.user_name }}</span>
+                    <span class="user-name" @click="goToUserPage(comment.user_id)">{{ comment.user_name }}</span>
                     <el-divider direction="vertical" style="height: 100%"/>
                   </div>
-                  <div class="comment-content">{{ comment.comment }}</div>
+                  <div class="comment-content">
+                    <span v-if="isMobile">
+                      <span class="user-name" @click="goToUserPage(comment.user_id)">{{ comment.user_name }}</span>
+                      :
+                    </span>
+                    {{ comment.comment }}
+                  </div>
                   <div class="bottom">
                     <el-button text class="delete" v-if="String(comment.user_id) === String(userId)" @click="deletePostComment(comment.comment_id)">{{ t('post.deleteComment') }}</el-button>
                     <div class="comment-time">{{ formatDate(comment.created_time) }}</div>
@@ -110,9 +114,6 @@
         <el-button plain @click="cancelForm">{{ t('post.cancel') }}</el-button>
       </div>
     </el-dialog>
-    <el-dialog v-model="postFileUpload" style="padding-top: 20px; max-width: 400px">
-      <mapUpload :postId="Number(postId)" :userId="userId" v-model:postFileUpload="postFileUpload"></mapUpload>
-    </el-dialog>
   </div>
 </template>
 
@@ -124,13 +125,21 @@ import { postById, postUpdate, postDelete } from "@/api/post"
 import { computed, onBeforeMount, reactive, ref } from "vue";
 import { useStore } from "vuex"
 import { useI18n } from 'vue-i18n';
-import { userById } from "@/api/user";
 import { commentByPostId, postCommentCreate, postCommentDelete } from "@/api/postComment";
 import { dayjs, ElMessage, ElMessageBox } from "element-plus";
 const { locale, mergeLocaleMessage, t } = useI18n();
 import { EditPen, Ticket, Delete, Upload } from '@element-plus/icons-vue'
 import wangEditor from "@/components/wangEditor.vue";
 import router from "@/router";
+import { useBreakpoints } from '@vueuse/core';
+
+const breakpoints = useBreakpoints({
+  tablet: 768,
+  laptop: 992,
+  desktop: 1200,
+});
+
+const isMobile = breakpoints.smaller('tablet');
 
 const route = useRoute()
 const store = useStore()
@@ -318,6 +327,10 @@ const uploadFile = () => {
   postFileUpload.value = true;
 }
 
+const goToUserPage = (userId) => {
+  router.push('/user/' + userId)
+}
+
 onBeforeMount(() => {
   getPostInfo()
   getCommentsByPostId()
@@ -373,9 +386,9 @@ onBeforeMount(() => {
 }
 .comment-item {
   margin-bottom: 10px;
-  padding: 5px;
   display: flex;
   position: relative;
+  padding: 5px 5px 20px;
 }
 .comment-user {
   display: flex;
@@ -415,5 +428,12 @@ onBeforeMount(() => {
 .rich-text-content :deep(img){
   max-width: 100%;
   height: auto;
+}
+.user-name{
+  font-weight: bold;
+  cursor: pointer;
+  &:hover{
+    text-decoration: underline;
+  }
 }
 </style>

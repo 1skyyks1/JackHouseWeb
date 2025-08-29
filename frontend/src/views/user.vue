@@ -101,9 +101,10 @@
             />
           </div>
           <el-divider />
-          <div v-for="(file, index) in postFileList" :key="index" class="post-item">
+          <div v-for="(file, index) in postFileList" :key="index">
             <div class="post-title">{{ file.file_name }}
               <div class="post-info">
+                <el-button text class="delete" v-if="String(file.user_id) === String(myUserId)" @click="deletePostFile(file.file_id)">{{ t('user.info.delete') }}</el-button>
                 <el-popover
                     placement="top-start"
                     :width="200"
@@ -130,18 +131,21 @@
 <script setup>
 import navMenu from '../components/navmenu.vue'
 import { useRoute } from "vue-router";
+import { useStore } from "vuex"
 import { userById } from "@/api/user"
 import { reactive, onBeforeMount, computed, ref } from "vue";
 import { dayjs, ElMessage } from "element-plus";
 import { useBreakpoints } from '@vueuse/core';
 import { useI18n } from 'vue-i18n';
-import { postFileByUserId } from "@/api/postFile"
+import { postFileByUserId, postFileDelete } from "@/api/postFile"
 import { postByUserId } from "@/api/post";
 import router from "@/router";
 
 const { locale, t } = useI18n();
 const route = useRoute()
+const store = useStore()
 const userId = route.params.user_id
+const myUserId = computed(() => store.state.userId);
 
 const userInfo = reactive({})
 const postList = ref([])
@@ -284,6 +288,13 @@ const handlePostFilePageChange = (page) => {
   getPostFileByUserId()
 }
 
+const deletePostFile = (fileId) => {
+  postFileDelete(fileId).then(() => {
+    ElMessage.success(t('user.info.deleteSuccess'));
+    getPostFileByUserId()
+  })
+}
+
 onBeforeMount(() => {
   getUserInfo()
   getPostByUserId()
@@ -321,10 +332,12 @@ onBeforeMount(() => {
 }
 .post-info {
   font-size: 12px;
-  gap: 1rem;
   align-items: center;
   display: flex;
   justify-content: flex-end;
+}
+.post-time {
+  margin-left: 0.5rem;
 }
 .post-item {
   cursor: pointer;
@@ -335,5 +348,10 @@ onBeforeMount(() => {
 }
 .copy-button{
   height: 24px;
+}
+.delete{
+  font-size: 11px;
+  margin: 1px 6px 0;
+  padding: 0 6px;
 }
 </style>

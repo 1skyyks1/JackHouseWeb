@@ -76,7 +76,7 @@ const groups = [
   },
   {
     title: "JHC",
-    desc: "osu!mania叠屋杯",
+    desc: "om叠屋杯",
     pic: "https://pub-1d83badff2eb42d5be2db70eeb6a4b78.r2.dev/61cbd092c7136aa5e98a9aa19730bb7a_720.png",
     link: "https://qm.qq.com/q/x8CpVXAB20"
   },
@@ -87,20 +87,20 @@ const groups = [
     link: "https://qm.qq.com/q/PRaI9t6P62"
   },
   {
-    title: "AAASETU批发",
+    title: "AAASETU",
     desc: "setu群(R18)",
     pic: "https://pub-1d83badff2eb42d5be2db70eeb6a4b78.r2.dev/setu.jpg",
     link: "https://qm.qq.com/q/p6WB1o5bMY"
   },
   {
-    title: "叠屋之三角洲",
+    title: "叠屋三角洲",
     desc: "三角洲分群",
     pic: "https://pub-1d83badff2eb42d5be2db70eeb6a4b78.r2.dev/sjz.jpg",
     link: "https://qm.qq.com/q/IjR5BlujWE"
   },
   {
-    title: "Codm House",
-    desc: "CODM分群&战队",
+    title: "REcodM",
+    desc: "CODM群&战队",
     pic: "https://pub-1d83badff2eb42d5be2db70eeb6a4b78.r2.dev/codm.jpg",
     link: "https://qm.qq.com/q/dh4elzESLm"
   },
@@ -126,7 +126,7 @@ const servers = [
   },
   {
     title: "MJHC",
-    desc: "Malody side JHC",
+    desc: "Malody JHC",
     pic: "https://pub-1d83badff2eb42d5be2db70eeb6a4b78.r2.dev/mjhc.jpg",
     link: "https://discord.gg/uQhBXZ2Y7s"
   }

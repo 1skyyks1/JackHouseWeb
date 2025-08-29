@@ -83,7 +83,8 @@
     "reviewSuccess": "投稿审核成功",
     "deleteSuccess": "删除成功",
     "deleteFailed": "删除失败",
-    "deleteForbidden": "权限不足，无法删除"
+    "deleteForbidden": "权限不足，无法删除",
+    "deleteNotPending": "无法删除已审核的投稿"
   },
   "tag": {
     "getFailed": "获取标签列表失败"

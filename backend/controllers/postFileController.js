@@ -4,6 +4,7 @@ const fs = require('fs')
 const path = require('path')
 const upload = require('../config/multer')
 const ROLES = require('../config/roles')
+const sequelize = require('../config/db')
 
 // 获取指定帖子的所有投稿
 exports.getFileByPostId = async (req, res) => {
@@ -219,13 +220,22 @@ exports.deletePostFile = async (req, res) => {
         }
         const isAdmin = (role === ROLES.ADMIN || role === ROLES.ORG);
         const isOwner = file.user_id === user_id;
-        if (isAdmin || isOwner) {
-            await mc.removeObject(process.env.MINIO_POSTFILES_BUCKET, file.minio_file_name);
-            await file.destroy();
-            res.json({ message: req.t('postFile.deleteSuccess') });
-        } else {
-            res.status(403).json({ message: req.t('postFile.deleteForbidden') });
+        const isPending = isOwner && file.status === 0
+
+        if (!isAdmin) {
+            return res.status(403).json({ message: req.t('postFile.deleteForbidden') });
         }
+
+        if (!isPending) {
+            return res.status(403).json({ message: req.t('postFile.deleteNotPending') });
+        }
+
+        await sequelize.transaction(async (t) => {
+            await file.destroy({ transaction: t });
+            await mc.removeObject(process.env.MINIO_POSTFILES_BUCKET, file.minio_file_name);
+        })
+        res.json({ message: req.t('postFile.deleteSuccess') });
+
     } catch (error) {
         res.status(500).json({ message: req.t('postFile.deleteFailed') });
     }

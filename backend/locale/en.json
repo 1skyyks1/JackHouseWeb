@@ -83,7 +83,8 @@
     "reviewSuccess": "Post file reviewed successfully",
     "deleteSuccess": "Deleted successfully",
     "deleteFailed": "Delete failed",
-    "deleteForbidden": "Permission denied to delete"
+    "deleteForbidden": "Permission denied to delete",
+    "deleteNotPending": "You can't delete a reviewed submission."
   },
   "tag": {
     "getFailed": "Failed to retrieve tag list"

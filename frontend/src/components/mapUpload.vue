@@ -1,12 +1,12 @@
 <template>
   <div class="container">
-    <div class="upload-button">
+    <div class="upload">
       <el-upload
           class="upload"
           drag
+          multiple
           :auto-upload="false"
           :show-file-list="true"
-          :limit="limit"
           :http-request="uploadFile"
           :on-change="selectFile"
           :on-remove="removeFile"
@@ -20,19 +20,10 @@
           <div class="el-upload__tip">
             {{ t('mapUpload.tip') }}
           </div>
-          <div class="el-upload__tip">
-            {{ t('mapUpload.tip2') }}
-          </div>
-          <div class="el-upload__tip">
-            {{ t('mapUpload.tip3') }}
-          </div>
-          <div class="el-upload__tip">
-            {{ t('mapUpload.tip4') }}
-          </div>
         </template>
       </el-upload>
     </div>
-    <div>
+    <div class="upload-btn">
       <el-button type="success" @click="submitUpload" :icon="Upload" :disabled="!selected" :loading="uploading">{{ t('mapUpload.upload') }}</el-button>
     </div>
   </div>
@@ -47,7 +38,6 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 
-const limit = ref(1)
 const uploadRef = ref()
 const selected = ref(false)
 const uploading = ref(false)
@@ -55,17 +45,14 @@ const uploading = ref(false)
 const props = defineProps({
   postId: { type: Number, required: true },
   userId: { type: Number, required: true },
-  postFileUpload: { type: Boolean, required: true }
 })
 
-const emit = defineEmits(['update:postFileUpload']);
-
-const selectFile = () => {
-  selected.value = true
+const selectFile = (file, fileList) => {
+  selected.value = fileList.length > 0
 }
 
-const removeFile = () => {
-  selected.value = false
+const removeFile = (file, fileList) => {
+  selected.value = fileList.length > 0
 }
 
 const uploadFile = async (file) => {
@@ -84,7 +71,8 @@ const uploadFile = async (file) => {
   return await postFileUpload(formData).then(() => {
     ElMessage.success(t('mapUpload.success'));
     uploading.value = false;
-    emit('update:postFileUpload', false);
+    uploadRef.value.clearFiles();
+    selected.value = false;
   }).catch(err => {
     console.log(err)
     uploading.value = false
@@ -98,7 +86,12 @@ const submitUpload = () => {
 </script>
 
 <style scoped>
-.upload-button{
+.upload{
   margin-bottom: 10px;
 }
+.upload-btn {
+  display: flex;
+  justify-content: flex-end;
+}
+
 </style>
