@@ -1,0 +1,6 @@
+#nprogress .bar {
+    top: 60px;
+}
+#nprogress .peg {
+    display: none;
+}

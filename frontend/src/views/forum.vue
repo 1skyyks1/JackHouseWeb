@@ -132,95 +132,23 @@
         </el-card>
       </el-col>
     </el-row>
-
-    <el-dialog v-model="newPost" style="padding-top: 10px">
-      <el-select v-model="postForm.type" :placeholder="t('forum.placeholder.selectPostType')" style="width: 50%">
-        <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-        />
-      </el-select>
-      <el-tabs v-model="tabName" type="card" style="margin-top: 10px">
-        <el-tab-pane label="中文" name="zh">
-          <el-input
-              v-model="postForm.title_zh"
-              placeholder="请输入标题"
-              style="margin-bottom: 10px"></el-input>
-          <wangEditor v-model="postForm.content_zh"></wangEditor>
-        </el-tab-pane>
-        <el-tab-pane label="English" name="en">
-          <el-input
-              v-model="postForm.title_en"
-              placeholder="Please input the title"
-              style="margin-bottom: 10px"></el-input>
-          <wangEditor v-model="postForm.content_en"></wangEditor>
-        </el-tab-pane>
-      </el-tabs>
-      <div style="margin-top: 10px">
-        <el-button type="primary" plain @click="submitForm">
-          {{ t('forum.submit') }}
-        </el-button>
-        <el-button plain @click="cancelForm">{{ t('forum.cancel') }}</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
 <script setup>
 import navMenu from "@/components/navmenu.vue";
-import { ref, computed, reactive, onBeforeMount } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { postSearch, postUpdate, postCreate, allType3Post } from "@/api/post";
+import { postSearch, allType3Post } from "@/api/post";
 import router from '@/router/index'
 import { Edit, Search } from '@element-plus/icons-vue'
 import { dayjs, ElMessage } from 'element-plus'
-import { useStore } from "vuex"
-import wangEditor from "@/components/wangEditor.vue";
-import { userInfo } from "@/api/user.js";
-
-const store = useStore()
 
 const { locale, t } = useI18n();
 const searchKeyword = ref('');
 const page = ref(1);
 const pageSize = ref(5)
-const userId = computed(() => store.state.userId);
-const role = ref(null);
 
-const roleTypeMap = {
-  0: [0],       // USER
-  1: [0, 1, 2], // ORG
-  2: [0, 1, 2], // ADMIN
-};
-
-const allOptions = [
-  {
-    value: 0,
-    label: t('forum.postType.normal'),
-  },
-  {
-    value: 1,
-    label: t('forum.postType.mapRequest'),
-  },
-  {
-    value: 2,
-    label: t('forum.postType.event'),
-  },
-];
-
-const newPost = ref(false)
-const tabName = ref('zh')
-const postForm = reactive({
-  type: null,
-  status: null,
-  translations: [],
-  title_zh: '',
-  content_zh: '',
-  title_en: '',
-  content_en: '',
-});
 const notice = ref([])
 const normal = ref([])
 const event = ref([])
@@ -278,59 +206,8 @@ const handleSelect = (item) => {
   router.push(`/post/${item.post_id}`);
 };
 
-const getUserInfo = async () => {
-  const res = await userInfo();
-  role.value = res.data.role;
-}
-
-const createNewPost = async () => {
-  await getUserInfo();
-  newPost.value = true
-}
-
-const options = computed(() => {
-  if (role.value === null) return [];
-  const allowedTypes = roleTypeMap[role.value];
-  return allOptions.filter(opt => allowedTypes.includes(opt.value));
-});
-
-const submitForm = () => {
-  if(postForm.type === null){
-    ElMessage.warning(t('forum.selectType'))
-    return
-  }
-  const form = {
-    user_id : userId.value,
-    type: postForm.type,
-    status: postForm.status,
-    translations: [
-      {
-        title: postForm.title_zh,
-        content: postForm.content_zh,
-        language: 'zh'
-      },
-      {
-        title: postForm.title_en,
-        content: postForm.content_en,
-        language: 'en'
-      }
-    ]
-  }
-  postCreate(form).then(() => {
-    ElMessage.success('success')
-    newPost.value = false;
-    getAllType3Post();
-  })
-}
-
-const cancelForm = () => {
-  postForm.type = null;
-  postForm.status = null;
-  postForm.title_zh = '';
-  postForm.content_zh = '';
-  postForm.title_en = '';
-  postForm.content_en = '';
-  newPost.value = false;
+const createNewPost = () => {
+  router.push('/forum/editor')
 }
 
 const goToPost = (postId) => {

@@ -79,7 +79,20 @@
     "by": "发帖人",
     "create": "发帖",
     "selectType": "请选择帖子类型",
-    "noResult": "无结果"
+    "noResult": "无结果",
+    "editor": {
+      "editor": "帖子编辑器",
+      "postTypes": "帖子类型",
+      "chineseTitle": "标题 (中文)",
+      "englishTitle": "标题 (英文)",
+      "chineseContent": "正文 (中文)",
+      "englishContent": "正文 (英文)",
+      "create": "确认创建",
+      "update": "确认更新",
+      "cancel": "取消并返回",
+      "createSuccess": "成功创建帖子",
+      "updateSuccess": "成功修改帖子"
+    }
   },
 
   "mapUpload": {

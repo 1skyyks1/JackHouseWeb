@@ -9,6 +9,7 @@ import 'element-plus/theme-chalk/dark/css-vars.css'
 import './style/tailwind.css'
 import { setStore } from "@/utils/request.js";
 import i18n from './locale/i18n.js'
+import './style/nprogress.css'
 
 setStore(store);
 

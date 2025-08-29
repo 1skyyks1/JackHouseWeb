@@ -33,7 +33,13 @@ const router = createRouter({
         {
             path: '/forum',
             name: 'forum',
-            component: () => import('../views/forum.vue')
+            component: () => import('../views/forum.vue'),
+        },
+        {
+            path: '/forum/editor/:id?',
+            name: 'editor',
+            component: () => import('../views/editor.vue'),
+            props: true
         },
         {
             path: '/oauth/complete',
@@ -104,5 +110,20 @@ router.beforeEach(async (to, from, next) => {
         next()
     }
 })
+
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+
+router.beforeEach((to, from, next) => {
+    NProgress.start()
+    next()
+})
+
+router.afterEach(() => {
+    router.isReady().then(() => {
+        NProgress.done()
+    })
+})
+
 
 export default router;

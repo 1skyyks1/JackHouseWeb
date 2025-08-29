@@ -79,7 +79,20 @@
     "by": "by",
     "create": "Create",
     "selectType": "Please select a post type",
-    "noResult": "No result"
+    "noResult": "No result",
+    "editor": {
+      "editor": "Post Editor",
+      "postTypes": "Post Types",
+      "chineseTitle": "Title (Chinese)",
+      "englishTitle": "Title (English)",
+      "chineseContent": "Content (Chinese)",
+      "englishContent": "Content (English)",
+      "create": "Confirm create",
+      "update": "Confirm update",
+      "cancel": "Cancel and back",
+      "createSuccess": "Post created successfully",
+      "updateSuccess": "Post updated successfully"
+    }
   },
 
   "mapUpload": {

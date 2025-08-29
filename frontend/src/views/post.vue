@@ -90,30 +90,6 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-dialog v-model="postEdit" style="padding-top: 10px">
-      <el-tabs v-model="tabName" type="card">
-        <el-tab-pane label="中文" name="zh">
-          <el-input
-              v-model="postEditForm.title_zh"
-              placeholder="请输入标题"
-              style="margin-bottom: 10px"></el-input>
-          <wangEditor v-model="postEditForm.content_zh"></wangEditor>
-        </el-tab-pane>
-        <el-tab-pane label="English" name="en">
-          <el-input
-              v-model="postEditForm.title_en"
-              placeholder="Please input the title"
-              style="margin-bottom: 10px"></el-input>
-          <wangEditor v-model="postEditForm.content_en"></wangEditor>
-        </el-tab-pane>
-      </el-tabs>
-      <div style="margin-top: 10px">
-        <el-button type="primary" plain @click="submitForm">
-          {{ t('post.submit') }}
-        </el-button>
-        <el-button plain @click="cancelForm">{{ t('post.cancel') }}</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -121,15 +97,14 @@
 import navMenu from '../components/navmenu.vue'
 import mapUpload from '../components/mapUpload.vue'
 import { useRoute } from "vue-router";
-import { postById, postUpdate, postDelete } from "@/api/post"
+import { postById, postDelete } from "@/api/post"
 import { computed, onBeforeMount, reactive, ref } from "vue";
 import { useStore } from "vuex"
 import { useI18n } from 'vue-i18n';
 import { commentByPostId, postCommentCreate, postCommentDelete } from "@/api/postComment";
 import { dayjs, ElMessage, ElMessageBox } from "element-plus";
-const { locale, mergeLocaleMessage, t } = useI18n();
+const { mergeLocaleMessage, t } = useI18n();
 import { EditPen, Ticket, Delete, Upload } from '@element-plus/icons-vue'
-import wangEditor from "@/components/wangEditor.vue";
 import router from "@/router";
 import { useBreakpoints } from '@vueuse/core';
 
@@ -144,24 +119,8 @@ const isMobile = breakpoints.smaller('tablet');
 const route = useRoute()
 const store = useStore()
 
-const haveZh = ref(false)
-const haveEn = ref(false)
-
 const postLoading = ref(true)
 const commentLoading = ref(true)
-
-const postEdit = ref(false)
-const tabName = ref('zh')
-const postEditForm = reactive({
-  post_id: null,
-  user_id: null,
-  type: null,
-  status: null,
-  translations: [],
-  user: {}
-});
-
-const postFileUpload = ref(false)
 
 const postId = route.params.post_id
 const postUserId = ref(null)
@@ -213,6 +172,10 @@ const getCommentsByPostId = () => {
   })
 }
 
+const editPost = () => {
+  router.push('/forum/editor/' + postId);
+}
+
 const createComment = () => {
   if (!userId.value) {
     ElMessage.warning(t('post.login'))
@@ -238,54 +201,6 @@ const formatDate = (dateString) => {
 const handlePageChange = (page) => {
   currentPage.value = page;
   getCommentsByPostId();
-}
-
-const editPost = async () => {
-  if(String(userId.value) !== String(postUserId.value)){
-    ElMessage.warning(t('post.isNotMyPost'))
-    return
-  }
-  await postById(postId).then(response => {
-    let dataForm = response.data
-    const zhTranslation = dataForm.translations.find(t => t.language === 'zh');
-    const enTranslation = dataForm.translations.find(t => t.language === 'en');
-    dataForm.title_zh = zhTranslation ? zhTranslation.title : '';
-    dataForm.content_zh = zhTranslation ? zhTranslation.content : '';
-    dataForm.title_en = enTranslation ? enTranslation.title : '';
-    dataForm.content_en = enTranslation ? enTranslation.content : '';
-    Object.assign(postEditForm, dataForm)
-  })
-  postEdit.value = true
-}
-
-const submitForm = () => {
-  postEditForm.translations = [
-    {
-      title: postEditForm.title_zh,
-      content: postEditForm.content_zh,
-      language: 'zh'
-    },
-    {
-      title: postEditForm.title_en,
-      content: postEditForm.content_en,
-      language: 'en'
-    }
-  ];
-  postUpdate(postEditForm.post_id, postEditForm).then(() => {
-    ElMessage.success(t('post.editSuccess'))
-    postEdit.value = false;
-    getPostInfo();
-  })
-}
-
-const cancelForm = () => {
-  postEditForm.post_id = null;
-  postEditForm.user_id = null;
-  postEditForm.type = null;
-  postEditForm.translations = [];
-  postEditForm.user = {};
-  postEditForm.status = null;
-  postEdit.value = false;
 }
 
 const deletePostComment = (commentId) => {
@@ -321,10 +236,6 @@ const deletePost = () => {
       message: t('post.delete.cancelText'),
     })
   })
-}
-
-const uploadFile = () => {
-  postFileUpload.value = true;
 }
 
 const goToUserPage = (userId) => {
