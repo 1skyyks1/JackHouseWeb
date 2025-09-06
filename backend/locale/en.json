@@ -107,5 +107,38 @@
     "permissionDenied": "Permission denied",
     "tokenExpired": "Authentication failed: Token expired",
     "tokenInvalid": "Authentication failed: Invalid token"
+  },
+  "event": {
+    "notFound": "Event not found",
+    "createSuccess": "Event created successfully",
+    "deleteSuccess": "Event deleted successfully",
+    "updateSuccess": "Event updated successfully",
+    "missingRequiredFields": "Missing required fields",
+    "startAfterEnd": "End time must be after start time",
+    "alreadyStartedOrEnded": "Event has already started or ended",
+    "cannotDeleteActive": "Cannot delete an active event",
+    "serverError": "Internal server error"
+  },
+  "stage": {
+    "notFound": "Stage not found",
+    "createSuccess": "Stage created successfully",
+    "updateSuccess": "Stage updated successfully",
+    "deleteSuccess": "Stage deleted successfully",
+    "missingRequiredFields": "Missing required fields",
+    "fileError": "File error",
+    "serverError": "Internal server error"
+  },
+  "score": {
+    "serverError": "Internal server error",
+    "notFound": "Data not found"
+  },
+  "osuScore": {
+    "eventNotFound": "Event not found",
+    "notEventTime": "Not within the event time",
+    "noRecentScore": "No recent score retrieved",
+    "invalidStage": "Recent score does not match any stage",
+    "scoreNotHigher": "Score is not higher than previous",
+    "serverError": "Internal server error"
   }
+
 }

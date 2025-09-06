@@ -107,5 +107,37 @@
     "permissionDenied": "权限不足",
     "tokenExpired": "认证失败：Token已过期",
     "tokenInvalid": "认证失败：无效的Token"
+  },
+  "event": {
+    "notFound": "活动不存在",
+    "createSuccess": "活动创建成功",
+    "deleteSuccess": "活动删除成功",
+    "updateSuccess": "活动更新成功",
+    "missingRequiredFields": "缺少必填信息",
+    "startAfterEnd": "结束时间必须晚于开始时间",
+    "alreadyStartedOrEnded": "活动已开始或已结束",
+    "cannotDeleteActive": "活动进行中无法删除",
+    "serverError": "服务器内部错误"
+  },
+  "stage": {
+    "notFound": "项目不存在",
+    "createSuccess": "项目创建成功",
+    "updateSuccess": "项目更新成功",
+    "deleteSuccess": "项目删除成功",
+    "missingRequiredFields": "缺少必填信息",
+    "fileError": "文件错误",
+    "serverError": "服务器内部错误"
+  },
+  "score": {
+    "serverError": "服务器内部错误",
+    "notFound": "数据不存在"
+  },
+  "osuScore": {
+    "eventNotFound": "活动不存在",
+    "notEventTime": "当前不在活动时间内",
+    "noRecentScore": "未获取到最近成绩",
+    "invalidStage": "最近成绩谱面不正确",
+    "scoreNotHigher": "未取得更高分数",
+    "serverError": "服务器内部错误"
   }
 }

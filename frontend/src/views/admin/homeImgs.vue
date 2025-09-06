@@ -22,12 +22,12 @@
               <el-button type="info" :icon="Link" plain size="small" @click="goToPage(scope.row.redirect_url)"></el-button>
             </template>
           </el-table-column>
-          <el-table-column prop="created_time" label="创建时间" align="center" min-width="200px">
+          <el-table-column label="创建时间" align="center" min-width="200px">
             <template v-slot:default="scope">
               {{ formatDate(scope.row.created_time) }}
             </template>
           </el-table-column>
-          <el-table-column prop="created_time" label="操作" align="center" min-width="300px">
+          <el-table-column label="操作" align="center" min-width="300px">
             <template v-slot:default="scope">
               <el-button type="success" plain size="small" @click="editHomeImg(scope.row)">修改</el-button>
               <el-button type="danger" plain size="small" @click="deleteHomeImg(scope.row)">删除</el-button>
@@ -73,8 +73,8 @@
 <script setup>
 import { Plus, Link, Upload } from "@element-plus/icons-vue";
 import { ref, onBeforeMount, reactive, computed } from "vue";
-import { dayjs, ElMessage, ElMessageBox } from "element-plus";
-import { homeImg, homeImgCreate, homeImgUpdate, homeImgDelete, homeImgList } from '@/api/homeImg'
+import { dayjs } from "element-plus";
+import { homeImgUpdate, homeImgDelete, homeImgList } from '@/api/homeImg'
 import HomeImgUpload from "@/components/homeImgUpload.vue";
 import { useStore } from "vuex"
 import router from "@/router";

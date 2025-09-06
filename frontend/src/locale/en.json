@@ -33,7 +33,11 @@
       "post": "Posts Published",
       "anni": "Countdown to 4th Anniversary",
       "day": "days"
-    }
+    },
+    "event": "Challenge Event",
+    "noEvent": "No ongoing events",
+    "closestEvent": "Upcoming event",
+    "stat": "Website Statistics"
   },
 
   "post": {
@@ -213,5 +217,26 @@
     "dc": "Discord Servers",
     "intro": "About Jack House...",
     "p": "<p><strong>4Key Jack House</strong> — founded on <em>June 1, 2022</em> — is a community for jack players.</p><p>By <em>August 2025</em>, it has grown to over <em><strong>4,000</strong></em><strong> members</strong> worldwide, with the majority from China. </p><p>\uD83D\uDC40<em>What can you do here?</em> - Search for a variety of jack packs, participate in rare jack-only tournaments, and connect with jack players across the globe...</p><p>There are no entrance requirements — <strong>whether you are jack main or not, everyone is welcome to join!</strong></p>"
+  },
+
+  "event": {
+    "overview": "Overview",
+    "countdown": "Time left: ",
+    "noScore": "No score yet",
+    "myScore": "My Score",
+    "leaderboard": "Leaderboard",
+    "rank": "Rank",
+    "username": "Player",
+    "totalRank": "Total Rank",
+    "totalScore": "Total Score",
+    "score": "Score",
+    "submitScore": "Sync Recent Score",
+    "createSuccess": "Score has been recorded",
+    "rule": "Rules",
+    "rule1": "1. Players must play assigned maps in osu!mania online, and use the Sync button to record the score",
+    "rule2": "2. Sync can only fetch the **most recent score** within 24 hours. If you forget to sync, the score cannot be fetched later. (It's recommended to sync immediately after each play to avoid missing a score.)",
+    "rule3": "3. Players can sync multiple times, but only the highest score will be kept. If the new score is not higher, it will not be recorded and a message will be shown.",
+    "rule4": "4. To prevent abuse, syncing is limited to once every 90 seconds. If you need assistance, please contact admin.",
+    "desc": "Details"
   }
 }

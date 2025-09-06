@@ -57,7 +57,7 @@
                     <span class="post-username">{{ t('home.by') }} {{ post.user_name }}</span>
                     <span class="post-time">{{ formatDate(post.created_time) }}</span>
                   </div>
-                  <el-divider />
+                  <el-divider class="custom-divider"/>
                 </div>
               </div>
             </el-card>
@@ -66,7 +66,32 @@
       </el-col>
       <el-col :xs="24" :sm="24" :md="6" :lg="4" :xl="4" style="margin-bottom: 10px">
         <el-card shadow="never">
+          <el-row justify="center">
+            <el-col class="event">
+              <div class="event-title"><el-icon><Aim></Aim></el-icon>{{ t('home.event') }}</div>
+            </el-col>
+            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" v-if="events.length > 0" class="event-card" @click="goToEvent(events[0].id)">
+              <div class="event-name gradient-text">{{ events[0].name }}</div>
+              <div class="event-time">~{{ monthDayHour(events[0].end) }}</div>
+            </el-col>
+            <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" v-if="events.length > 1" class="event-card" @click="goToEvent(events[1].id)">
+              <div class="event-name">{{ events[1].name }}</div>
+              <div class="event-time">~{{monthDayHour(events[1].end) }}</div>
+            </el-col>
+            <el-col xs="24" :sm="24" :md="24" :lg="24" :xl="24" v-if="events.length === 0" class="no-event-card">
+              <div class="no-event">{{ t('home.noEvent') }}</div>
+              <div v-if="closeEvent && events.length === 0" class="closest-event">
+                <div class="closest-title">{{ t('home.closestEvent') }}</div>
+                <div class="closest-name">{{ closeEvent.name }}</div>
+                <div class="closest-time">{{ monthDayHour(closeEvent.start) }}</div>
+              </div>
+            </el-col>
+          </el-row>
+          <el-divider class="dashboard-divider"></el-divider>
           <el-row justify="center" :gutter="10" class="dashboard-stat">
+            <el-col class="event">
+              <div class="event-title"><el-icon><DataLine /></el-icon>{{ t('home.stat') }}</div>
+            </el-col>
             <el-col :xs="12" :sm="12" :md="12" :lg="24" :xl="24">
               <el-statistic :title="t('home.dashboard.user')" :value="userValue" />
             </el-col>
@@ -93,12 +118,14 @@
 import navMenu from '../components/navmenu.vue'
 import { ref, onBeforeMount, computed } from "vue";
 import { postList, postByType, postWithContentByType } from "@/api/post"
+import { eventList } from "@/api/event.js"
 import { homeDashboard } from "@/api/dashboard"
 import { homeImg } from "@/api/homeImg";
 import { useI18n } from "vue-i18n";
 import { dayjs } from "element-plus";
 import router from "@/router";
 const { locale, t } = useI18n();
+import { Aim, DataLine } from "@element-plus/icons-vue";
 
 const postLoading = ref(true) // 主页论坛加载
 const noticeLoading = ref(true) // 主页公告加载
@@ -106,6 +133,8 @@ const noticeLoading = ref(true) // 主页公告加载
 const notices = ref([])
 const posts = ref([])
 const homeImgs = ref([])
+const events = ref([])
+const closeEvent = ref({})
 
 import { useTransition } from '@vueuse/core'
 
@@ -127,6 +156,10 @@ const countdownFormat = computed(() => {
 
 const formatDate = (dateString) => {
   return dayjs(dateString).format('YYYY-MM-DD');
+}
+
+const monthDayHour = (dateString) => {
+  return dayjs(dateString).format('MM-DD HH:mm');
 }
 
 const getTitle = (post) => {
@@ -174,6 +207,21 @@ const getHomeDashboard = () => {
   })
 }
 
+const getEvent = async () => {
+  await eventList(1, 2, true, false).then(response => {
+    events.value = response.data;
+  })
+  if(events.value.length === 0) {
+    getClosestEvent();
+  }
+}
+
+const getClosestEvent = () => {
+  eventList(1, 1, false, true).then(response => {
+    closeEvent.value = response.data[0];
+  })
+}
+
 const goToPost = (postId) => {
   router.push(`/post/${postId}`)
 }
@@ -182,11 +230,16 @@ const goToPage = (page) => {
   router.push(page)
 }
 
+const goToEvent = (id) => {
+  router.push(`/event/${id}`)
+}
+
 onBeforeMount(() => {
   getPostList();
   getNotice();
   getHomeImg();
   getHomeDashboard();
+  getEvent();
 })
 
 </script>
@@ -241,8 +294,11 @@ onBeforeMount(() => {
 .post-username {
   margin-right: 15px;
 }
-:deep(.el-divider--horizontal){
+:deep(.custom-divider.el-divider--horizontal){
   margin: 15px 0 5px;
+}
+:deep(.dashboard-divider.el-divider--horizontal){
+  margin: 15px 0;
 }
 .notice-content :deep(img){
   display: none;
@@ -287,8 +343,64 @@ onBeforeMount(() => {
 .line-clamp-1 {
   -webkit-line-clamp: 1;
 }
-
 .line-clamp-5 {
   -webkit-line-clamp: 5;
+}
+.event {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.enter-text {
+  font-size: 14px;
+}
+.event-title {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.event-card {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+.event-name {
+  font-size: 15px;
+  font-style: italic;
+  font-weight: bold;
+  &:hover{
+    font-size: 16px;
+    animation: gradient-flow 8s ease infinite, bounce 0.6s ease;
+  }
+}
+.event-time {
+  font-size: 12px;
+  align-self: flex-end;
+}
+.gradient-text {
+  background: linear-gradient(270deg, #ff6ec4,
+  #7873f5,
+  #4ade80,
+  #facc15,
+  #f87171,
+  #06b6d4);
+  background-size: 800% 800%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-flow 6s ease infinite;
+}
+
+@keyframes gradient-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-8px); }
+  50% { transform: translateY(4px); }
+  70% { transform: translateY(-4px); }
 }
 </style>

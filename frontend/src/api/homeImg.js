@@ -23,7 +23,7 @@ export function homeImgCreate(data){
         url: '/homeImg',
         method: 'POST',
         data: data,
-        headers:{
+        headers: {
             'Content-Type': 'multipart/form-data',
         }
     })

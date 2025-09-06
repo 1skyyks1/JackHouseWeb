@@ -9,6 +9,7 @@ const dashboardRoutes = require('./routes/dashboardRoute')
 const packRoutes = require('./routes/packRoute')
 const tagRoutes = require('./routes/tagRoute')
 const packCommentRoutes = require('./routes/packCommentRoute')
+const eventRoutes = require('./routes/eventRoute');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -46,28 +47,36 @@ app.use(cors({
 })); // 启用 CORS
 
 // API限流
-const limiter = rateLimit({
+const commonLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15分钟
     max: 200, // 每个IP允许的请求数
     standardHeaders: true,
     legacyHeaders: false,
 });
-app.use(limiter);
+
+// osu-api
+const osuLimiter = rateLimit({
+    windowMs: 10 * 60 * 1000,
+    max: 80,
+    standardHeaders: true,
+    legacyHeaders: false,
+})
 
 // 解析 JSON 请求体
 app.use(express.json());
 
 // 路由
-app.use('/user', userRoutes);
-app.use('/auth', authRoutes);
-app.use('/post', postRoutes);
-app.use('/comment', postCommentRoutes);
-app.use('/postFile', postFileRoutes);
-app.use('/homeImg', homeImgRoutes);
-app.use('/dashboard', dashboardRoutes);
-app.use('/pack', packRoutes);
-app.use('/tag', tagRoutes);
-app.use('/packCom', packCommentRoutes);
+app.use('/user', commonLimiter, userRoutes);
+app.use('/auth', osuLimiter, authRoutes);
+app.use('/post', commonLimiter, postRoutes);
+app.use('/comment', commonLimiter, postCommentRoutes);
+app.use('/postFile', commonLimiter, postFileRoutes);
+app.use('/homeImg', commonLimiter, homeImgRoutes);
+app.use('/dashboard', commonLimiter, dashboardRoutes);
+app.use('/pack', commonLimiter, packRoutes);
+app.use('/tag', commonLimiter, tagRoutes);
+app.use('/packCom', commonLimiter, packCommentRoutes);
+app.use('/event', commonLimiter, eventRoutes)
 
 app.listen(port, '0.0.0.0', () => {
     console.log(`Server running on http://localhost:${port}`);

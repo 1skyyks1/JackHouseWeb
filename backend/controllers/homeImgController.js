@@ -146,7 +146,7 @@ exports.deleteHomeImg = async (req, res) => {
         }
         await mc.removeObject(process.env.MINIO_HOMEIMG_BUCKET, img.minio_img_name);
         await img.destroy();
-        res.json({ message: req.t('homeImg.deleteSuccess') })
+        res.status(200).json({ message: req.t('homeImg.deleteSuccess') })
     } catch (error) {
         res.status(500).json({ message: req.t('homeImg.deleteFailed') });
     }

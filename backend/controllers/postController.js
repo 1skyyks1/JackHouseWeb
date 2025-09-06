@@ -373,7 +373,7 @@ exports.deletePost = async (req, res) => {
         const isOwner = post.user_id === user_id;
         if (isAdmin || isOwner) {
             await post.destroy();
-            res.json({ message: req.t('post.deleteSuccess') });
+            res.status(200).json({ message: req.t('post.deleteSuccess') });
         } else {
             res.status(403).json({ message: req.t('post.deleteForbidden') });
         }

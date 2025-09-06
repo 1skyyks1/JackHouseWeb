@@ -8,6 +8,10 @@ const Pack = require('../models/pack');
 const Tag = require('../models/tag');
 const PackComment = require('../models/packComment');
 
+const Event = require('../models/event/event');
+const EventStage = require('../models/event/eventStage');
+const EventScore = require('../models/event/eventScore');
+
 Post.hasMany(PostTranslation, { foreignKey: 'post_id', onDelete: 'CASCADE', as: 'translations' });
 Post.hasMany(PostFile, { foreignKey: 'post_id', onDelete: 'CASCADE', as: 'files' });
 Post.hasMany(PostComment, { foreignKey: 'post_id', onDelete: 'CASCADE' });
@@ -26,6 +30,7 @@ User.hasMany(PostFile, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 User.hasMany(PostComment, { foreignKey: 'user_id', onDelete: 'CASCADE' })
 User.hasMany(HomeImg, { foreignKey: 'user_id', onDelete: 'CASCADE' })
 User.hasMany(Pack, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+User.hasMany(EventScore, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 
 HomeImg.belongsTo(User, {foreignKey: 'user_id'})
 
@@ -48,6 +53,14 @@ Tag.belongsToMany(Pack, {
 PackComment.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 PackComment.belongsTo(Pack, { foreignKey: 'pack_id' });
 
+Event.hasMany(EventStage, { foreignKey: 'event_id', onDelete: 'CASCADE', as: 'stage' });
+
+EventStage.belongsTo(Event, { foreignKey: 'event_id', as: 'event' });
+EventStage.hasMany(EventScore, { foreignKey: 'stage_id', onDelete: 'CASCADE', as: 'score' });
+
+EventScore.belongsTo(EventStage, { foreignKey: 'stage_id' , as: 'stage' });
+EventScore.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+
 module.exports = {
     Post,
     PostTranslation,
@@ -58,4 +71,7 @@ module.exports = {
     Pack,
     Tag,
     PackComment,
+    Event,
+    EventStage,
+    EventScore
 };

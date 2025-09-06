@@ -52,6 +52,12 @@ const router = createRouter({
             component: () => import('../views/about.vue'),
         },
         {
+            path: '/event/:event_id',
+            name: 'event',
+            component: () => import('../views/event.vue'),
+            props: true
+        },
+        {
             path: '/admin',
             name: 'admin',
             component: () => import('../views/admin/admin.vue'),
@@ -86,6 +92,17 @@ const router = createRouter({
                     path: 'homeImgs',
                     name: 'homeImgs',
                     component: () => import('../views/admin/homeImgs.vue')
+                },
+                {
+                    path: 'events',
+                    name: 'events',
+                    component: () => import('../views/admin/events.vue')
+                },
+                {
+                    path: 'events/:event_id/stage',
+                    name: 'eventStages',
+                    component: () => import('../views/admin/eventStages.vue'),
+                    props: true
                 }
             ]
         }
@@ -113,6 +130,8 @@ router.beforeEach(async (to, from, next) => {
 
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+
+NProgress.configure({ showSpinner: false })
 
 router.beforeEach((to, from, next) => {
     NProgress.start()

@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const AuthController = require('../controllers/authController');
+const osuAuthController = require('../controllers/osu/osuAuthController');
 
 // 生成授权链接并重定向
-router.get('/osu', AuthController.auth);
+router.get('/osu', osuAuthController.authRedirect);
 
 // 处理回调并完成登录
-router.get('/osu/callback', AuthController.authCallback);
+router.get('/osu/callback', osuAuthController.authCallback);
 
 // 邮箱注册
 router.post('/register', AuthController.register);
