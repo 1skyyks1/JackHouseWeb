@@ -1,17 +1,5 @@
 import request from "@/utils/request";
 
-// 获取所有投稿
-export function postFileList(page, pageSize){
-    return request({
-        url: '/postFile',
-        method: 'GET',
-        params: {
-            page,
-            pageSize
-        }
-    })
-}
-
 // 根据userId获取投稿
 export function postFileByUserId(userId, page, pageSize){
     return request({
@@ -24,14 +12,17 @@ export function postFileByUserId(userId, page, pageSize){
     })
 }
 
-// 根据postId获取单个帖子的所有投稿
-export function postFileByPostId(postId, page, pageSize){
+// 根据条件获取投稿
+export function postFileList(page, pageSize, post_id, status, keyword){
     return request({
-        url: '/postFile/post/' + postId,
+        url: '/postFile',
         method: 'GET',
         params: {
             page,
-            pageSize
+            pageSize,
+            post_id,
+            status,
+            keyword
         }
     })
 }

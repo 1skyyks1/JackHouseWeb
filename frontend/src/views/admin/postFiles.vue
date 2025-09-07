@@ -3,14 +3,24 @@
     <template #header>
       <div class="card-header">
         <span class="title">投稿审核</span>
-        <div>
-          <el-checkbox v-model="selectAll" label="All Files" size="large" @change="selectAllChange" style="margin-right: 20px" :disabled="selectAll" />
-          <el-select v-model="selectPostId" style="width: 240px;" @change="selectRequest">
+        <div class="filter">
+          <el-button type="success" plain style="margin-left: 10px;" @click="exportExcel">
+            导出 Excel
+          </el-button>
+          <el-select v-model="selectPostId" style="width: 240px;" @change="onFilterChange" placeholder="所属征稿">
+            <el-option :value="null" label="全部征稿帖"></el-option>
             <el-option v-for="post in requestList"
                        :key="post.post_id"
                        :value="post.post_id"
                        :label="locale.value === 'zh' ? post.title_zh : post.title_en">
             </el-option>
+          </el-select>
+          <el-input v-model="keyword" placeholder="搜索文件名" style="width: 240px" @input="debouncedGetPostFile"></el-input>
+          <el-select v-model="reviewStatus" style="width: 120px;" @change="onFilterChange" placeholder="审核状态">
+            <el-option :value="null" label="全部状态"></el-option>
+            <el-option :value="0" label="未审核"></el-option>
+            <el-option :value="1" label="通过"></el-option>
+            <el-option :value="2" label="不通过"></el-option>
           </el-select>
         </div>
       </div>
@@ -71,11 +81,13 @@
 <script setup>
 import { computed, onBeforeMount, reactive, ref } from "vue";
 import { dayjs, ElMessage, ElMessageBox } from "element-plus";
-import router from "@/router";
-import { postFileList, postFileByPostId, postFileReview, postFileUrl, postFileDelete } from "@/api/postFile"
+import { postFileList, postFileReview, postFileUrl, postFileDelete } from "@/api/postFile"
 import { requestByUserId } from "@/api/post"
 import { useStore } from "vuex"
 import { useI18n } from 'vue-i18n';
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
+import { debounce } from 'lodash';
 
 const store = useStore()
 const { locale } = useI18n();
@@ -84,11 +96,12 @@ const fileList = ref([])
 const currentPage = ref(1)
 const pageSize = ref(13)
 const totalFiles = ref(0)
-const selectAll = ref(true)
+const keyword = ref("")
 
 const userId = computed(() => store.state.userId);
 const requestList = ref([])
 const selectPostId = ref(null)
+const reviewStatus = ref(null)
 const fileTableLoading = ref(false)
 
 const fileReview = ref(false)
@@ -105,35 +118,33 @@ const formatDate = (dateString) => {
 const getRequestList = () => {
   requestByUserId(userId.value).then(response => {
     requestList.value = response.data
-    // console.log(requestList.value)
   })
 }
 
-const selectRequest = () => {
-  if(selectPostId.value){
-    selectAll.value = false;
-    currentPage.value = 1
-    getPostFileByPostId();
-  }
-}
+const onFilterChange = () => {
+  currentPage.value = 1;
+  getPostFile();
+};
 
-const getPostFileByPostId = () => {
+const getPostFile = () => {
   fileTableLoading.value = true;
-  postFileByPostId(selectPostId.value, currentPage.value, pageSize.value).then(response => {
+  postFileList(currentPage.value, pageSize.value, selectPostId.value, reviewStatus.value, keyword.value).then(response => {
     fileList.value = response.data;
     totalFiles.value = response.total;
     fileTableLoading.value = false;
-  })
+  }).catch(() => {
+    fileTableLoading.value = false;
+  });
 }
+
+const debouncedGetPostFile = debounce(() => {
+  currentPage.value = 1; // 搜索时回到第一页
+  getPostFile();
+}, 500);
 
 const handlePageChange = (page) => {
   currentPage.value = page;
-  if(selectAll.value){
-    getAllFiles();
-  }
-  else{
-    getPostFileByPostId();
-  }
+  getPostFile();
 };
 
 const downloadFile = (fileId) => {
@@ -162,7 +173,7 @@ const submitReview = () => {
   postFileReview(reviewForm.file_id, updateData).then(response => {
     fileReview.value = false;
     resetForm();
-    getPostFileByPostId();
+    getPostFile();
   })
 }
 
@@ -177,36 +188,50 @@ const deleteFile = (fileId) => {
       }
   ).then(() => {
     postFileDelete(fileId).then(response => {
-      if(selectAll.value){
-        getAllFiles();
-      }
-      else{
-        getPostFileByPostId();
-      }
+      getPostFile();
     })
   })
 }
 
-const getAllFiles = () => {
+const exportExcel = async () => {
   fileTableLoading.value = true;
-  postFileList(currentPage.value, pageSize.value).then(response => {
-    fileList.value = response.data;
-    totalFiles.value = response.total;
-    fileTableLoading.value = false;
-  })
-}
+  try {
+    const response = await postFileList(1, totalFiles.value || 10000, selectPostId.value, reviewStatus.value, keyword.value);
 
-const selectAllChange = () => {
-  if(selectAll.value){
-    selectPostId.value = null;
-    currentPage.value = 1;
-    getAllFiles();
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('投稿列表');
+
+    // 添加表头
+    worksheet.columns = [
+      { header: '文件名', key: 'file_name', width: 100 },
+      { header: '投稿人', key: 'user_name', width: 20 },
+      { header: '反馈意见', key: 'feedback', width: 100 },
+    ];
+
+    // 添加数据
+    response.data.forEach(file => {
+      worksheet.addRow({
+        file_name: file.file_name,
+        user_name: file.user_name,
+        feedback: file.feedback,
+      });
+    });
+
+    // 导出
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+    saveAs(blob, '投稿.xlsx');
+
+  } catch (err) {
+    console.error(err);
+  } finally {
+    fileTableLoading.value = false;
   }
-}
+};
 
 onBeforeMount(() => {
   getRequestList()
-  getAllFiles();
+  getPostFile();
 })
 </script>
 
@@ -224,5 +249,11 @@ onBeforeMount(() => {
 .title{
   display: flex;
   align-items: center;
+}
+.filter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px
 }
 </style>

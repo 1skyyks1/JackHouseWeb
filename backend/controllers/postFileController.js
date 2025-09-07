@@ -5,27 +5,46 @@ const path = require('path')
 const upload = require('../config/multer')
 const ROLES = require('../config/roles')
 const sequelize = require('../config/db')
+const { Op } = require("sequelize");
 
-// 获取指定帖子的所有投稿
+// 条件获取所有投稿
 exports.getFileByPostId = async (req, res) => {
-    const { post_id } = req.params;
-    const { page, pageSize } = req.query;
+    const { page, pageSize, post_id, status, keyword } = req.query;
     const offset = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
     const limit = parseInt(pageSize, 10);
+
+    const where = {};
+
+    if (post_id) {
+        where.post_id = post_id;
+    }
+
+    if (status) {
+        where.status = status;
+    }
+
+    if (keyword) {
+        where[Op.or] = [
+            { file_name: { [Op.like]: `%${keyword}%` } },
+        ];
+    }
+
+    const options = {
+        limit,
+        offset,
+        order: [['uploaded_time', 'DESC']],
+        where,
+        include: [
+            {
+                model: User,
+                as: 'user',
+                attributes: ['user_name', 'role']
+            }
+        ]
+    };
+
     try {
-        const { count, rows } = await PostFile.findAndCountAll({
-            where: { post_id },
-            limit,
-            offset,
-            order: [['uploaded_time', 'DESC']],
-            include: [
-                {
-                    model: User,
-                    as: 'user',
-                    attributes: ['user_name', 'role']
-                }
-            ]
-        });
+        const { count, rows } = await PostFile.findAndCountAll(options);
 
         const result = rows.map(file => {
             const fileData = file.toJSON();
@@ -60,38 +79,6 @@ exports.getFileByUserId = async (req, res) => {
         res.status(500).json({ message: req.t('postFile.getFailed') });
     }
 }
-
-// 获取所有帖子所有投稿
-exports.getAllPostFiles = async (req, res) => {
-    const { page, pageSize } = req.query;
-    const offset = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
-    const limit = parseInt(pageSize, 10);
-    try {
-        const { count, rows } = await PostFile.findAndCountAll({
-            limit,
-            offset,
-            order: [['uploaded_time', 'DESC']],
-            include: [
-                {
-                    model: User,
-                    as: 'user',
-                    attributes: ['user_name', 'role']
-                }
-            ]
-        });
-        const result = rows.map(file => {
-            const fileData = file.toJSON();
-            fileData.user_name = fileData.user.user_name;
-            fileData.role = fileData.user.role;
-            delete fileData.user;
-            return fileData;
-        })
-        const totalPages = Math.ceil(count / limit);
-        res.json({ data: result, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
-    } catch (error) {
-        res.status(500).json({ message: req.t('postFile.getFailed') });
-    }
-};
 
 // 创建投稿
 exports.createPostFile = async (req, res) => {

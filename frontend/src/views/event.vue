@@ -66,6 +66,7 @@
                   <p class="rule">{{ t('event.rule2') }}</p>
                   <p class="rule">{{ t('event.rule3') }}</p>
                   <p class="rule">{{ t('event.rule4') }}</p>
+                  <p class="rule">{{ t('event.rule5') }}</p>
                 </div>
                 <el-divider class="custom-divider"></el-divider>
                 <div class="score-header">
@@ -84,12 +85,12 @@
               <template #default>
                 <div class="rank">
                   <el-table :data="eventRank" style="width: 100%" :row-class-name="tableRowClassName" class="total-table">
-                    <el-table-column type="index" align="center" :index="indexMethod" :label="t('event.rank')" min-width="55">
+                    <el-table-column type="index" align="center" :index="indexMethod" min-width="40">
                       <template #default="{ row, $index }">
                         <span v-if="indexMethod($index) === 1" style="font-size: 26px">🥇</span>
                         <span v-else-if="indexMethod($index) === 2" style="font-size: 24px">🥈</span>
                         <span v-else-if="indexMethod($index) === 3" style="font-size: 24px">🥉</span>
-                        <span v-else>{{ indexMethod($index) }}</span>
+                        <span v-else>#{{ indexMethod($index) }}</span>
                       </template>
                     </el-table-column>
                     <el-table-column align="right" min-width="70" class="avatar-col">
@@ -102,7 +103,7 @@
                         <span>{{ scope.row.user.user_name }}</span>
                       </template>
                     </el-table-column>
-                    <el-table-column prop="totalScore" min-width="80" :label="t('event.totalScore')" align="center"></el-table-column>
+                    <el-table-column prop="totalScore" min-width="100" :label="t('event.totalScore')" align="center"></el-table-column>
                   </el-table>
                   <el-pagination
                       style="margin-top: 14px; justify-content: center"
@@ -129,7 +130,11 @@
                 </div>
               </div>
               <el-table :data="stageRank" style="width: 100%" :row-class-name="tableRowClassName">
-                <el-table-column type="index" align="center" :index="indexMethod" :label="t('event.rank')" min-width="60"></el-table-column>
+                <el-table-column type="index" align="center" :index="indexMethod" min-width="40">
+                  <template #default="{ row, $index }">
+                    <span>#{{ indexMethod($index) }}</span>
+                  </template>
+                </el-table-column>
                 <el-table-column align="right" min-width="70" class="avatar-col">
                   <template v-slot:default="scope">
                     <el-avatar shape="square" :src="scope.row.user.avatar" style="margin-top: 5px"/>
@@ -140,7 +145,7 @@
                     <span>{{ scope.row.user.user_name }}</span>
                   </template>
                 </el-table-column>
-                <el-table-column prop="score" min-width="120px" :label="t('event.score')" align="center"></el-table-column>
+                <el-table-column prop="score" min-width="100" :label="t('event.score')" align="center"></el-table-column>
               </el-table>
               <el-pagination
                   style="margin-top: 14px; justify-content: center"
