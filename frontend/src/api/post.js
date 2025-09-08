@@ -37,9 +37,9 @@ export function postByUserId(userId, page, pageSize){
 }
 
 // 根据userId获取 征稿 帖
-export function requestByUserId(userId){
+export function requestPostList(){
     return request({
-        url: '/post/requestPost/' + userId,
+        url: '/post/requestPost',
         method: 'GET'
     })
 }

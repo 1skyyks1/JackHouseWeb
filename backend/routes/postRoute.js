@@ -21,8 +21,8 @@ router.get('/search', PostController.searchPosts);
 // 获取每种类型最新的三个帖子
 router.get('/forum', PostController.getAllType3Posts)
 
-// 获取某用户的所有征稿帖
-router.get('/requestPost/:user_id', PostController.getRequestPostByUserId)
+// 获取所有征稿帖
+router.get('/requestPost', checkAuth(), PostController.getRequestList)
 
 // 获取单个帖子
 router.get('/:post_id', PostController.getPostById);

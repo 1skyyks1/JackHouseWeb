@@ -26,6 +26,9 @@ exports.getFileByPostId = async (req, res) => {
     if (keyword) {
         where[Op.or] = [
             { file_name: { [Op.like]: `%${keyword}%` } },
+            sequelize.where(sequelize.col('user.user_name'), {
+                [Op.like]: `%${keyword}%`,
+            })
         ];
     }
 
@@ -38,7 +41,7 @@ exports.getFileByPostId = async (req, res) => {
             {
                 model: User,
                 as: 'user',
-                attributes: ['user_name', 'role']
+                attributes: ['user_name']
             }
         ]
     };
@@ -207,22 +210,22 @@ exports.deletePostFile = async (req, res) => {
         }
         const isAdmin = (role === ROLES.ADMIN || role === ROLES.ORG);
         const isOwner = file.user_id === user_id;
-        const isPending = isOwner && file.status === 0
-
-        if (!isAdmin) {
-            return res.status(403).json({ message: req.t('postFile.deleteForbidden') });
-        }
+        const isPending = file.status === 0
 
         if (!isPending) {
             return res.status(403).json({ message: req.t('postFile.deleteNotPending') });
         }
 
-        await sequelize.transaction(async (t) => {
-            await file.destroy({ transaction: t });
-            await mc.removeObject(process.env.MINIO_POSTFILES_BUCKET, file.minio_file_name);
-        })
-        res.json({ message: req.t('postFile.deleteSuccess') });
+        if (isAdmin || isOwner) {
+            await sequelize.transaction(async (t) => {
+                await file.destroy({ transaction: t });
+                await mc.removeObject(process.env.MINIO_POSTFILES_BUCKET, file.minio_file_name);
+            })
+        } else {
+            return res.status(403).json({ message: req.t('postFile.deleteForbidden') });
+        }
 
+        res.json({ message: req.t('postFile.deleteSuccess') });
     } catch (error) {
         res.status(500).json({ message: req.t('postFile.deleteFailed') });
     }

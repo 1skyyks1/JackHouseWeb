@@ -174,17 +174,11 @@ exports.getPostsByUserId = async (req, res) => {
     }
 };
 
-// 获取某用户的所有征稿帖
-exports.getRequestPostByUserId = async (req, res) => {
-    const { user_id } = req.params;
-    try{
+// 获取所有征稿帖（投稿审核系统用）
+exports.getRequestList = async (req, res) => {
+    try {
         const rows = await Post.findAll({
-            where: {
-                [Op.and]: [
-                    { user_id: user_id },
-                    { type: 1 }
-                ]
-            },
+            where: { type: 1 },
             order: [['created_time', 'DESC']],
             include: [
                 {
@@ -195,9 +189,11 @@ exports.getRequestPostByUserId = async (req, res) => {
             ]
         });
 
-        const result = rows.length ? processPosts(rows) : [];
-        res.json({ data: result })
-    } catch(error){
+        const results = rows.length ? processPosts(rows) : [];
+
+        res.json({ data: results })
+    } catch(error) {
+        console.log(error);
         res.status(500).json({ message: req.t('post.listFailed') });
     }
 }

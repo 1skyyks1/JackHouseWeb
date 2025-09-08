@@ -15,7 +15,7 @@
                        :label="locale.value === 'zh' ? post.title_zh : post.title_en">
             </el-option>
           </el-select>
-          <el-input v-model="keyword" placeholder="搜索文件名" style="width: 240px" @input="debouncedGetPostFile"></el-input>
+          <el-input v-model="keyword" placeholder="搜索文件名或谱师" style="width: 240px" @input="debouncedGetPostFile"></el-input>
           <el-select v-model="reviewStatus" style="width: 120px;" @change="onFilterChange" placeholder="审核状态">
             <el-option :value="null" label="全部状态"></el-option>
             <el-option :value="0" label="未审核"></el-option>
@@ -82,7 +82,7 @@
 import { computed, onBeforeMount, reactive, ref } from "vue";
 import { dayjs, ElMessage, ElMessageBox } from "element-plus";
 import { postFileList, postFileReview, postFileUrl, postFileDelete } from "@/api/postFile"
-import { requestByUserId } from "@/api/post"
+import { requestPostList } from "@/api/post"
 import { useStore } from "vuex"
 import { useI18n } from 'vue-i18n';
 import ExcelJS from 'exceljs';
@@ -98,7 +98,6 @@ const pageSize = ref(13)
 const totalFiles = ref(0)
 const keyword = ref("")
 
-const userId = computed(() => store.state.userId);
 const requestList = ref([])
 const selectPostId = ref(null)
 const reviewStatus = ref(null)
@@ -116,7 +115,7 @@ const formatDate = (dateString) => {
 }
 
 const getRequestList = () => {
-  requestByUserId(userId.value).then(response => {
+  requestPostList().then(response => {
     requestList.value = response.data
   })
 }
