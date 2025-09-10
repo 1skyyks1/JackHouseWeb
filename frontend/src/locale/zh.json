@@ -239,5 +239,15 @@
     "rule4": "4. 可以多次同步保留最高分，若分数不是更高则不会录入，并会弹出提示。",
     "rule5": "5. 为防滥用，每90秒只能同步1次，如需协助请联系管理员。",
     "desc": "活动详情"
+  },
+
+  "tags": {
+    "Full Jack": "满叠",
+    "Dense Jack": "大叠",
+    "Middle Jack": "中叠",
+    "Light Jack": "小叠",
+    "Anchor Jack": "纵叠",
+    "Quad Stream": "四押切",
+    "Mini Jack": "迷你叠/子弹"
   }
 }

@@ -43,7 +43,9 @@
           </div>
           <div class="tag-box">
             <p>{{ t('pack.pattern') }}</p>
-            <el-check-tag v-for="tag in tags.slice(0, 7)" v-model:checked="tag.checked" @change="handleTagSelect" :disabled="packType === 1 || packType === 2">{{ tag.tag_name }}</el-check-tag>
+            <el-check-tag v-for="tag in tags.slice(0, 7)" v-model:checked="tag.checked" @change="handleTagSelect" :disabled="packType === 1 || packType === 2">
+              {{ t(`tags.${tag.tag_name}`) }}
+            </el-check-tag>
           </div>
           <div class="tag-box">
             <p>{{ t('pack.bpm') }}</p>
@@ -125,7 +127,9 @@
             <el-collapse-item :title="t('pack.tags')">
               <div class="tag-box" v-if="packForm.type === 0">
                 <p>{{ t('pack.pattern') }}</p>
-                <el-check-tag v-for="tag in addPackTags.slice(0, 7)" v-model:checked="tag.checked">{{ tag.tag_name }}</el-check-tag>
+                <el-check-tag v-for="tag in addPackTags.slice(0, 7)" v-model:checked="tag.checked">
+                  {{ t(`tags.${tag.tag_name}`) }}
+                </el-check-tag>
               </div>
               <div class="tag-box" v-if="packForm.type === 0">
                 <p>{{ t('pack.bpm') }}</p>
@@ -168,7 +172,7 @@
         </el-descriptions-item>
         <el-descriptions-item>
           <div class="tag-box">
-            <el-check-tag v-for="tag in drawerData.tags" disabled>{{ tag.tag_name }}</el-check-tag>
+            <el-check-tag v-for="tag in drawerData.tags" disabled>{{ t(`tags.${tag.tag_name}`, tag.tag_name) }}</el-check-tag>
           </div>
         </el-descriptions-item>
         <el-descriptions-item :label="t('pack.drawer.intro')">

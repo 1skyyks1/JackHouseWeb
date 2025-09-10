@@ -239,5 +239,15 @@
     "rule4": "4. Players can sync multiple times, but only the highest score will be kept. If the new score is not higher, it will not be recorded and a message will be shown.",
     "rule5": "5. To prevent abuse, syncing is limited to once every 90 seconds. If you need assistance, please contact admin.",
     "desc": "Details"
+  },
+
+  "tags": {
+    "Full Jack": "Full Jack",
+    "Dense Jack": "Dense Jack",
+    "Middle Jack": "Middle Jack",
+    "Light Jack": "Light Jack",
+    "Anchor Jack": "Anchor Jack",
+    "Quad Stream": "Quad Stream",
+    "Mini Jack": "Mini Jack"
   }
 }
