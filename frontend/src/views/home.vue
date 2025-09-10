@@ -300,6 +300,9 @@ onBeforeMount(() => {
 :deep(.dashboard-divider.el-divider--horizontal){
   margin: 15px 0;
 }
+:deep(.drawer-divider.el-divider--horizontal){
+  margin: 0;
+}
 .notice-content :deep(img){
   display: none;
 }
@@ -378,6 +381,25 @@ onBeforeMount(() => {
   font-size: 12px;
   align-self: flex-end;
 }
+
+.closest-name {
+  font-size: 15px;
+  font-style: italic;
+  font-weight: bold;
+  &:hover{
+    font-size: 16px;
+    animation: gradient-flow 8s ease infinite, bounce 0.6s ease;
+  }
+}
+.closest-time {
+  font-size: 12px;
+  align-self: flex-end;
+}
+
+.no-event {
+  font-size: 14px;
+}
+
 .gradient-text {
   background: linear-gradient(270deg, #ff6ec4,
   #7873f5,

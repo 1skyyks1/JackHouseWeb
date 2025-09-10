@@ -1,36 +1,28 @@
 <template>
-  <el-select @change="langChange" v-model="recentLang" :popper-append-to-body="false" class="select-box">
-    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-        <span style="float: left">
-          <img :src="item.icon" alt="" style="padding-top: 7px">
-        </span>
-      <span style="float: left; padding-left: 5px">{{ item.label }}</span>
-    </el-option>
-    <template #prefix>
-      <span style="display: inline-flex; align-items: center;">
-        <img :src="options.find(item => item.value === recentLang).icon" alt="" height="20px">
-      </span>
-    </template>
-  </el-select>
+  <button class="flag-btn" @click="toggleLang">
+    <span :class="currentFlag"></span>
+  </button>
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
+import { ref, computed } from "vue";
 import { useI18n } from 'vue-i18n';
 const { locale } = useI18n();
 
-
-const options = reactive([{
-  value: 'zh',
-  label: '简体中文',
-  icon: 'https://cdn.jsdelivr.net/npm/@twemoji/svg@latest/1f1e8-1f1f3.svg'
-},{
-  value: 'en',
-  label: 'English',
-  icon: 'https://cdn.jsdelivr.net/npm/@twemoji/svg@latest/1f1ec-1f1e7.svg'
-}])
+const flags = {
+  zh: "fi fi-cn",
+  en: "fi fi-gb"
+};
 
 const recentLang = ref(locale.value)
+
+const currentFlag = computed(() => flags[recentLang.value]);
+
+const toggleLang = () => {
+  recentLang.value = recentLang.value === "zh" ? "en" : "zh";
+  locale.value = recentLang.value;
+  localStorage.setItem("locale", locale.value);
+};
 
 const langChange = () => {
   locale.value = recentLang.value
@@ -40,16 +32,26 @@ const langChange = () => {
 </script>
 
 <style scoped>
-.select-box{
-  width: 130px;
-  height: 40px;
-  margin: 8px 20px;
-  border-radius: 10px;
+.flag-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  border-radius: 50%;
+  padding: 8px;
+  transition: background-color 0.3s, box-shadow 0.3s;
 }
-.select-box :deep(.el-select__prefix img){
-  display: block !important;
-  visibility: visible !important;
-  height: 20px !important;
-  width: 20px !important;
+.flag-btn span {
+  display: inline-block;
+  line-height: 1;
+  border-radius: 15%;
+}
+.flag-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+}
+.dark .flag-btn:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.1);
 }
 </style>

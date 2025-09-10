@@ -104,6 +104,7 @@
       <el-menu-item index="/about" class="menu-item">{{ t('menu.about') }}</el-menu-item>
     </el-menu>
 
+    <el-divider class="drawer-divider"></el-divider>
     <div class="ver-option">
       <div class="ver-lang-option">
         <lang></lang>
@@ -364,26 +365,18 @@ html.dark .darkModeSvg{
   padding: 0
 }
 .lang-option{
-  margin: 4px 0 0 0;
-}
-.ver-option{
-  margin-top: 10px;
-  position: absolute;
-  bottom: 20px;
+  margin: 0 10px 3px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  width: 70%;
 }
-/*.ver-lang-option{
-  margin: 4px 0 0 0;
-  padding: 8px 0 8px 10px;
-  .el-select{
-    margin: 0 10px 0 0
-  }
-}*/
-.ver-svg{
-  margin-bottom: 8px;
+.ver-option {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: flex-start;
+}
+.ver-lang-option {
+  margin: 10px 0;
 }
 .el-select{
   margin: 8px

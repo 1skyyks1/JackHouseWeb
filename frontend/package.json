@@ -20,6 +20,7 @@
     "element-plus": "^2.10.4",
     "exceljs": "^4.4.0",
     "file-saver": "^2.0.5",
+    "flag-icons": "^7.5.0",
     "lodash": "^4.17.21",
     "lucide-vue-next": "^0.526.0",
     "nprogress": "^0.2.0",
