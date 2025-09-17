@@ -1,11 +1,8 @@
 const { User, PostFile, Post } = require('../models/index')
-const mc = require('../config/minio')
-const fs = require('fs')
-const path = require('path')
-const upload = require('../config/multer')
 const ROLES = require('../config/roles')
 const sequelize = require('../config/db')
 const { Op } = require("sequelize");
+const { fetchUploadUrl, getSign, getAuthCode } = require('../utils/pan');
 
 // 条件获取所有投稿
 exports.getFileByPostId = async (req, res) => {
@@ -85,14 +82,15 @@ exports.getFileByUserId = async (req, res) => {
 
 // 创建投稿
 exports.createPostFile = async (req, res) => {
-    const { post_id, user_id, file_name, file_url, status } = req.body;
+    const { post_id, file_url, file_name, size } = req.body;
+    const user_id = req.user.user_id;
     try {
         await PostFile.create({
             post_id,
             user_id,
             file_name,
             file_url,
-            status
+            size
         });
         res.status(201).json({ message: req.t('postFile.createSuccess') })
     } catch (error) {
@@ -100,71 +98,44 @@ exports.createPostFile = async (req, res) => {
     }
 }
 
-// 上传投稿
-exports.uploadPostFile = [
-    upload.upload.single('file'),
-    async (req, res) => {
-        const { post_id, status } = req.body;
-        const user_id = req.user.user_id;
-        const file = req.file;
-
-        if (!file) {
-            return res.status(400).json({ message: req.t('postFile.noFile') });
+// 获取上传链接
+exports.getUploadUrl = async (req, res) => {
+    const { post_id } = req.params;
+    const user_id = req.user.user_id;
+    try {
+        const cnt = await PostFile.count({
+            where: { user_id, post_id }
+        })
+        const post = await Post.findByPk(post_id)
+        if(cnt >= post.limit){
+            return res.status(403).json({ message: req.t('postFile.uploadLimit') });
         }
-
-        const filePath = file.path;
-        const fileName = file.filename;
-        const fileUrl = `${process.env.MINIO_POSTFILES_BUCKET}/${fileName}`;
-
-        try {
-            // 上传文件到 MinIO
-            await mc.fPutObject(process.env.MINIO_POSTFILES_BUCKET, fileName, filePath, {
-                'Content-Type': file.mimetype,
-            });
-
-            // 将文件信息保存到数据库
-            const postFile = await PostFile.create({
-                post_id,
-                user_id,
-                file_name: Buffer.from(file.originalname, 'latin1').toString('utf8'),
-                minio_file_name: fileName,
-                file_url: fileUrl,
-                status,
-            });
-
-            // 删除临时文件
-            fs.unlinkSync(filePath);
-
-            res.status(201).json({ message: req.t('postFile.uploadSuccess'), data: postFile });
-        } catch (error) {
-            // 如果上传失败，删除临时文件
-            if (fs.existsSync(filePath)) {
-                fs.unlinkSync(filePath);
-            }
-            res.status(500).json({ message: req.t('postFile.uploadFailed') });
+        const authCode = await getAuthCode()
+        const url = await fetchUploadUrl(authCode, String(post.folder_id));
+        if(url){
+            res.status(200).json({ data: url });
         }
+    } catch (err) {
+        res.status(500).json({ message: req.t('postFile.uploadFailed') });
     }
-];
+}
 
-// MinIO预签名 文件url
-exports.postFileUrl = async (req, res) => {
-    const expires = 24 * 60 * 60;
+// 获取文件下载url
+exports.getFileUrl = async (req, res) => {
     const { file_id } = req.params;
-    try{
-        const postFile = await PostFile.findByPk(file_id);
-        if(!postFile) {
+    try {
+        const file = await PostFile.findByPk(file_id);
+        if(!file) {
             return res.status(404).json({ message: req.t('postFile.notFound') });
         }
-        const fileName = postFile.minio_file_name;
-
-        const fileUrl = await mc.presignedUrl('GET', process.env.MINIO_POSTFILES_BUCKET, fileName, expires)
-        res.status(200).json({ data: { fileUrl } })
+        const authCode = await getAuthCode()
+        const url = await getSign(file.file_url, authCode)
+        res.status(200).json({ data: url.data });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: req.t('postFile.getUrlFailed') });
     }
 }
-
 
 // 更新投稿
 exports.updatePostFile = async (req, res) => {
@@ -198,10 +169,9 @@ exports.reviewPostFile = async (req, res) => {
     }
 }
 
-// 删除投稿
-exports.deletePostFile = async (req, res) => {
+// 新删除投稿，不删除文件
+exports.deleteFile = async (req, res) => {
     const { file_id } = req.params;
-    const user_id = req.user.user_id;
     const role = req.user.role;
     try {
         const file = await PostFile.findByPk(file_id);
@@ -209,24 +179,13 @@ exports.deletePostFile = async (req, res) => {
             return res.status(404).json({ message: req.t('postFile.notFound') });
         }
         const isAdmin = (role === ROLES.ADMIN || role === ROLES.ORG);
-        const isOwner = file.user_id === user_id;
-        const isPending = file.status === 0
-
-        if (!isPending) {
-            return res.status(403).json({ message: req.t('postFile.deleteNotPending') });
-        }
-
-        if (isAdmin || isOwner) {
-            await sequelize.transaction(async (t) => {
-                await file.destroy({ transaction: t });
-                await mc.removeObject(process.env.MINIO_POSTFILES_BUCKET, file.minio_file_name);
-            })
+        if (isAdmin) {
+            await file.destroy();
+            res.json({ message: req.t('postFile.deleteSuccess') });
         } else {
             return res.status(403).json({ message: req.t('postFile.deleteForbidden') });
         }
-
-        res.json({ message: req.t('postFile.deleteSuccess') });
     } catch (error) {
         res.status(500).json({ message: req.t('postFile.deleteFailed') });
     }
-};
+}

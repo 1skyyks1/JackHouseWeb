@@ -38,8 +38,8 @@
             <div class="prose max-w-none dark:prose-invert" v-html="t('post.content')"></div>
           </div>
         </el-card>
-        <el-card style="margin: 10px 0;" shadow="never" v-if="postType === 1">
-          <mapUpload :postId="Number(postId)" :userId="userId"/>
+        <el-card style="margin: 10px 0;" shadow="never" v-if="canUpload">
+          <mapUpload :postId="Number(postId)" :userId="userId" :limit="limit"/>
         </el-card>
         <el-card style="margin: 10px 0;" v-loading="commentLoading" shadow="never">
           <div class="comments">
@@ -130,6 +130,8 @@ const avatar = ref('');
 const role = ref(0)
 const time = ref(null)
 const postType = ref(0)
+const end = ref(null)
+const limit = ref(null)
 
 const newComment = ref('')
 const comments = ref([])
@@ -160,6 +162,8 @@ const getPostInfo = () => {
     avatar.value = response.data.user.avatar;
     role.value = response.data.user.role;
     postType.value = response.data.type;
+    end.value = response.data.end;
+    limit.value = response.data.limit;
     postLoading.value = false;
   })
 }
@@ -240,6 +244,12 @@ const deletePost = () => {
 
 const goToUserPage = (userId) => {
   router.push('/user/' + userId)
+}
+
+const canUpload = () => {
+  const now = new Date();
+  const endDate = new Date(end.value);
+  return postType === 1 && now < endDate
 }
 
 onBeforeMount(() => {

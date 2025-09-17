@@ -57,6 +57,7 @@
   },
   "post": {
     "listFailed": "获取帖子列表失败",
+    "getPostFailed": "获取该帖子失败",
     "notFound": "帖子不存在",
     "createFailed": "创建帖子失败",
     "createSuccess": "帖子创建成功",
@@ -67,13 +68,15 @@
     "deleteSuccess": "帖子删除成功",
     "deleteForbidden": "权限不足，无法删除",
     "searchFailed": "搜索帖子失败",
-    "noPermission": "无权限"
+    "noPermission": "无权限",
+    "startAfterEnd": "结束时间必须晚于现在时间"
   },
   "postFile": {
     "getFailed": "获取投稿失败",
     "notFound": "投稿不存在",
     "createSuccess": "上传成功",
     "createFailed": "上传失败",
+    "uploadLimit": "上传数量超出限制",
     "uploadSuccess": "文件上传成功",
     "uploadFailed": "文件上传失败",
     "noFile": "没有文件上传",

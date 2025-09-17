@@ -81,7 +81,7 @@
 <script setup>
 import { computed, onBeforeMount, reactive, ref } from "vue";
 import { dayjs, ElMessage, ElMessageBox } from "element-plus";
-import { postFileList, postFileReview, postFileUrl, postFileDelete } from "@/api/postFile"
+import { postFileList, postFileReview, postFileDelete, downloadUrl } from "@/api/postFile"
 import { requestPostList } from "@/api/post"
 import { useStore } from "vuex"
 import { useI18n } from 'vue-i18n';
@@ -147,8 +147,8 @@ const handlePageChange = (page) => {
 };
 
 const downloadFile = (fileId) => {
-  postFileUrl(fileId).then(response => {
-    const url = response.data.fileUrl;
+  downloadUrl(fileId).then(response => {
+    const url = response.data;
     window.open(url);
   })
 }
@@ -205,6 +205,7 @@ const exportExcel = async () => {
       { header: '文件名', key: 'file_name', width: 100 },
       { header: '投稿人', key: 'user_name', width: 20 },
       { header: '反馈意见', key: 'feedback', width: 100 },
+      { header: '投稿时间', key: 'uploaded_time', width: 30 },
     ];
 
     // 添加数据
@@ -213,6 +214,7 @@ const exportExcel = async () => {
         file_name: file.file_name,
         user_name: file.user_name,
         feedback: file.feedback,
+        uploaded_time: file.uploaded_time,
       });
     });
 
@@ -220,7 +222,6 @@ const exportExcel = async () => {
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: 'application/octet-stream' });
     saveAs(blob, '投稿.xlsx');
-
   } catch (err) {
     console.error(err);
   } finally {

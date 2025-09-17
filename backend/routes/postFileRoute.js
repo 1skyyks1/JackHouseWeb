@@ -10,8 +10,8 @@ router.get('/', checkAuth([ROLES.ORG,ROLES.ADMIN]), postFileController.getFileBy
 // 获取指定用户的所有投稿
 router.get('/user/:user_id', postFileController.getFileByUserId)
 
-// 上传投稿
-router.post('/upload', checkAuth(), postFileController.uploadPostFile);
+// 获取上传链接
+router.get('/upload/:post_id', checkAuth(), postFileController.getUploadUrl);
 
 // 创建投稿
 router.post('/', checkAuth([ROLES.ORG,ROLES.ADMIN]), postFileController.createPostFile);
@@ -23,9 +23,9 @@ router.put('/:file_id', checkAuth([ROLES.ORG,ROLES.ADMIN]), postFileController.u
 router.put('/review/:file_id', checkAuth([ROLES.ORG,ROLES.ADMIN]), postFileController.reviewPostFile)
 
 // 删除投稿
-router.delete('/:file_id', checkAuth(), postFileController.deletePostFile);
+router.delete('/:file_id', checkAuth(), postFileController.deleteFile);
 
-// 获取文件下载 URL
-router.get('/url/:file_id', checkAuth([ROLES.ORG,ROLES.ADMIN]), postFileController.postFileUrl);
+// 获取url
+router.get('/download/:file_id', checkAuth([ROLES.ORG,ROLES.ADMIN]), postFileController.getFileUrl);
 
 module.exports = router;

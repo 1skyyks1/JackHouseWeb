@@ -6,7 +6,8 @@
 import { onBeforeMount, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import { ElMessage } from "element-plus";
+import { userUpdate } from '@/api/user.js'
+import { ElMessage, ElMessageBox } from "element-plus";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n()
 
@@ -19,16 +20,49 @@ const token = urlParams.get('token');
 const userId = urlParams.get('userId')
 const redirectTo = localStorage.getItem('loginRedirect') || '/';
 
-onBeforeMount(() => {
+const thirdName = urlParams.get('name')
+const thirdAvatar = urlParams.get('avatar')
+
+onBeforeMount(async () => {
   if (token && userId) {
     localStorage.setItem('token', token);
     localStorage.setItem('userId', userId);
     store.commit('setLogin', userId)
-    router.push(redirectTo)
+
+    if(thirdName || thirdAvatar){
+      try {
+        const confirm = await ElMessageBox.confirm(
+            t('login.syncPrompt', { name: thirdName }),
+            t('login.syncTitle'),
+            {
+              confirmButtonText: t('login.syncYes'),
+              cancelButtonText: t('login.syncNo'),
+              type: 'warning',
+              closeOnClickModal: false,
+              closeOnPressEscape: false,
+              distinguishCancelAndClose: true
+            }
+        )
+        if(confirm === 'confirm'){
+          // 选择同步
+          await userUpdate(userId, {
+            user_name: thirdName,
+            avatar: thirdAvatar,
+          })
+          ElMessage.success(t('login.syncSuccess'))
+        } else {
+          ElMessage.info(t('login.syncSkipped'))
+        }
+      } catch(err) {
+        ElMessage.info(t('login.syncSkipped'))
+      }
+    }
+
+    await router.push(redirectTo)
     ElMessage.success(t('menu.message.loginSuccess'))
   }
   else{
-    router.push('/')
+    await router.push('/')
   }
 })
 </script>

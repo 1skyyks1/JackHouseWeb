@@ -57,6 +57,7 @@
   },
   "post": {
     "listFailed": "Failed to get post list",
+    "getPostFailed": "Failed to get this post",
     "notFound": "Post not found",
     "createFailed": "Failed to create post",
     "createSuccess": "Post created successfully",
@@ -67,13 +68,15 @@
     "deleteSuccess": "Post deleted successfully",
     "deleteForbidden": "Permission denied to delete post",
     "searchFailed": "Failed to search posts",
-    "noPermission": "No permission to create"
+    "noPermission": "No permission to create",
+    "startAfterEnd": "End time must be later than now"
   },
   "postFile": {
     "getFailed": "Failed to get post files",
     "notFound": "Post file not found",
     "createSuccess": "Upload successful",
     "createFailed": "Upload failed",
+    "uploadLimit": "The number of uploaded files exceeds the limit",
     "uploadSuccess": "File uploaded successfully",
     "uploadFailed": "File upload failed",
     "noFile": "No file uploaded",

@@ -12,9 +12,9 @@
               </div>
             </div>
           </template>
-          <div v-if="newPost">
+          <div>
             <div style="margin-bottom: 8px">{{ t('forum.editor.postTypes') }}</div>
-            <el-select v-model="postForm.type" :placeholder="t('forum.placeholder.selectPostType')" style="width: 50%">
+            <el-select v-model="postForm.type" :placeholder="t('forum.placeholder.selectPostType')" style="width: 50%" :disabled="!newPost">
               <el-option
                   v-for="item in options"
                   :key="item.value"
@@ -22,6 +22,14 @@
                   :value="item.value"
               />
             </el-select>
+            <div style="margin-top: 10px" v-if="postForm.type === 1">
+              <span style="margin-right: 8px">{{ t('forum.editor.end') }}</span>
+              <el-date-picker v-model="postForm.end" type="datetime" :placeholder="t('forum.placeholder.end')"></el-date-picker>
+            </div>
+            <div style="margin-top: 10px" v-if="postForm.type === 1">
+              <span style="margin-right: 8px">{{ t('forum.editor.limit') }}</span>
+              <el-input-number v-model="postForm.limit" :min="1"></el-input-number>
+            </div>
             <el-divider></el-divider>
           </div>
           <div style="margin: 8px 0">{{ t('forum.editor.chineseTitle') }}</div>
@@ -76,7 +84,8 @@ const userId = computed(() => store.state.userId);
 const role = ref(null);
 const postForm = reactive({
   type: null,
-  status: null,
+  end: null,
+  limit: 2,
   translations: [],
   title_zh: '',
   content_zh: '',
@@ -134,10 +143,15 @@ const submitForm = () => {
     ElMessage.warning(t('forum.selectType'))
     return
   }
+  if(postForm.type === 1 && !postForm.end){
+    ElMessage.warning(t('forum.selectEnd'));
+    return
+  }
   const form = {
     user_id : userId.value,
     type: postForm.type,
-    status: postForm.status,
+    end: postForm.end,
+    limit: postForm.limit,
     translations: [
       {
         title: postForm.title_zh,

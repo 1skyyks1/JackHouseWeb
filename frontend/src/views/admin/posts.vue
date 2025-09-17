@@ -46,32 +46,6 @@
       />
     </div>
   </el-card>
-
-  <el-dialog v-model="postEdit" style="padding-top: 10px">
-    <el-tabs v-model="tabName" type="card">
-      <el-tab-pane label="中文" name="zh">
-        <el-input
-          v-model="postEditForm.title_zh"
-          placeholder="请输入标题"
-          style="margin-bottom: 10px"></el-input>
-        <wangEditor v-model="postEditForm.content_zh"></wangEditor>
-      </el-tab-pane>
-      <el-tab-pane label="English" name="en">
-        <el-input
-            v-model="postEditForm.title_en"
-            placeholder="Please input the title"
-            style="margin-bottom: 10px"></el-input>
-        <wangEditor v-model="postEditForm.content_en"></wangEditor>
-      </el-tab-pane>
-    </el-tabs>
-    <div style="margin-top: 10px">
-      <el-button type="primary" plain @click="submitForm">
-        确认修改
-      </el-button>
-      <el-button plain @click="cancelForm">取消</el-button>
-    </div>
-  </el-dialog>
-
 </template>
 
 <script setup>
@@ -79,23 +53,11 @@ import { onBeforeMount, reactive, ref } from "vue";
 import { postById, postDelete, postList, postUpdate } from "@/api/post"
 import { dayjs, ElMessage, ElMessageBox } from "element-plus";
 import router from "@/router";
-import wangEditor from "@/components/wangEditor.vue"
 
 const posts = ref([])
 const currentPage = ref(1)
 const pageSize = ref(12)
 const totalPosts = ref(0)
-
-const postEdit = ref(false)
-const tabName = ref('zh')
-const postEditForm = reactive({
-  post_id: null,
-  user_id: null,
-  type: null,
-  status: null,
-  translations: [],
-  user: {}
-});
 
 const postTableLoading = ref(false)
 
@@ -123,18 +85,8 @@ const enterPostPage = (postId) => {
   router.push({ path: `/post/${postId}` })
 }
 
-const editPost = async (postId) => {
-  await postById(postId).then(response => {
-    let dataForm = response.data
-    const zhTranslation = dataForm.translations.find(t => t.language === 'zh');
-    const enTranslation = dataForm.translations.find(t => t.language === 'en');
-    dataForm.title_zh = zhTranslation ? zhTranslation.title : '';
-    dataForm.content_zh = zhTranslation ? zhTranslation.content : '';
-    dataForm.title_en = enTranslation ? enTranslation.title : '';
-    dataForm.content_en = enTranslation ? enTranslation.content : '';
-    Object.assign(postEditForm, dataForm)
-    postEdit.value = true
-  })
+const editPost = (postId) => {
+  router.push('/forum/editor/' + postId);
 }
 
 const deletePost = (row) => {
@@ -159,36 +111,6 @@ const deletePost = (row) => {
       message: '取消删除操作',
     })
   })
-}
-
-const submitForm = () => {
-  postEditForm.translations = [
-    {
-      title: postEditForm.title_zh,
-      content: postEditForm.content_zh,
-      language: 'zh'
-    },
-    {
-      title: postEditForm.title_en,
-      content: postEditForm.content_en,
-      language: 'en'
-    }
-  ];
-  postUpdate(postEditForm.post_id, postEditForm).then(() => {
-    ElMessage.success('修改成功')
-    postEdit.value = false;
-    getPostList();
-  })
-}
-
-const cancelForm = () => {
-  postEditForm.post_id = null;
-  postEditForm.user_id = null;
-  postEditForm.type = null;
-  postEditForm.translations = [];
-  postEditForm.user = {};
-  postEditForm.status = null;
-  postEdit.value = false;
 }
 
 onBeforeMount(() => {

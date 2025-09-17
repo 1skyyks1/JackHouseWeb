@@ -5,8 +5,8 @@
            class="nav-menu"
            :ellipsis="false">
     <div class="logo">
-      <img alt="logo" src="../assets/pic/jackHouseDark.png" v-if="isDark"/>
-      <img alt="logo" src="../assets/pic/jackHouseLight.png" v-else/>
+      <img alt="logo" src="../assets/pic/jackHouseDark.webp" v-if="isDark"/>
+      <img alt="logo" src="../assets/pic/jackHouseLight.webp" v-else/>
     </div>
     <div v-if="isMobile" style="">
       <el-menu-item @click="openDrawer">

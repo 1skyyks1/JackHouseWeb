@@ -2,6 +2,7 @@ const { Post, PostTranslation, User } = require('../models/index');
 const sequelize = require('../config/db')
 const { Op } = require('sequelize');
 const ROLES = require("../config/roles");
+const { addFolder, getAuthCode } = require('../utils/pan');
 
 // 获取所有帖子
 exports.getAllPosts = async (req, res) => {
@@ -90,7 +91,7 @@ exports.getPostWithContentByType = async (req, res) => {
                 {
                     model: PostTranslation,
                     as: 'translations',
-                    attributes: ['title', 'content', 'language'], // 获取标题和内容
+                    attributes: ['title', 'content', 'language'],
                 },
                 {
                     model: User,
@@ -245,13 +246,13 @@ exports.getPostById = async (req, res) => {
             res.status(404).json({ message: req.t('post.notFound') });
         }
     } catch (error) {
-        res.status(500).json({ message: req.t('post.listFailed') });
+        res.status(500).json({ message: req.t('post.getPostFailed') });
     }
 };
 
 // 创建帖子
 exports.createPost = async (req, res) => {
-    const { type, status, translations } = req.body;
+    const { type, translations, end, limit } = req.body;
     const user_id = req.user.user_id;
     const userRole = req.user.role;
 
@@ -261,23 +262,40 @@ exports.createPost = async (req, res) => {
         2: 'all',       // ADMIN 可以发所有帖子
     };
 
-    if (
+    if(
         roleTypePermissions[userRole] !== 'all' &&
         !roleTypePermissions[userRole].includes(type)
     ) {
         return res.status(403).json({ message: req.t('post.noPermission') });
     }
 
+    let endDate;
+    if(Number(type) === 1 && end) {
+        endDate = new Date(end);
+        const now = new Date();
+        if(endDate < now) { // 征稿结束时间
+            return res.status(400).json({ message: req.t('post.startAfterEnd') })
+        }
+    }
+
     const t = await sequelize.transaction();
 
     try {
+        let folder_id;
+        if(Number(type) === 1) {
+            const authCode = await getAuthCode()
+            folder_id = await addFolder(endDate.toISOString().split('T')[0], '227868', authCode);
+        }
+
         const newPost = await Post.create({
             user_id,
             type,
-            status: status || null,
+            end: endDate || null,
+            limit: limit || null,
+            folder_id: folder_id || null,
         }, { transaction: t });
 
-        for( const { language, title, content } of translations){
+        for( const { language, title, content } of translations ){
             await PostTranslation.create({
                 post_id: newPost.post_id,
                 language,
@@ -285,8 +303,9 @@ exports.createPost = async (req, res) => {
                 content,
             },{ transaction: t });
         }
+
         await t.commit();
-        res.status(201).json({ data: newPost });
+        res.status(201).json({ data: { post_id: newPost.post_id } });
     } catch (error) {
         await t.rollback();
         console.error(error)
@@ -297,9 +316,19 @@ exports.createPost = async (req, res) => {
 // 更新帖子
 exports.updatePost = async (req, res) => {
     const { post_id } = req.params;
-    const { type, status, translations } = req.body;
+    const { type, translations, end, limit } = req.body;
     const user_id = req.user.user_id;
     const role = req.user.role;
+
+    let endDate;
+    if(Number(type) === 1 && end) {
+        endDate = new Date(end);
+        const now = new Date();
+        if(endDate < now) { //征稿结束时间
+            return res.status(400).json({ message: req.t('post.startAfterEnd') })
+        }
+    }
+
     try {
         const existingPost = await Post.findByPk(post_id);
         if (!existingPost) {
@@ -309,7 +338,8 @@ exports.updatePost = async (req, res) => {
         const isOwner = existingPost.user_id === user_id;
         if (isAdmin || isOwner) {
             existingPost.type = type ?? existingPost.type;
-            existingPost.status = status ?? existingPost.status;
+            existingPost.end = endDate ?? existingPost.end;
+            existingPost.limit = limit ?? existingPost.limit;
             await existingPost.save();
 
             let translationModified = false;

@@ -15,6 +15,15 @@
     }
   },
 
+  "login": {
+    "syncPrompt": "{name} 你好！，检测到osu!名字/头像更新，是否同步？",
+    "syncTitle": "osu!用户信息同步更新",
+    "syncYes": "同步",
+    "syncNo": "不同步",
+    "syncSuccess": "已同步",
+    "syncSkipped": "已跳过同步"
+  },
+
   "loginDialog": {
     "username": "Username / Email",
     "password": "Password",
@@ -72,7 +81,8 @@
     "cancel": "Cancel",
     "placeholder": {
       "selectPostType": "Please select a post type",
-      "search": "Please input..."
+      "search": "Please input...",
+      "end": "End Time"
     },
     "postType": {
       "normal": "Normal Post",
@@ -83,6 +93,7 @@
     "by": "by",
     "create": "Create",
     "selectType": "Please select a post type",
+    "selectEnd": "Please select end time",
     "noResult": "No result",
     "editor": {
       "editor": "Post Editor",
@@ -95,7 +106,9 @@
       "update": "Confirm update",
       "cancel": "Cancel and back",
       "createSuccess": "Post created successfully",
-      "updateSuccess": "Post updated successfully"
+      "updateSuccess": "Post updated successfully",
+      "end": "Request deadline",
+      "limit": "Submission limit"
     }
   },
 

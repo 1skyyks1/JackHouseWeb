@@ -39,6 +39,10 @@ const PostFile = sequelize.define('PostFile', {
     feedback: {
         type: DataTypes.TEXT,
         allowNull: true,
+    },
+    size: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
     }
 }, {
     tableName: 'post_file',

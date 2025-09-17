@@ -15,6 +15,15 @@
     }
   },
 
+  "login": {
+    "syncPrompt": "Hello {name}! We've detected an update in your osu! name/avatar. Do you want to sync it?",
+    "syncTitle": "osu! User Info Sync Update",
+    "syncYes": "Sync",
+    "syncNo": "Don't Sync",
+    "syncSuccess": "Synced successfully",
+    "syncSkipped": "Sync skipped"
+  },
+
   "loginDialog": {
     "username": "用户名/邮箱",
     "password": "密码",
@@ -72,7 +81,8 @@
     "cancel": "取消",
     "placeholder": {
       "selectPostType": "请选择帖子类型",
-      "search": "请输入..."
+      "search": "请输入...",
+      "end": "征稿结束时间"
     },
     "postType": {
       "normal": "常规帖",
@@ -83,6 +93,7 @@
     "by": "发帖人",
     "create": "发帖",
     "selectType": "请选择帖子类型",
+    "selectEnd": "请选择结束时间",
     "noResult": "无结果",
     "editor": {
       "editor": "帖子编辑器",
@@ -95,7 +106,9 @@
       "update": "确认更新",
       "cancel": "取消并返回",
       "createSuccess": "成功创建帖子",
-      "updateSuccess": "成功修改帖子"
+      "updateSuccess": "成功修改帖子",
+      "end": "征稿截止时间",
+      "limit": "投稿数量限制"
     }
   },
 

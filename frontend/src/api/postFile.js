@@ -62,22 +62,18 @@ export function postFileDelete(fileId){
     })
 }
 
-// 上传
-export function postFileUpload(data){
+// 获取上传链接
+export function uploadUrl(postId){
     return request({
-        url: '/postFile/upload',
-        method: 'POST',
-        data: data,
-        headers:{
-            'Content-Type': 'multipart/form-data',
-        }
+        url: '/postFile/upload/' + postId,
+        method: 'GET',
     })
 }
 
-// 下载
-export function postFileUrl(fileId){
+// 获取下载url
+export function downloadUrl(fileId){
     return request({
-        url: `/postFile/url/` + fileId,
+        url: `/postFile/download/` + fileId,
         method: 'GET',
     });
 }

@@ -104,7 +104,6 @@
           <div v-for="(file, index) in postFileList" :key="index">
             <div class="post-title">{{ file.file_name }}
               <div class="post-info">
-                <el-button text class="delete" v-if="String(file.user_id) === String(myUserId)" @click="deletePostFile(file.file_id)">{{ t('user.info.delete') }}</el-button>
                 <el-popover
                     placement="top-start"
                     :width="200"
@@ -131,7 +130,6 @@
 <script setup>
 import navMenu from '../components/navmenu.vue'
 import { useRoute } from "vue-router";
-import { useStore } from "vuex"
 import { userById } from "@/api/user"
 import { reactive, onBeforeMount, computed, ref } from "vue";
 import { dayjs, ElMessage } from "element-plus";
@@ -143,9 +141,7 @@ import router from "@/router";
 
 const { locale, t } = useI18n();
 const route = useRoute()
-const store = useStore()
 const userId = route.params.user_id
-const myUserId = computed(() => store.state.userId);
 
 const userInfo = reactive({})
 const postList = ref([])
@@ -286,13 +282,6 @@ const handlePostPageChange = (page) => {
 const handlePostFilePageChange = (page) => {
   postFilePage.value = page;
   getPostFileByUserId()
-}
-
-const deletePostFile = (fileId) => {
-  postFileDelete(fileId).then(() => {
-    ElMessage.success(t('user.info.deleteSuccess'));
-    getPostFileByUserId()
-  })
 }
 
 onBeforeMount(() => {

@@ -29,12 +29,20 @@ const Post = sequelize.define('Post', {
         defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),
         comment: '更新时间',
     },
-    status: {
+    end: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        comment: '征稿结束时间'
+    },
+    limit: {
         type: DataTypes.TINYINT,
         allowNull: true,
-        defaultValue: 0,
-        comment: '征稿帖的状态（0=征稿中，1=结束）',
+        comment: '投稿数量限制'
     },
+    folder_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    }
 }, {
     tableName: 'post',
     timestamps: true,
