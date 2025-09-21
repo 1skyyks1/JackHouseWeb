@@ -79,7 +79,7 @@
               <div class="event-time">~{{monthDayHour(events[1].end) }}</div>
             </el-col>
             <el-col xs="24" :sm="24" :md="24" :lg="24" :xl="24" v-if="events.length === 0" class="no-event-card">
-              <div class="no-event">{{ t('home.noEvent') }}</div>
+              <div class="no-event" v-if="!closeEvent && events.length === 0">{{ t('home.noEvent') }}</div>
               <div v-if="closeEvent && events.length === 0" class="closest-event">
                 <div class="closest-title">{{ t('home.closestEvent') }}</div>
                 <div class="closest-name">{{ closeEvent.name }}</div>

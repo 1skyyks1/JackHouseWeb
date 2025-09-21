@@ -45,7 +45,7 @@
     },
     "event": "Challenge Event",
     "noEvent": "No ongoing events",
-    "closestEvent": "Upcoming event",
+    "closestEvent": "Upcoming event: ",
     "stat": "Website Statistics"
   },
 
@@ -248,9 +248,9 @@
     "rule": "Rules",
     "rule1": "1. Players must play assigned maps in osu!mania online, and use the Sync button to record the score",
     "rule2": "2. Do not use osu!lazer, using Mods (including ScoreV2) is not recommended to avoid errors.",
-    "rule3": "3. Sync can only fetch the **most recent score** within 24 hours. If you forget to sync, the score cannot be fetched later. (It's recommended to sync immediately after each play to avoid missing a score.)",
+    "rule3": "3. Sync can only fetch the **50 most recent scores** within 24 hours. If you forget to sync, the score cannot be fetched later. (It's recommended to sync immediately after each play to avoid missing a score.)",
     "rule4": "4. Players can sync multiple times, but only the highest score will be kept. If the new score is not higher, it will not be recorded and a message will be shown.",
-    "rule5": "5. To prevent abuse, syncing is limited to once every 90 seconds. If you need assistance, please contact admin.",
+    "rule5": "5. To prevent abuse, syncing is limited to once every 30 minutes. If you need assistance, please contact admin.",
     "desc": "Details"
   },
 

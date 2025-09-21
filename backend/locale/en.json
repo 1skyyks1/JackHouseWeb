@@ -141,6 +141,7 @@
     "noRecentScore": "No recent score retrieved",
     "invalidStage": "Recent score does not match any stage",
     "scoreNotHigher": "Score is not higher than previous",
+    "updateSuccess": "Score updated successfully",
     "serverError": "Internal server error"
   }
 }

@@ -141,6 +141,7 @@
     "noRecentScore": "未获取到最近成绩",
     "invalidStage": "最近成绩谱面不正确",
     "scoreNotHigher": "未取得更高分数",
+    "updateSuccess": "分数更新成功",
     "serverError": "服务器内部错误"
   }
 }

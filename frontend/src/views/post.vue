@@ -246,11 +246,16 @@ const goToUserPage = (userId) => {
   router.push('/user/' + userId)
 }
 
-const canUpload = () => {
-  const now = new Date();
-  const endDate = new Date(end.value);
-  return postType === 1 && now < endDate
-}
+const canUpload = computed(() => {
+  if(postType.value === 1) {
+    const now = new Date();
+    const endDate = new Date(end.value);
+    return now < endDate;
+  }
+  else {
+    return false
+  }
+})
 
 onBeforeMount(() => {
   getPostInfo()

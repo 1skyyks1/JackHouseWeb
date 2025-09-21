@@ -7,6 +7,7 @@ const HomeImg = require('../models/homeImg')
 const Pack = require('../models/pack');
 const Tag = require('../models/tag');
 const PackComment = require('../models/packComment');
+const Badge = require('../models/badge');
 
 const Event = require('../models/event/event');
 const EventStage = require('../models/event/eventStage');
@@ -52,6 +53,13 @@ Tag.belongsToMany(Pack, {
 
 PackComment.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 PackComment.belongsTo(Pack, { foreignKey: 'pack_id' });
+
+Badge.belongsToMany(User, {
+    through: 'user_badges',
+    foreignKey: 'badge_id',
+    otherKey: 'user_id',
+    as: 'badges'
+})
 
 Event.hasMany(EventStage, { foreignKey: 'event_id', onDelete: 'CASCADE', as: 'stage' });
 

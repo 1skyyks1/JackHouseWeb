@@ -57,7 +57,7 @@ const commonLimiter = rateLimit({
 // osu-api
 const osuLimiter = rateLimit({
     windowMs: 10 * 60 * 1000,
-    max: 80,
+    max: 30,
     standardHeaders: true,
     legacyHeaders: false,
 })

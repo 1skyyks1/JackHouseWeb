@@ -25,44 +25,74 @@ exports.userRecentScore = async (req, res) => {
         }
 
         const user = await User.findByPk(user_id)
-
         const api = await osu.API.createAsync(CLIENT_ID, CLIENT_SECRET);
         const osuUser = await api.getUser(Number(user.osu_uid));
-        const scores = await api.getUserScores(osuUser, "recent", osu.Ruleset.mania, { lazer: false, fails: false }, { limit: 1 });
-        const score = scores[0];
-        if (!score) {
+        const scores = await api.getUserScores(osuUser, "recent", osu.Ruleset.mania, { lazer: false, fails: false }, { limit: 50 });
+        if (!scores || scores.length === 0) {
             // 未获取到最近成绩
             return res.status(400).json({ message: req.t('osuScore.noRecentScore') });
         }
 
-        const stage = await EventStage.findOne({
-            where: { map_id: score.beatmap_id, event_id }
-        })
-        if (!stage) {
-            // 最近成绩谱面不正确
-            return res.status(400).json({ message: req.t('osuScore.invalidStage') });
+        const stages = await EventStage.findAll({
+            where: { event_id }
+        });
+        const validMapIds = new Set(stages.map(s => s.map_id));
+        const bestScoresMap = new Map();
+
+        for (const score of scores) {
+            if (!validMapIds.has(score.beatmap_id)) continue;
+            const current = bestScoresMap.get(score.beatmap_id);
+            if (!current || score.legacy_total_score > current.legacy_total_score) {
+                bestScoresMap.set(score.beatmap_id, score);
+            }
         }
 
-        let eventScore = await EventScore.findOne({
-            where: { user_id, stage_id: stage.id },
-        })
-        if (eventScore) {
-            if (eventScore.score < score.legacy_total_score) {
-                eventScore.score = score.legacy_total_score;
-                await eventScore.save();
-            }
-            else {
-                // 未取得更高分数
-                return res.status(400).json({ message: req.t('osuScore.scoreNotHigher') });
-            }
-        } else {
-            eventScore = await EventScore.create({
-                stage_id: stage.id,
-                user_id: user_id,
-                score: score.legacy_total_score,
-            })
+        if (bestScoresMap.size === 0) {
+            return res.status(400).json({ message: req.t('osuScore.noValidScore') });
         }
-        res.status(200).json({ data: eventScore })
+
+        const stageMap = new Map();
+        for (const stage of stages) {
+            stageMap.set(stage.map_id, stage.id);
+        }
+
+        const existingScores = await EventScore.findAll({
+            where: {
+                user_id,
+                stage_id: Array.from(stageMap.values())
+            }
+        });
+        const existingMap = new Map();
+        for (const es of existingScores) {
+            existingMap.set(es.stage_id, es);
+        }
+
+        let hasUpdated = false; // 记录是否有成绩更新
+        for (const [beatmap_id, score] of bestScoresMap.entries()) {
+            const stage_id = stageMap.get(beatmap_id);
+            const existing = existingMap.get(stage_id);
+
+            if (existing) {
+                if (score.legacy_total_score > existing.score) {
+                    existing.score = score.legacy_total_score;
+                    await existing.save();
+                    hasUpdated = true;
+                }
+            } else {
+                const newScore = await EventScore.create({
+                    stage_id,
+                    user_id,
+                    score: score.legacy_total_score
+                });
+                hasUpdated = true;
+            }
+        }
+
+        if (!hasUpdated) {
+            return res.status(400).json({ message: req.t('osuScore.scoreNotHigher') });
+        }
+
+        res.status(200).json({ message: req.t('osuScore.updateSuccess') });
     } catch (error) {
         // 错误
         console.log(error)

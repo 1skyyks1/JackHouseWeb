@@ -33,7 +33,7 @@
                   <div class="score-header">
                     <div class="my-score">{{ t('event.myScore') }}</div>
                     <el-button style="margin-top: 14px" plain type="success" @click="createScore" :disabled="createDisabled" :loading="createLoading">
-                      {{ createDisabled ? `${t('event.submitScore')} (${countdown}s)` : t('event.submitScore') }}
+                      {{ createDisabled ? `${t('event.submitScore')} (${countdownText})` : t('event.submitScore') }}
                     </el-button>
                   </div>
                   <div v-if="totalScore.totalRank" class="total-score">{{ t('event.totalRank') }}: #{{ totalScore.totalRank }} / {{ t('event.totalScore') }}: {{ totalScore.totalScore }}</div>
@@ -50,8 +50,8 @@
                           <div class="stage-mapper">Mapped by {{ stage.mapper }}</div>
                         </div>
                         <div>
-                          <div class="stage-title">#{{ stageScores && stageScores[index]?.rank || '' }}</div>
-                          <div class="stage-mapper">{{ stageScores && stageScores[index]?.score || t('event.noScore') }}</div>
+                          <div class="stage-rank">#{{ stageScoresMap[stage.id]?.rank || '' }}</div>
+                          <div class="stage-mapper">{{ stageScoresMap[stage.id]?.score || t('event.noScore') }}</div>
                         </div>
                       </div>
                     </div>
@@ -184,8 +184,9 @@ const event_id = route.params.event_id;
 const eventLoading = ref(false);
 const createLoading = ref(false);
 const createDisabled = ref(false);
-const countdown = ref(90)
+const countdown = ref(0)
 let timer = null
+const cooldownSeconds = 30 * 60 // 30分钟冷却时间
 const stages = ref([])
 const event = ref({})
 const stageScores = ref([])
@@ -206,9 +207,23 @@ const countdownFormat = computed(() => {
   return `DD [${t('home.dashboard.day')}] HH:mm:ss`
 })
 
+const countdownText = computed(() => {
+  const minutes = Math.floor(countdown.value / 60)
+  const seconds = countdown.value % 60
+  return `${minutes}:${seconds.toString().padStart(2, '0')}`
+})
+
 const indexMethod = (index) => {
   return (page.value - 1) * pageSize.value + index + 1;
 };
+
+const stageScoresMap = computed(() => {
+  const map = {}
+  stageScores.value.forEach(s => {
+    map[s.stage_id] = s
+  })
+  return map
+})
 
 const handleTotalRankPageChange = (newPage) => {
   page.value = newPage;
@@ -274,7 +289,7 @@ const createScore = () => {
   if(createLoading.value || createDisabled.value) return;
   createLoading.value = true;
   createDisabled.value = true;
-  countdown.value = 90
+  countdown.value = cooldownSeconds
   timer = setInterval(() => {
     countdown.value--
     if (countdown.value <= 0) {
@@ -358,6 +373,7 @@ onBeforeMount(() => {
   position: relative;
   border-radius: 8px;
   margin-bottom: 8px;
+  height: 82px;
   overflow: hidden;
   color: #fff;
   cursor: pointer;
@@ -388,13 +404,28 @@ onBeforeMount(() => {
 .stage-info {
   position: relative;
   z-index: 1;
-  padding: 16px;
+  padding: 20px 16px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.stage-info > div:first-child {
+  flex: 1;
+  min-width: 0;
 }
 .stage-title {
   font-size: 16px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+.stage-rank {
+  font-size: 16px;
   text-align: right;
+  flex-shrink: 0;
 }
 .stage-mapper {
   font-size: 12px;
