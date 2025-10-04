@@ -204,6 +204,7 @@ const exportExcel = async () => {
     worksheet.columns = [
       { header: '文件名', key: 'file_name', width: 100 },
       { header: '投稿人', key: 'user_name', width: 20 },
+      { header: '备注', key: 'note', width: 50 },
       { header: '反馈意见', key: 'feedback', width: 100 },
       { header: '投稿时间', key: 'uploaded_time', width: 30 },
     ];

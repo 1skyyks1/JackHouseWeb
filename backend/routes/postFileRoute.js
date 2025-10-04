@@ -4,11 +4,14 @@ const postFileController = require('../controllers/postFileController');
 const checkAuth = require("../middleware/authMiddleware");
 const ROLES = require("../config/roles");
 
-// 获取指定帖子的所有投稿
+// 获取指定帖子的投稿（条件）
 router.get('/', checkAuth([ROLES.ORG,ROLES.ADMIN]), postFileController.getFileByPostId);
 
+// 获取指定征稿中指定用户的投稿
+router.get('/post/:post_id', checkAuth(), postFileController.getFileByPostAndUser);
+
 // 获取指定用户的所有投稿
-router.get('/user/:user_id', postFileController.getFileByUserId)
+router.get('/user/:user_id', postFileController.getFileByUserId);
 
 // 获取上传链接
 router.get('/upload/:post_id', checkAuth(), postFileController.getUploadUrl);

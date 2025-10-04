@@ -12,6 +12,14 @@ export function postFileByUserId(userId, page, pageSize){
     })
 }
 
+// 获取指定征稿中指定用户的投稿
+export function postFileByPostAndUser(postId){
+    return request({
+        url: '/postFile/post/' + postId,
+        method: 'GET',
+    })
+}
+
 // 根据条件获取投稿
 export function postFileList(page, pageSize, post_id, status, keyword){
     return request({

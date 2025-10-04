@@ -19,10 +19,6 @@ const PostFile = sequelize.define('PostFile', {
         type: DataTypes.STRING(255),
         allowNull: false,
     },
-    minio_file_name: {
-        type: DataTypes.STRING(255),
-        allowNull: false,
-    },
     file_url: {
         type: DataTypes.STRING(255),
         allowNull: false,
@@ -30,6 +26,10 @@ const PostFile = sequelize.define('PostFile', {
     uploaded_time: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
+    },
+    note: {
+        type: DataTypes.TEXT,
+        allowNull: true,
     },
     status: {
         type: DataTypes.TINYINT,

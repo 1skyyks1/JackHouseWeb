@@ -51,6 +51,7 @@
 
   "post": {
     "by": "by",
+    "comments": "Comments",
     "placeholder": "Enter your comment",
     "createComment": "Post",
     "login": "Log in to leave a comment",
@@ -73,7 +74,13 @@
     },
     "upload": "Upload your map",
     "noTitle": "No EN title available (>_<)",
-    "noContent": "<p> Sorry... No EN content available (>_<) </p>"
+    "noContent": "<p> Sorry... No EN content available (>_<) </p>",
+    "myPostFile": "My Uploads",
+    "addNote": "Add note here",
+    "submitNote": "Submit Note",
+    "addNoteSuccess": "Note submitted successfully",
+    "noteTooltip": "Please input your suggested difficulty and pattern in the note. Reviewers can see your note, and it will also be used as a reference for the difficulty list later.",
+    "more": "Go to your profile to view submission history"
   },
 
   "forum": {

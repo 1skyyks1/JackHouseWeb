@@ -51,6 +51,7 @@
 
   "post": {
     "by": "发帖人",
+    "comments": "评论区",
     "placeholder": "输入你的评论",
     "createComment": "发表评论",
     "login": "请登录后发表评论",
@@ -73,7 +74,13 @@
     },
     "upload": "点此投稿",
     "noTitle": "暂无中文标题 (>_<)",
-    "noContent": "<p> 抱歉！暂无中文内容 (>_<) </p>"
+    "noContent": "<p> 抱歉！暂无中文内容 (>_<) </p>",
+    "myPostFile": "已上传文件",
+    "addNote": "在此处填写备注",
+    "submitNote": "提交备注",
+    "addNoteSuccess": "备注已提交",
+    "noteTooltip": "请在备注中填写你的投稿的定级和键型。审核人可以看到你的备注，也会作为难度表的参考。",
+    "more": "前往个人页查看所有投稿记录"
   },
 
   "forum": {

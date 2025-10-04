@@ -75,7 +75,7 @@
               <div class="event-time">~{{ monthDayHour(events[0].end) }}</div>
             </el-col>
             <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" v-if="events.length > 1" class="event-card" @click="goToEvent(events[1].id)">
-              <div class="event-name">{{ events[1].name }}</div>
+              <div class="event-name gradient-text">{{ events[1].name }}</div>
               <div class="event-time">~{{monthDayHour(events[1].end) }}</div>
             </el-col>
             <el-col xs="24" :sm="24" :md="24" :lg="24" :xl="24" v-if="events.length === 0" class="no-event-card">

@@ -49,12 +49,31 @@ exports.getFileByPostId = async (req, res) => {
         const result = rows.map(file => {
             const fileData = file.toJSON();
             fileData.user_name = fileData.user.user_name;
-            fileData.role = fileData.user.role;
             delete fileData.user;
             return fileData;
         })
         const totalPages = Math.ceil(count / limit)
         res.json({ data: result, page: parseInt(page, 10), pageSize: limit, totalPages, total: count });
+    } catch (error){
+        res.status(500).json({ message: req.t('postFile.getFailed') });
+    }
+}
+
+// 获取指定征稿中指定用户的投稿
+exports.getFileByPostAndUser = async (req, res) => {
+    const { post_id } = req.params;
+    const user_id = req.user.user_id;
+
+    try {
+        const rows = await PostFile.findAll({
+            order: [['uploaded_time', 'DESC']],
+            where: {
+                post_id: post_id,
+                user_id: user_id,
+            },
+        });
+
+        res.json({ data: rows });
     } catch (error){
         res.status(500).json({ message: req.t('postFile.getFailed') });
     }
@@ -137,16 +156,16 @@ exports.getFileUrl = async (req, res) => {
     }
 }
 
-// 更新投稿
+// 更新投稿备注
 exports.updatePostFile = async (req, res) => {
-    const { file_name, file_url } = req.body;
+    const { note } = req.body;
     const { file_id } = req.params;
     try {
         const originalPostFile = await PostFile.findByPk(file_id);
         if(!originalPostFile) {
             return res.status(404).json({ message: req.t('postFile.notFound') });
         }
-        await originalPostFile.update({ file_name, file_url });
+        await originalPostFile.update({ note });
         res.status(200).json({ message: req.t('postFile.updateSuccess') });
     } catch (err) {
         res.status(500).json({ message: req.t('postFile.updateFailed') });
