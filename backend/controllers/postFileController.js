@@ -191,19 +191,13 @@ exports.reviewPostFile = async (req, res) => {
 // 新删除投稿，不删除文件
 exports.deleteFile = async (req, res) => {
     const { file_id } = req.params;
-    const role = req.user.role;
     try {
         const file = await PostFile.findByPk(file_id);
         if (!file) {
             return res.status(404).json({ message: req.t('postFile.notFound') });
         }
-        const isAdmin = (role === ROLES.ADMIN || role === ROLES.ORG);
-        if (isAdmin) {
-            await file.destroy();
-            res.json({ message: req.t('postFile.deleteSuccess') });
-        } else {
-            return res.status(403).json({ message: req.t('postFile.deleteForbidden') });
-        }
+        await file.destroy();
+        res.json({ message: req.t('postFile.deleteSuccess') });
     } catch (error) {
         res.status(500).json({ message: req.t('postFile.deleteFailed') });
     }

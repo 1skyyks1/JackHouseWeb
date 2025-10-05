@@ -92,10 +92,15 @@
       "end": "End Time"
     },
     "postType": {
+      "all": "All",
       "normal": "Normal Post",
       "mapRequest": "Map Request",
       "event": "Event",
       "announcement": "Announcement"
+    },
+    "status": {
+      "ongoing": "Ongoing",
+      "closed": "Closed"
     },
     "by": "by",
     "create": "Create",

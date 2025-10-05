@@ -39,7 +39,7 @@
           </div>
         </el-card>
         <el-card style="margin: 10px 0;" shadow="never" v-if="canUpload">
-          <mapUpload :postId="Number(postId)" :userId="userId" :limit="limit"/>
+          <mapUpload :postId="Number(postId)" :userId="userId" :limit="limit" @upload-success="getUserPostFiles"/>
         </el-card>
         <el-card style="margin: 10px 0;" shadow="never" v-if="userPostFiles && userPostFiles.length > 0">
           <template #header>

@@ -49,6 +49,8 @@ const props = defineProps({
   limit: { type: Number, required: true },
 })
 
+const emit = defineEmits(['upload-success'])
+
 const selectFile = (file, fileList) => {
   selected.value = fileList.length > 0
 }
@@ -82,6 +84,7 @@ const uploadFile = async (file) => {
     uploading.value = false;
     uploadRef.value.clearFiles();
     selected.value = false;
+    emit('upload-success');
   }).catch(err => {
     console.log(err)
     uploading.value = false
@@ -92,30 +95,6 @@ const getUploadUrl = async () => {
   const res = await uploadUrl(props.postId)
   return res.data.url + '/upload?' + res.data.query
 }
-
-// const uploadFile = async (file) => {
-//   if(!file.file){
-//     ElMessage.warning(t('mapUpload.warning'));
-//     return;
-//   }
-//
-//   const formData = new FormData();
-//   formData.append('file', file.file)
-//   formData.append('post_id', props.postId)
-//   formData.append('user_id', props.userId)
-//
-//   uploading.value = true
-//
-//   return await postFileUpload(formData).then(() => {
-//     ElMessage.success(t('mapUpload.success'));
-//     uploading.value = false;
-//     uploadRef.value.clearFiles();
-//     selected.value = false;
-//   }).catch(err => {
-//     console.log(err)
-//     uploading.value = false
-//   })
-// }
 
 const submitUpload = () => {
   uploadRef.value.submit()

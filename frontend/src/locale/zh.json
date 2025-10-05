@@ -92,10 +92,15 @@
       "end": "征稿结束时间"
     },
     "postType": {
-      "normal": "常规帖",
+      "all": "全部帖子",
+      "normal": "常规",
       "mapRequest": "谱面征集",
-      "event": "活动帖",
+      "event": "活动",
       "announcement": "公告"
+    },
+    "status": {
+      "ongoing": "火热征稿中",
+      "closed": "已结束"
     },
     "by": "发帖人",
     "create": "发帖",

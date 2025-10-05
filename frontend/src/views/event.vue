@@ -9,7 +9,7 @@
               <template #label>
                 <span class="custom-tabs-label">
                   <el-icon><LocationInformation /></el-icon>
-                <span>{{ t('event.overview') }}</span>
+                  <span>{{ t('event.overview') }}</span>
                 </span>
               </template>
               <template #default>
@@ -307,6 +307,8 @@ const createScore = () => {
 
 const handleChange = (name) => {
   const n = Number(name);
+  page.value = 1;
+  pageSize.value = 8;
   if(Number(n) === -2){
     getStages();
     getUserScore();
