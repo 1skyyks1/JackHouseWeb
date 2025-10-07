@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
+const sequelize = require('../../config/db');
 
 const Pack = sequelize.define('Pack', {
     pack_id: {
@@ -41,16 +41,26 @@ const Pack = sequelize.define('Pack', {
         allowNull: false,
         comment: '图包类型（0：练习包，1：综合包，2：段位类）'
     },
-    intro: {
+    status: {
+        type: DataTypes.TINYINT,
+        allowNull: true,
+        comment: '图包状态（0：graveyard，1：wip，2：pending，3：ranked，4：approved，5：qualified，6：loved）'
+    },
+    last_updated: {
+        type: DataTypes.DATE,
+        allowNull: true,
+    },
+    submitted_date: {
+        type: DataTypes.DATE,
+        allowNull: true,
+    },
+    description: {
         type: DataTypes.TEXT,
         allowNull: true,
-        comment: '介绍'
     },
-    is_recommend:{
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-        comment: '是否推荐（true：推荐）'
+    cover_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
     },
     created_time: {
         type: DataTypes.DATE,

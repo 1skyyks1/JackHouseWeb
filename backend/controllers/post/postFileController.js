@@ -1,8 +1,8 @@
-const { User, PostFile, Post } = require('../models/index')
-const ROLES = require('../config/roles')
-const sequelize = require('../config/db')
+const { User, PostFile, Post } = require('../../models')
+const ROLES = require('../../config/roles')
+const sequelize = require('../../config/db')
 const { Op } = require("sequelize");
-const { fetchUploadUrl, getSign, getAuthCode } = require('../utils/pan');
+const { fetchUploadUrl, getSign, getAuthCode } = require('../../utils/pan');
 
 // 条件获取所有投稿
 exports.getFileByPostId = async (req, res) => {
@@ -160,13 +160,19 @@ exports.getFileUrl = async (req, res) => {
 exports.updatePostFile = async (req, res) => {
     const { note } = req.body;
     const { file_id } = req.params;
+    const userId = req.user.user_id;
     try {
         const originalPostFile = await PostFile.findByPk(file_id);
         if(!originalPostFile) {
             return res.status(404).json({ message: req.t('postFile.notFound') });
         }
-        await originalPostFile.update({ note });
-        res.status(200).json({ message: req.t('postFile.updateSuccess') });
+        const isOwner = originalPostFile.user_id === userId;
+        if(isOwner) {
+            await originalPostFile.update({ note });
+            res.status(200).json({ message: req.t('postFile.updateSuccess') });
+        } else {
+            res.status(403).json({ message: req.t('postFile.updateFailed') });
+        }
     } catch (err) {
         res.status(500).json({ message: req.t('postFile.updateFailed') });
     }

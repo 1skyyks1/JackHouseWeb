@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db'); // 引入数据库配置
+const sequelize = require('../../config/db'); // 引入数据库配置
 
 const PostFile = sequelize.define('PostFile', {
     file_id: {

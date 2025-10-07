@@ -10,7 +10,7 @@ exports.getAllHomeImg = async (req, res) => {
     const { page, pageSize } = req.query;
     const offset = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
     const limit = parseInt(pageSize, 10);
-    try{
+    try {
         const { count, rows } = await HomeImg.findAndCountAll({
             limit,
             offset,

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const AuthController = require('../controllers/authController');
+const AuthController = require('../controllers/user/authController');
 const osuAuthController = require('../controllers/osu/osuAuthController');
 
 // 生成授权链接并重定向

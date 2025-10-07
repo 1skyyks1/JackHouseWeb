@@ -1,8 +1,8 @@
-const { Post, PostTranslation, User } = require('../models/index');
-const sequelize = require('../config/db')
+const { Post, PostTranslation, User } = require('../../models');
+const sequelize = require('../../config/db')
 const { Op } = require('sequelize');
-const ROLES = require("../config/roles");
-const { addFolder, getAuthCode } = require('../utils/pan');
+const ROLES = require("../../config/roles");
+const { addFolder, getAuthCode } = require('../../utils/pan');
 
 // 获取所有帖子
 exports.getAllPosts = async (req, res) => {

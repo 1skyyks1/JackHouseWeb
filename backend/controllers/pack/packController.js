@@ -1,10 +1,10 @@
-const { Pack, Tag, User } = require('../models');
-const sequelize = require('../config/db')
+const { Pack, Tag, User, PackMap } = require('../../models');
+const sequelize = require('../../config/db')
 const { Op } = require('sequelize');
 
-// 创建新图包
+// 创建新图包（非osu）
 exports.createPack = async (req, res) => {
-    const { title, creator, osuBID, url, tags, intro, type } = req.body;
+    const { title, creator, url, tags, type } = req.body;
     const user_id = req.user.user_id;
 
     if (!title || !Array.isArray(tags)) {
@@ -18,9 +18,7 @@ exports.createPack = async (req, res) => {
             title,
             creator,
             user_id,
-            osu_bid: osuBID,
             other_url: url,
-            intro,
             type
         }, { transaction: t });
 
@@ -46,7 +44,7 @@ exports.getAllPacks = async (req, res) => {
             limit,
             offset,
             order: [['created_time', 'DESC']],
-            attributes: { exclude: ['user_id', 'intro'] },
+            attributes: { exclude: ['user_id'] },
             where: {},
             include: [
                 {
@@ -59,7 +57,7 @@ exports.getAllPacks = async (req, res) => {
                     model: User,
                     as: 'user',
                     attributes: ['user_id', 'user_name']
-                }
+                },
             ]
         };
 
@@ -111,6 +109,10 @@ exports.getPackById = async (req, res) => {
                     as: 'tags',
                     attributes: ['tag_id', 'tag_name'],
                     through: { attributes: [] }
+                },
+                {
+                    model: PackMap,
+                    as: 'maps',
                 }
             ]
         });

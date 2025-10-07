@@ -16,12 +16,12 @@
   },
 
   "login": {
-    "syncPrompt": "Hello {name}! We've detected an update in your osu! name/avatar. Do you want to sync it?",
-    "syncTitle": "osu! User Info Sync Update",
-    "syncYes": "Sync",
-    "syncNo": "Don't Sync",
-    "syncSuccess": "Synced successfully",
-    "syncSkipped": "Sync skipped"
+    "syncPrompt": "{name} 你好！，检测到osu!名字/头像更新，是否同步？",
+    "syncTitle": "osu!用户信息同步更新",
+    "syncYes": "同步",
+    "syncNo": "不同步",
+    "syncSuccess": "已同步",
+    "syncSkipped": "已跳过同步"
   },
 
   "loginDialog": {

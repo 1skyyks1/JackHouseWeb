@@ -1,6 +1,6 @@
 // models/PostComment.js
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db'); // 引入数据库配置
+const sequelize = require('../../config/db'); // 引入数据库配置
 
 const PostComment = sequelize.define('PostComment', {
     comment_id: {

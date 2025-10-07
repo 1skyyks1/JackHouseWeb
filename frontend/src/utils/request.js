@@ -49,32 +49,32 @@ service.interceptors.response.use(
             const backendMessage = error.response.data.message;
             switch (status) {
                 case 401:
-                    message = backendMessage || t('errors.pleaseLogin');
+                    message = backendMessage || t('request.pleaseLogin');
                     if (store) {
                         store.dispatch('logout');
                         store.commit('SET_LOGIN_DIALOG', true);
                     }
                     break;
                 case 404:
-                    message = backendMessage || t('errors.notFound');
+                    message = backendMessage || t('request.notFound');
                     break;
                 case 500:
-                    message = backendMessage || `${status} - ${t('errors.unknown')}`;
+                    message = backendMessage || `${status} - ${t('request.unknown')}`;
                     break;
                 default:
-                    message = backendMessage || `${status} - ${t('errors.unknown')}`;
+                    message = backendMessage || `${status} - ${t('request.unknown')}`;
             }
         } else if (error.request) {
-            message = t('errors.networkError');
+            message = t('request.networkError');
         } else {
-            message = t('errors.requestError');
+            message = t('request.requestError');
         }
         ElMessage({
             message: message,
             type: 'error',
             duration: 5 * 1000
         });
-        return Promise.reject(error);
+        return new Promise(() => {})
     }
 );
 

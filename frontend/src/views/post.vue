@@ -198,8 +198,9 @@ const pageSize = ref(10)
 const currentPage = ref(1)
 const totalComments = ref(0)
 
-const getPostInfo = () => {
-  postById(postId).then(response => {
+const getPostInfo = async () => {
+  try {
+    const response = await postById(postId);
     const zhTranslation = response.data.translations.find(t => t.language === 'zh');
     const enTranslation = response.data.translations.find(t => t.language === 'en');
 
@@ -224,7 +225,9 @@ const getPostInfo = () => {
     end.value = response.data.end;
     limit.value = response.data.limit;
     postLoading.value = false;
-  })
+  } catch (error) {
+    postLoading.value = false;
+  }
 }
 
 const getCommentsByPostId = () => {
@@ -306,6 +309,11 @@ const goToUserPage = (userId) => {
 }
 
 const getUserPostFiles = () => {
+  console.log('getUserPostFiles');
+  if(postType.value !== 1){
+    console.log('not request')
+    return
+  }
   postFileByPostAndUser(postId).then(response => {
     userPostFiles.value = response.data.map(file => ({
       ...file,
@@ -332,8 +340,8 @@ const canUpload = computed(() => {
   }
 })
 
-onBeforeMount(() => {
-  getPostInfo();
+onBeforeMount(async () => {
+  await getPostInfo();
   getUserPostFiles();
   getCommentsByPostId();
 })

@@ -1,4 +1,4 @@
-const User = require('../../models/user');
+const User = require('../../models/user/user');
 const jwt = require('jsonwebtoken');
 const osu = require("osu-api-v2-js");
 

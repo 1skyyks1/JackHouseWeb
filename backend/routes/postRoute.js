@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const PostController = require('../controllers/postController');
+const PostController = require('../controllers/post/postController');
 const checkAuth = require("../middleware/authMiddleware");
 
 // 获取所有帖子

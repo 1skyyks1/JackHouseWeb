@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const postFileController = require('../controllers/postFileController');
+const postFileController = require('../controllers/post/postFileController');
 const checkAuth = require("../middleware/authMiddleware");
 const ROLES = require("../config/roles");
 
@@ -17,10 +17,10 @@ router.get('/user/:user_id', postFileController.getFileByUserId);
 router.get('/upload/:post_id', checkAuth(), postFileController.getUploadUrl);
 
 // 创建投稿
-router.post('/', checkAuth([ROLES.ORG,ROLES.ADMIN]), postFileController.createPostFile);
+router.post('/', checkAuth(), postFileController.createPostFile);
 
-// 更新投稿
-router.put('/:file_id', checkAuth([ROLES.ORG,ROLES.ADMIN]), postFileController.updatePostFile);
+// 更新投稿备注
+router.put('/:file_id', checkAuth(), postFileController.updatePostFile);
 
 // 审核投稿
 router.put('/review/:file_id', checkAuth([ROLES.ORG,ROLES.ADMIN]), postFileController.reviewPostFile)

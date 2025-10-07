@@ -1,7 +1,8 @@
-const { User, Post } = require('../models/index');
+const { User, Post, Badge } = require('../../models');
 const bcrypt = require('bcryptjs');
 const { Op } = require('sequelize');
-const ROLES = require("../config/roles");
+const ROLES = require("../../config/roles");
+const mc = require('../../config/minio')
 
 // 创建用户
 const createUser = async (req, res) => {
@@ -47,16 +48,44 @@ const getUsers = async (req, res) => {
 const getUserById = async (req, res) => {
     try {
         const user = await User.findByPk(req.params.user_id, {
-            attributes: { exclude: ['password'] }
+            attributes: { exclude: ['password'] },
+            include: [
+                {
+                    model: Badge,
+                    as: 'badges',
+                    through: { attributes: [] }
+                }
+            ]
         });
         if (!user) {
             return res.status(404).json({ message: req.t('user.notFound') });
         }
-        res.status(200).json({ data: user });
+
+        // 获取badge
+        const userData = user.toJSON();
+        if (userData.badges && userData.badges.length > 0) {
+            const signedBadge = userData.badges.map(async (badge) => {
+                const signedUrl = await preSign(badge.minio_img_name);
+                delete badge.minio_img_name;
+                if (badge.url) {
+                    delete badge.url;
+                }
+                badge.signedUrl = signedUrl;
+                return badge;
+            });
+            userData.badges = await Promise.all(signedBadge);
+        }
+        res.status(200).json({ data: userData });
     } catch (err) {
         res.status(500).json({ message: req.t('user.getFailed') });
     }
 };
+
+// 处理badge预签名
+const preSign = async (name) => {
+    const expires = 24 * 60 * 60;
+    return await mc.presignedUrl('GET', process.env.MINIO_BADGES_BUCKET, name, expires)
+}
 
 // 更新用户
 const updateUser = async (req, res) => {

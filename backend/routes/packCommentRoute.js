@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const PackCommentController = require('../controllers/packCommentController');
+const PackCommentController = require('../controllers/pack/packCommentController');
 const checkAuth = require('../middleware/authMiddleware');
 
 // 图包下发表评论

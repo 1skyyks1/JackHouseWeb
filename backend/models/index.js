@@ -1,13 +1,14 @@
-const Post = require('../models/post');
-const PostTranslation = require('../models/postTranslation');
-const PostFile = require('../models/postFile');
-const PostComment = require('../models/postComment');
-const User = require('../models/user');
+const Post = require('./post/post');
+const PostTranslation = require('./post/postTranslation');
+const PostFile = require('./post/postFile');
+const PostComment = require('./post/postComment');
+const User = require('./user/user');
 const HomeImg = require('../models/homeImg')
-const Pack = require('../models/pack');
-const Tag = require('../models/tag');
-const PackComment = require('../models/packComment');
-const Badge = require('../models/badge');
+const Pack = require('./pack/pack');
+const PackMap = require('./pack/packMap');
+const Tag = require('./pack/tag');
+const PackComment = require('./pack/packComment');
+const Badge = require('./user/badge');
 
 const Event = require('../models/event/event');
 const EventStage = require('../models/event/eventStage');
@@ -32,6 +33,12 @@ User.hasMany(PostComment, { foreignKey: 'user_id', onDelete: 'CASCADE' })
 User.hasMany(HomeImg, { foreignKey: 'user_id', onDelete: 'CASCADE' })
 User.hasMany(Pack, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 User.hasMany(EventScore, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+User.belongsToMany(Badge, {
+    through: 'user_badges',
+    foreignKey: 'user_id',
+    otherKey: 'badge_id',
+    as: 'badges'
+})
 
 HomeImg.belongsTo(User, {foreignKey: 'user_id'})
 
@@ -43,6 +50,9 @@ Pack.belongsToMany(Tag, {
 })
 Pack.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 Pack.hasMany(PackComment, { foreignKey: 'pack_id' });
+Pack.hasMany(PackMap, { foreignKey: 'pack_id', as: 'maps' });
+
+PackMap.belongsTo(Pack, { foreignKey: 'pack_id' });
 
 Tag.belongsToMany(Pack, {
     through: 'pack_tags',
@@ -58,7 +68,7 @@ Badge.belongsToMany(User, {
     through: 'user_badges',
     foreignKey: 'badge_id',
     otherKey: 'user_id',
-    as: 'badges'
+    as: 'users'
 })
 
 Event.hasMany(EventStage, { foreignKey: 'event_id', onDelete: 'CASCADE', as: 'stage' });
@@ -75,8 +85,10 @@ module.exports = {
     PostFile,
     PostComment,
     User,
+    Badge,
     HomeImg,
     Pack,
+    PackMap,
     Tag,
     PackComment,
     Event,

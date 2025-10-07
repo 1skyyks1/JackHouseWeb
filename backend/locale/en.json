@@ -90,7 +90,9 @@
     "deleteNotPending": "You can't delete a reviewed submission."
   },
   "tag": {
-    "getFailed": "Failed to retrieve tag list"
+    "getFailed": "Failed to retrieve tag list",
+    "updateFailed": "Failed to update tags",
+    "updateSuccess": "tags updated successfully"
   },
   "user": {
     "createSuccess": "User created successfully",
@@ -143,5 +145,15 @@
     "scoreNotHigher": "Score is not higher than previous",
     "updateSuccess": "Score updated successfully",
     "serverError": "Internal server error"
+  },
+  "badge": {
+    "fileMissing": "Please upload a file",
+    "uploadSuccess": "Badge uploaded successfully",
+    "uploadFailed": "Badge upload failed, please try again",
+    "getFailed": "Failed to retrieve badge list, please try again",
+    "invalidParams": "Invalid or missing request parameters",
+    "grantSuccess": "Badge successfully granted to user(s)",
+    "grantFailed": "Failed to grant badge",
+    "notFound": "The specified badge was not found"
   }
 }

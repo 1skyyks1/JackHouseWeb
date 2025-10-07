@@ -90,7 +90,9 @@
     "deleteNotPending": "无法删除已审核的投稿"
   },
   "tag": {
-    "getFailed": "获取标签列表失败"
+    "getFailed": "获取标签列表失败",
+    "updateFailed": "更新标签失败",
+    "updateSuccess": "成功更新标签"
   },
   "user": {
     "createSuccess": "用户创建成功",
@@ -143,5 +145,15 @@
     "scoreNotHigher": "未取得更高分数",
     "updateSuccess": "分数更新成功",
     "serverError": "服务器内部错误"
+  },
+  "badge": {
+    "fileMissing": "请上传文件",
+    "uploadSuccess": "牌子上传成功",
+    "uploadFailed": "牌子上传失败",
+    "getFailed": "获取牌子列表失败",
+    "invalidParams": "请求参数无效或缺失",
+    "grantSuccess": "牌子已成功添加用户",
+    "grantFailed": "添加失败",
+    "notFound": "指定的牌子未找到。"
   }
 }
