@@ -6,7 +6,7 @@ const sequelize = require('../../config/db')
 
 // 上传牌子
 exports.uploadBadge = [
-    upload.imageUpload.single('file'),
+    upload.badgeUpload.single('file'),
     async (req, res) => {
         const { name, redirect_url } = req.body;
         const file = req.file;
@@ -35,6 +35,7 @@ exports.uploadBadge = [
 
             res.status(201).json({ message: req.t('badge.uploadSuccess') })
         } catch (error) {
+            console.error('上传徽章时出错：', error);
             // 如果上传失败，删除临时文件
             if (fs.existsSync(filePath)) {
                 fs.unlinkSync(filePath);
@@ -106,5 +107,19 @@ exports.addUsersToBadge = async (req, res) => {
     } catch (error) {
         await t.rollback();
         res.status(500).json({ message: req.t('badge.grantFailed') });
+    }
+}
+
+exports.deleteBadge = async (req, res) => {
+    const badgeId = req.params.id;
+    try {
+        const badge = await Badge.findByPk(badgeId);
+        if (!badge) {
+            return res.status(404).json({ message: req.t('badge.notFound') });
+        }
+        await badge.destroy();
+        res.status(200).json({ message: req.t('badge.deleteSuccess') });
+    } catch (err) {
+        res.status(500).json({ message: req.t('badge.deleteFailed') });
     }
 }

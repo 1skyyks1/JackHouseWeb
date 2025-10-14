@@ -103,6 +103,11 @@ const router = createRouter({
                     name: 'eventStages',
                     component: () => import('../views/admin/eventStages.vue'),
                     props: true
+                },
+                {
+                    path: 'badges',
+                    name: 'badges',
+                    component: () => import('../views/admin/badges.vue')
                 }
             ]
         }

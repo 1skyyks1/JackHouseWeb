@@ -3,10 +3,29 @@
     <navMenu></navMenu>
     <el-row justify="center">
       <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
-        <el-card class="profile-card" shadow="never">
+        <el-card class="profile-card profile" shadow="never">
           <div class="profile-header">
             <el-avatar :size="120" :src="userInfo.avatar" />
             <h2 class="username">{{ userInfo.user_name }}</h2>
+          </div>
+          <div class="badge-divider">
+            <el-divider />
+          </div>
+          <div class="badge-list">
+            <el-tooltip
+                :content="badge.name"
+                placement="top"
+                v-for="badge in userInfo.badges"
+                offset="6"
+            >
+              <el-image
+                  :key="badge.id"
+                  :src="badge.signedUrl"
+                  fit="cover"
+                  class="badge-img"
+                  @click="goToPage(badge.redirect_url)"
+              />
+            </el-tooltip>
           </div>
         </el-card>
       </el-col>
@@ -17,7 +36,9 @@
           <div class="post-card-header">
             {{ t('user.info.info') }}
           </div>
-          <el-divider />
+          <div class="custom-divider">
+            <el-divider />
+          </div>
           <el-descriptions :column="dynamicColumn" label-width="9rem" border>
             <el-descriptions-item :label="t('user.info.uid')" :span="3">
               {{ userInfo.user_id }}
@@ -73,13 +94,17 @@
                 :hide-on-single-page="postTotal <= postPageSize"
             />
           </div>
-          <el-divider />
+          <div class="custom-divider">
+            <el-divider />
+          </div>
           <div v-for="(post, index) in postList" :key="index" class="post-item" @click="goToPost(post.post_id)">
             <div class="post-title">{{ getTitle(post) }}</div>
             <div class="post-info">
               <span class="post-time">{{ formatDate(post.created_time) }}</span>
             </div>
-            <el-divider class="post-divider" />
+            <div class="custom-divider">
+              <el-divider />
+            </div>
           </div>
           <el-empty :description="t('user.info.noPost', { username: userInfo.user_name })" v-if="postList.length === 0" />
         </el-card>
@@ -100,7 +125,9 @@
                 :hide-on-single-page="postFileTotal <= postFilePageSize"
             />
           </div>
-          <el-divider />
+          <div class="custom-divider">
+            <el-divider />
+          </div>
           <div v-for="(file, index) in postFileList" :key="index">
             <div class="post-title">{{ file.file_name }}
               <div class="post-info">
@@ -118,7 +145,9 @@
                 <span class="post-time">{{ formatDate(file.created_time) }}</span>
               </div>
             </div>
-            <el-divider class="post-divider" />
+            <div class="custom-divider">
+              <el-divider />
+            </div>
           </div>
           <el-empty :description="t('user.info.noPostFile', { username: userInfo.user_name })" v-if="postFileList.length === 0" />
         </el-card>
@@ -138,6 +167,7 @@ import { useI18n } from 'vue-i18n';
 import { postFileByUserId, postFileDelete } from "@/api/postFile"
 import { postByUserId } from "@/api/post";
 import router from "@/router";
+import {QuestionFilled} from "@element-plus/icons-vue";
 
 const { locale, t } = useI18n();
 const route = useRoute()
@@ -274,6 +304,10 @@ const goToPost = (postId) => {
   router.push(`/post/${postId}`)
 }
 
+const goToPage = (page) => {
+  router.push(page)
+}
+
 const handlePostPageChange = (page) => {
   postPage.value = page;
   getPostByUserId()
@@ -300,6 +334,9 @@ onBeforeMount(() => {
   gap: 1rem;
   padding-top: 1rem;
 }
+.profile :deep(.el-card__body){
+  padding: 20px 20px 12px
+}
 .username {
   margin: 0;
   font-size: 1.5rem;
@@ -316,8 +353,11 @@ onBeforeMount(() => {
 .el-row:last-child {
   margin-bottom: 0;
 }
-:deep(.el-divider--horizontal){
+.custom-divider :deep(.el-divider--horizontal){
   margin: 0.5rem 0;
+}
+.badge-divider :deep(.el-divider--horizontal){
+  margin: 1rem 0 0.5rem 0;
 }
 .post-info {
   font-size: 12px;
@@ -342,5 +382,17 @@ onBeforeMount(() => {
   font-size: 11px;
   margin: 1px 6px 0;
   padding: 0 6px;
+}
+.badge-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: left;
+}
+.badge-img {
+  width: 95px;
+  height: 44px;
+  cursor: pointer;
+  border-radius: 0;
 }
 </style>

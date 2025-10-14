@@ -325,6 +325,12 @@ onMounted(() => {
   backdrop-filter: blur(8px);
   --el-menu-bg-color: transparent;
 }
+.el-menu--horizontal :deep(.menu-item) {
+  font-size: 15px;
+}
+.el-menu--horizontal :deep(.is-active) {
+  font-weight: bold;
+}
 html.dark .darkModeSvg{
   color: #fff
 }

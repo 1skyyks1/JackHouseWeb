@@ -32,12 +32,16 @@
       <el-icon><Aim /></el-icon>
       <span>活动管理</span>
     </el-menu-item>
+    <el-menu-item index="badges" route="/admin/badges">
+      <el-icon><Medal /></el-icon>
+      <span>牌子发放</span>
+    </el-menu-item>
   </el-menu>
 </template>
 
 <script setup>
 import { useRoute } from "vue-router";
-import { Odometer, Bell, User, ChatLineSquare, DocumentChecked, Postcard, Aim } from "@element-plus/icons-vue"
+import { Odometer, Bell, User, ChatLineSquare, DocumentChecked, Postcard, Aim, Medal } from "@element-plus/icons-vue"
 
 const route = useRoute();
 </script>

@@ -13,4 +13,7 @@ router.post('/', checkAuth([ROLES.ORG,ROLES.ADMIN]), BadgeController.uploadBadge
 // 添加拥有者
 router.post('/:id', checkAuth([ROLES.ORG,ROLES.ADMIN]), BadgeController.addUsersToBadge)
 
+// 删除牌子
+router.delete('/:id', checkAuth([ROLES.ORG,ROLES.ADMIN]), BadgeController.deleteBadge)
+
 module.exports = router;

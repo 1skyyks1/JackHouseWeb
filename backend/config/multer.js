@@ -31,7 +31,24 @@ const imageUpload = multer({
     }
 });
 
+const badgeUpload = multer({
+    storage: storage,
+    limits: { fileSize: 1024 * 1024 },
+    fileFilter: function (req, file, cb) {
+        const filetypes = /jpeg|jpg|png|gif|svg/;
+        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+        const mimetype = filetypes.test(file.mimetype);
+
+        if (extname && mimetype) {
+            return cb(null, true);
+        } else {
+            return cb(new Error('只允许上传图片文件'), false);
+        }
+    }
+});
+
 module.exports = {
     upload: multer({ storage: storage }),
-    imageUpload: imageUpload
+    imageUpload: imageUpload,
+    badgeUpload: badgeUpload
 };
