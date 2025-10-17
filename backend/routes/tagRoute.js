@@ -8,6 +8,9 @@ const ROLES = require("../config/roles");
 router.get('/', TagController.getAllTags)
 
 // 更新tags
-router.post('/:pack_id', checkAuth([ROLES.ADMIN]), TagController.updateTags)
+router.put('/:pack_id', checkAuth([ROLES.ADMIN]), TagController.updatePackTags)
+
+// 删除tags
+router.post('/:pack_id', checkAuth([ROLES.ADMIN]), TagController.removeTagsFromPack)
 
 module.exports = router;

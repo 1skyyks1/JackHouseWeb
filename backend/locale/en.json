@@ -43,7 +43,11 @@
     "createFailed": "Failed to create pack",
     "getListFailed": "Failed to fetch packs",
     "notFound": "Specified pack not found",
-    "getDetailFailed": "Failed to fetch pack details"
+    "getDetailFailed": "Failed to get pack details",
+    "alreadyExists": "This beatmap already exists",
+    "createSuccess": "Pack created successfully",
+    "updateFailed": "Failed to update pack",
+    "updateSuccess": "Pack updated successfully"
   },
   "postComment": {
     "fetchFailed": "Failed to fetch comments",
@@ -91,8 +95,11 @@
   },
   "tag": {
     "getFailed": "Failed to retrieve tag list",
-    "updateFailed": "Failed to update tags",
-    "updateSuccess": "tags updated successfully"
+    "invalidTags": "Invalid tags parameter",
+    "tagsUpdated": "Pack tags updated successfully",
+    "tagsAdded": "Tags added successfully",
+    "tagsRemoved": "Tags removed successfully",
+    "updateFailed": "Failed to update tags"
   },
   "user": {
     "createSuccess": "User created successfully",

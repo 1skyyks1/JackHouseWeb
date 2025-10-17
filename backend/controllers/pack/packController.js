@@ -35,7 +35,7 @@ exports.createPack = async (req, res) => {
 
 // 获取图包列表（带筛选和分页）
 exports.getAllPacks = async (req, res) => {
-    const { page, pageSize, searchKeys, tags, type } = req.query;
+    const { page, pageSize, searchKeys, tags, type, ranked, loved, startDate, endDate } = req.query;
     const offset = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
     const limit = parseInt(pageSize, 10);
     try {
@@ -44,7 +44,7 @@ exports.getAllPacks = async (req, res) => {
             limit,
             offset,
             order: [['created_time', 'DESC']],
-            attributes: { exclude: ['user_id'] },
+            attributes: { exclude: ['user_id', 'description'] },
             where: {},
             include: [
                 {
@@ -72,6 +72,24 @@ exports.getAllPacks = async (req, res) => {
 
         if (type) {
             findOptions.where.type = Number(type);
+        }
+
+        const statusArr = [];
+        if (ranked) statusArr.push(1);
+        if (loved) statusArr.push(4);
+        if (statusArr.length > 0) {
+            findOptions.where.status = { [Op.in]: statusArr };
+        }
+
+        if (startDate && endDate) {
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            end.setMonth(end.getMonth() + 1);
+            end.setSeconds(end.getSeconds() - 1);
+
+            findOptions.where.submitted_date = {
+                [Op.between]: [start, end],
+            };
         }
 
         if (tags) {

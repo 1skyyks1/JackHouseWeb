@@ -18,7 +18,17 @@ const router = createRouter({
         {
             path: '/pack',
             name: 'pack',
-            component: () => import('../views/pack.vue')
+            component: () => import('../views/pack/pack.vue'),
+        },
+        {
+            path: '/pack/:pack_id',
+            name: 'packInfo',
+            component: () => import('../views/pack/packInfo.vue'),
+        },
+        {
+            path: '/newPack',
+            name: 'newPack',
+            component: () => import('../views/pack/newPack.vue'),
         },
         {
             path: '/user/:user_id',

@@ -3,6 +3,7 @@ const router = express.Router();
 const PackController = require('../controllers/pack/packController');
 const OsuPackController = require('../controllers/osu/osuPackController');
 const checkAuth = require('../middleware/authMiddleware');
+const ROLES = require("../config/roles");
 
 // 获取所有包
 router.get('/', PackController.getAllPacks)
@@ -18,5 +19,8 @@ router.get('/osu/:bid', checkAuth(), OsuPackController.beatmapsetDetail)
 
 // 从osu录入图包信息
 router.post('/osu/:bid', checkAuth(), OsuPackController.packFromOsu)
+
+// 从osu更新图包信息
+router.put('/osu/:bid', checkAuth([ROLES.ADMIN]), OsuPackController.updatePackFromOsu)
 
 module.exports = router;

@@ -9,11 +9,24 @@ const Pack = sequelize.define('Pack', {
         primaryKey: true,
         comment: '图包ID'
     },
+    artist: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+        comment: '曲师'
+    },
+    artist_unicode: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+        comment: '曲师'
+    },
     title: {
         type: DataTypes.STRING(255),
         allowNull: false,
-        unique: true,
         comment: '图包名'
+    },
+    title_unicode: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
     },
     creator: {
         type: DataTypes.STRING(255),

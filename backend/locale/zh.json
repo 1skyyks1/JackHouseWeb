@@ -43,7 +43,8 @@
     "createFailed": "创建图包失败",
     "getListFailed": "查询图包失败",
     "notFound": "未找到指定的图包",
-    "getDetailFailed": "获取图包详情失败"
+    "getDetailFailed": "获取图包详情失败",
+    "alreadyExists": "该图包已存在"
   },
   "postComment": {
     "fetchFailed": "获取评论失败",
