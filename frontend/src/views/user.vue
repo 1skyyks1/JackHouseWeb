@@ -167,7 +167,6 @@ import { useI18n } from 'vue-i18n';
 import { postFileByUserId, postFileDelete } from "@/api/postFile"
 import { postByUserId } from "@/api/post";
 import router from "@/router";
-import {QuestionFilled} from "@element-plus/icons-vue";
 
 const { locale, t } = useI18n();
 const route = useRoute()

@@ -137,11 +137,11 @@
     "info": {
       "info": "信息",
       "uid": "UID",
-      "osuUid": "Osu! UID",
+      "osuUid": "osu! UID",
       "status": "帐号状态",
       "regTime": "注册时间",
       "role": "角色",
-      "osuPage": "Osu! 主页",
+      "osuPage": "osu! 主页",
       "roleName": {
         "admin": "管理",
         "org": "组织策划",
@@ -182,7 +182,7 @@
     "difficulty": "难度：",
     "bpm": "BPM：",
     "status": "状态：",
-    "date": "Osu! 上传日期：",
+    "date": "osu! 上传日期：",
     "startDate": "起始年月",
     "endDate": "结束年月",
     "all": "全部类型",
@@ -207,37 +207,48 @@
     "validate": {
       "title": "请输入图包名",
       "creator": "请输入图包作者",
-      "osuBID": "请输入Osu! BeatmapSet ID",
+      "osuBID": "请输入osu! BeatmapSet ID",
       "type": "请选择图包类型"
     },
     "newPack": {
       "title": "添加未收录的图包",
       "reset": "重置",
-      "osuBID": "Osu! BeatmapSet ID (如：2380503)",
+      "osuBID": "osu! BeatmapSet ID (如：2380503)",
       "url": "备用下载链接 (可选，如谷歌网盘)",
       "check": "预览图包信息",
-      "checkError": "请输入Osu! BeatmapSet ID",
+      "checkError": "请输入osu! BeatmapSet ID",
       "type": "图包类型",
       "tags": "标签"
     },
     "submitSuccess": "图包已添加. 感谢你帮助我们收集叠包!",
-    "drawer": {
+    "info": {
       "drawerTitle": "图包信息",
       "title": "图包名",
       "creator": "作者",
-      "osuLink": "Osu!",
+      "osuLink": "osu!",
       "tags": "标签",
       "url": "备用下载链接",
       "intro": "介绍",
       "added": "添加者",
-      "comment": "评论",
+      "comments": "讨论区",
+      "by": "谱师",
+      "submitted": "创建于",
+      "updated": "最后更新",
+      "od": "准度要求(OD)",
+      "hp": "掉血速度(HP)",
+      "rating": "难度星级",
+      "bpm": "BPM",
+      "length": "长度",
+      "realLength": "游玩长度",
+      "rc": "单键数",
+      "ln": "长条数",
       "com": {
-        "placeholder": "输入你的评论",
-        "createComment": "发表评论",
-        "login": "请登录后发表评论",
-        "postSuccess": "成功发表评论",
-        "deleteComment": "删除评论",
-        "deleteCommentSuccess": "删除评论成功"
+        "placeholder": "写点你的想法/评价……",
+        "createComment": "发送",
+        "login": "登录后即可参与讨论",
+        "postSuccess": "已成功发表",
+        "deleteComment": "删除",
+        "deleteCommentSuccess": "删除成功"
       }
     }
   },

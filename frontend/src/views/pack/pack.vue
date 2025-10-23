@@ -51,21 +51,21 @@
           </div>
           <div class="tag-box">
             <p>{{ t('pack.pattern') }}</p>
-            <el-check-tag v-for="tag in tags.slice(0, 7)" v-model:checked="tag.checked" @change="handleTagSelect" :disabled="packType === 1 || packType === 2">
+            <el-check-tag v-for="tag in tags.slice(0, 7)" v-model:checked="tag.checked" @change="(checked) => handleTagSelect(tag, checked)" :disabled="packType === 1 || packType === 2">
               {{ t(`tags.${tag.tag_name}`) }}
             </el-check-tag>
           </div>
           <div class="tag-box">
             <p>{{ t('pack.bpm') }}</p>
-            <el-check-tag v-for="tag in tags.slice(7, 19)" v-model:checked="tag.checked" @change="handleTagSelect" :disabled="packType === 1 || packType === 2 || packType === 3">{{ tag.tag_name }}</el-check-tag>
+            <el-check-tag v-for="tag in tags.slice(7, 19)" v-model:checked="tag.checked" @change="(checked) => handleTagSelect(tag, checked)" :disabled="packType === 1 || packType === 2 || packType === 3">{{ tag.tag_name }}</el-check-tag>
           </div>
           <div class="tag-box">
             <p>{{ t('pack.difficulty') }}</p>
-            <el-check-tag v-for="tag in tags.slice(19)" v-model:checked="tag.checked" @change="handleTagSelect" :disabled="packType === 1 || packType === 3">{{ tag.tag_name }}</el-check-tag>
+            <el-check-tag v-for="tag in tags.slice(19)" v-model:checked="tag.checked" @change="(checked) => handleTagSelect(tag, checked)" :disabled="packType === 1 || packType === 3">{{ tag.tag_name }}</el-check-tag>
           </div>
           <div class="tag-box">
             <p>{{ t('pack.status') }}</p>
-            <el-check-tag v-for="tag in status" v-model:checked="tag.checked" @change="handleTagSelect" :type="tag.type">{{ tag.label }}</el-check-tag>
+            <el-check-tag v-for="tag in status" v-model:checked="tag.checked" @change="(checked) => handleStatusSelect(tag, checked)" :type="tag.type">{{ tag.label }}</el-check-tag>
           </div>
           <div class="tag-box">
             <p>{{ t('pack.date') }}</p>
@@ -113,14 +113,14 @@
       <el-col :xs="24" :sm="24" :md="16" :lg="16" :xl="16">
         <el-row justify="start" :gutter="6">
           <el-col :xs="24" :sm="12" :md="12" :lg="userCol" :xl="userCol" v-for="pack in packs" class="pack-col">
-            <div class="stage-card" @click="">
+            <div class="stage-card" @click="goToPackInfo(pack.pack_id)">
               <div class="stage-bg" :style="{ backgroundImage: `url(https://assets.ppy.sh/beatmaps/${pack.osu_bid}/covers/card@2x.jpg` }"></div>
               <div class="stage-overlay"></div>
               <div class="stage-side-panel">
                 <div class="panel-icon" @click="goToPackLink(0, pack.osu_bid)">
                   <el-tooltip
                       effect="dark"
-                      content="Osu!"
+                      content="osu!"
                       placement="top"
                   >
                     <img class="dl-icon" alt="osu" src="../../assets/pic/osu/osu.svg" width="20" height="20">
@@ -146,8 +146,8 @@
               <div class="stage-info">
                 <div>
                   <div class="stage-title">
-                    <span v-if="pack.type === 3">{{ pack.artist }} - </span>
-                    {{ pack.title }}
+                    <span v-if="pack.type === 3">{{ pack.artist_unicode }} - </span>
+                    {{ pack.title_unicode }}
                   </div>
                   <div class="stage-mapper">Created by {{ pack.creator }}</div>
                 </div>
@@ -197,19 +197,20 @@ const { t } = useI18n();
 const store = useStore()
 
 const userId = computed(() => store.state.userId);
-const searchKeyword = ref('');
-const page = ref(1);
-const pageSize = ref(12);
 const totalPage = ref(0)
-const tags = ref([]);
 const packs = ref([]);
 const tableLoading = ref(false)
 const showTags = ref(true)
-const packType = ref(-1)
 const userCol = ref(12)
+const searchKeyword = ref('')
+const page = ref(1)
+const pageSize = ref(12)
+const packType = ref(-1)
+const tags = ref([])
 const status = ref([{ val: 1, label: 'Ranked', checked: false, type: 'success' },
-  { val: 4, label: 'Loved', checked: false, type: 'error' },])
+  { val: 4, label: 'Loved', checked: false, type: 'error' }])
 const time = ref([])
+
 
 const breakpoints = useBreakpoints({
   tablet: 768,
@@ -249,12 +250,12 @@ function getCheckedTagIds(tagsArray) {
   return tagsArray.filter(tag => tag.checked).map(tag => tag.tag_id);
 }
 
-const getTagList = () => {
-  tagList().then((res) => {
-    const tagData = res.data;
-    tagData.forEach(tag => {
-      tag.checked = false;
-    });
+const getTagList = async () => {
+  await tagList().then((res) => {
+    const tagData = res.data.map(tag => ({
+      ...tag,
+      checked: false
+    }));
     tags.value = JSON.parse(JSON.stringify(tagData));
   })
 }
@@ -264,16 +265,48 @@ const debouncedSearch = debounce(() => {
   getPackList();
 }, 1000);
 
-const handleTagSelect = () => {
+const handleTagSelect = (tag, checked) => {
+  tag.checked = checked;
+  const checkedTagIds = tags.value.filter(tag => tag.checked).map(tag => tag.tag_id);
+  store.commit('setPackFilters', {
+    ...store.state.packFilters,
+    checkedTagIds
+  });
   debouncedSearch();
 }
+
+const handleStatusSelect = (tag, checked) => {
+  tag.checked = checked;
+  const checkedStatusIds = status.value.filter(tag => tag.checked).map(tag => tag.val);
+  store.commit('setPackFilters', {
+    ...store.state.packFilters,
+    checkedStatus: checkedStatusIds,
+  });
+  debouncedSearch();
+}
+
+const debouncedUpdateTimeFilters = debounce(() => {
+  store.commit('setPackFilters', {
+    ...store.state.packFilters,
+    time: time.value,
+  });
+}, 1000);
 
 const handleDateSelect = () => {
   debouncedSearch();
+  debouncedUpdateTimeFilters();
 }
+
+const debouncedUpdateKeyWordFilters = debounce(() => {
+  store.commit('setPackFilters', {
+    ...store.state.packFilters,
+    searchKeyword: searchKeyword.value,
+  });
+}, 1000);
 
 const handleSearchInput = () => {
   debouncedSearch();
+  debouncedUpdateKeyWordFilters();
 }
 
 const refreshTags = () => {
@@ -284,9 +317,25 @@ const refreshTags = () => {
     tag.checked = false;
   })
   time.value = [];
+  packType.value = -1;
+  searchKeyword.value = '';
+  store.commit('setPackFilters', {
+    searchKeyword: '',
+    packType: -1,
+    checkedTags: [],
+    checkedStatus: [],
+    timeRange: []
+  });
   debouncedSearch();
   ElMessage.success(t('pack.refreshSuccess'))
 }
+
+const debouncedUpdateTypeFilters = debounce(() => {
+  store.commit('setPackFilters', {
+    ...store.state.packFilters,
+    packType: packType.value,
+  });
+}, 1000);
 
 const refreshTagsWhenChangeType = () => {
   let rangeStart = 0
@@ -302,15 +351,28 @@ const refreshTagsWhenChangeType = () => {
     tag.checked = false
   })
   debouncedSearch()
+  debouncedUpdateTypeFilters()
 }
+
+const debouncedUpdatePageFilters = debounce(() => {
+  store.commit('setPackFilters', {
+    ...store.state.packFilters,
+    page: page.value,
+  });
+}, 1000);
 
 const handlePageChange = (packPage) => {
   page.value = packPage;
+  debouncedUpdatePageFilters();
   getPackList();
 }
 
 const goToCreateNewPack = () => {
   router.push({ path: '/newPack' })
+}
+
+const goToPackInfo = (packId) => {
+  router.push({ path: `/pack/${packId}` })
 }
 
 const setUserCol = () => {
@@ -359,8 +421,28 @@ const goToPackLink = (type, bid) => {
   }
 }
 
-onBeforeMount(() => {
-  getTagList();
+const initFiltersFromVuex = () => {
+  const savedFilters = store.state.packFilters;
+  if (savedFilters.checkedTagIds && tags.value.length) {
+    tags.value.forEach(tag => {
+      tag.checked = savedFilters.checkedTagIds.includes(tag.tag_id);
+    });
+  }
+  searchKeyword.value = savedFilters.searchKeyword ?? '';
+  page.value = savedFilters.page ?? 1
+  packType.value = savedFilters.packType ?? -1;
+  console.log(savedFilters);
+  status.value.forEach((sTag) => {
+    sTag.checked = savedFilters.checkedStatus
+        ? savedFilters.checkedStatus.includes(sTag.val)
+        : false;
+  });
+  time.value = savedFilters.time ?? [];
+}
+
+onBeforeMount(async () => {
+  await getTagList();
+  initFiltersFromVuex()
   getPackList();
 })
 </script>
@@ -544,7 +626,7 @@ onBeforeMount(() => {
 .stage-card:hover .stage-status {
   display: none;
 }
-.stage-status {
+.stage-status .el-tag {
   backdrop-filter: blur(3px);
 }
 .stage-side-panel {
@@ -610,5 +692,8 @@ onBeforeMount(() => {
 }
 .pack-col{
   padding: 0 4px !important;
+}
+.el-pagination{
+  margin-bottom: 8px;
 }
 </style>

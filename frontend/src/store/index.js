@@ -6,7 +6,15 @@ export default createStore({
         isLogged: !!localStorage.getItem('token'),
         userId: localStorage.getItem('userId') || null,
         loginRedirect: null,
-        showLoginDialog: false
+        showLoginDialog: false,
+        packFilters: {
+            searchKeyword: '',
+            page: 1,
+            packType: -1,
+            checkedTagIds: [],
+            checkedStatus: [],
+            time: []
+        }
     },
     mutations: {
         setLogin(state, userId) {
@@ -19,6 +27,9 @@ export default createStore({
         },
         SET_LOGIN_DIALOG(state, value) {
             state.showLoginDialog = value
+        },
+        setPackFilters(state, filters) {
+            state.packFilters = filters;
         }
     },
     actions: {

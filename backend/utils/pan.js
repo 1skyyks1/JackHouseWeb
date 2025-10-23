@@ -48,6 +48,7 @@ async function fetchUploadUrl(authCode, fid, time) {
     try {
         const response = await fetch(url.toString(), { method: 'GET' });
         const result = await response.json();
+        console.log(result)
 
         if (result.code === 200 && result.data) {
             return result.data; // { url: "...", query: "..." }

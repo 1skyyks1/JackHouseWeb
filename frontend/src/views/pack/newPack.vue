@@ -40,11 +40,6 @@
                     <el-option :value="2" :label="t('pack.dan')" :key="2"></el-option>
                     <el-option :value="3" :label="t('pack.single')" :key="3"></el-option>
                   </el-select>
-                  <el-popover placement="bottom-end" :content="t('pack.typePopover')">
-                    <template #reference>
-                      <el-icon><QuestionFilled /></el-icon>
-                    </template>
-                  </el-popover>
                 </div>
               </el-form-item>
               <el-collapse v-if="packForm.type !== 1">

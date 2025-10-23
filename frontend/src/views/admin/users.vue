@@ -42,7 +42,7 @@
               <el-tag type="warning" v-else>限制</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="role" label="Osu!" align="center" min-width="100px">
+          <el-table-column prop="role" label="osu!" align="center" min-width="100px">
             <template v-slot:default="scope">
               <el-link :href="osuPage(scope.row.osu_uid)" target="_blank" v-if="scope.row.osu_uid">
                 {{ scope.row.osu_uid }}

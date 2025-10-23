@@ -39,12 +39,15 @@
     "deleteFailed": "删除评论失败"
   },
   "pack": {
-    "createMissing": "图包名和标签为必填项",
-    "createFailed": "创建图包失败",
-    "getListFailed": "查询图包失败",
-    "notFound": "未找到指定的图包",
-    "getDetailFailed": "获取图包详情失败",
-    "alreadyExists": "该图包已存在"
+    "createMissing": "图包名和标签是必填项",
+    "createFailed": "创建失败",
+    "getListFailed": "获取图包列表失败",
+    "notFound": "未找到指定的包",
+    "getDetailFailed": "获取详情失败",
+    "alreadyExists": "该图包已存在",
+    "createSuccess": "图包创建成功",
+    "updateFailed": "更新失败",
+    "updateSuccess": "更新成功"
   },
   "postComment": {
     "fetchFailed": "获取评论失败",
@@ -92,8 +95,11 @@
   },
   "tag": {
     "getFailed": "获取标签列表失败",
-    "updateFailed": "更新标签失败",
-    "updateSuccess": "成功更新标签"
+    "invalidTags": "无效的标签参数",
+    "tagsUpdated": "合集标签更新成功",
+    "tagsAdded": "标签添加成功",
+    "tagsRemoved": "标签移除成功",
+    "updateFailed": "更新标签失败"
   },
   "user": {
     "createSuccess": "用户创建成功",
