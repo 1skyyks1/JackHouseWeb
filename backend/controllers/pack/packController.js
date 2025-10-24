@@ -65,6 +65,9 @@ exports.getAllPacks = async (req, res) => {
             findOptions.where = {
                 [Op.or]: [
                     { title: { [Op.like]: `%${searchKeys}%` } },
+                    { title_unicode: { [Op.like]: `%${searchKeys}%` } },
+                    { artist: { [Op.like]: `%${searchKeys}%` } },
+                    { artist_unicode: { [Op.like]: `%${searchKeys}%` } },
                     { creator: { [Op.like]: `%${searchKeys}%` } }
                 ]
             };

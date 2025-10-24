@@ -242,6 +242,7 @@
       "realLength": "Drain length",
       "rc": "Notes",
       "ln": "LNs",
+      "osu": "osu! website",
       "com": {
         "placeholder": "Write something…",
         "createComment": "Post",

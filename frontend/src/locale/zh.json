@@ -242,6 +242,7 @@
       "realLength": "游玩长度",
       "rc": "单键数",
       "ln": "长条数",
+      "osu": "osu!官网",
       "com": {
         "placeholder": "写点你的想法/评价……",
         "createComment": "发送",
