@@ -113,7 +113,6 @@ exports.updatePackFromOsu = async (req, res) => {
 
         const t = await sequelize.transaction();
         try {
-            // 更新 Pack
             await existingPack.update({
                 artist: beatmapset.artist,
                 artist_unicode: beatmapset.artist_unicode,
@@ -127,13 +126,11 @@ exports.updatePackFromOsu = async (req, res) => {
                 cover_id: parseInt(beatmapset.covers.cover.split('?')[1], 10)
             }, { transaction: t });
 
-            // 删除旧的 PackMap
             await PackMap.destroy({
                 where: { pack_id: existingPack.pack_id },
                 transaction: t
             });
 
-            // 构造新的 PackMap 并插入数据库
             const packMapData = beatmapset.beatmaps.map(beatmap => ({
                 pack_id: existingPack.pack_id,
                 rating: beatmap.difficulty_rating,

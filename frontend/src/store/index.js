@@ -13,7 +13,7 @@ export default createStore({
             packType: -1,
             checkedTagIds: [],
             checkedStatus: [],
-            time: []
+            sort: 0
         }
     },
     mutations: {

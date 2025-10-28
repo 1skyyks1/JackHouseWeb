@@ -1,7 +1,7 @@
 import request from "@/utils/request";
 
 // 获取所有包
-export function packList(page, pageSize, searchKeys, tags, type, ranked, loved, startDate, endDate) {
+export function packList(page, pageSize, searchKeys, tags, type, ranked, loved, sort) {
     return request({
         url: '/pack',
         method: "GET",
@@ -13,8 +13,7 @@ export function packList(page, pageSize, searchKeys, tags, type, ranked, loved, 
             type,
             ranked,
             loved,
-            startDate,
-            endDate
+            sort
         }
     })
 }

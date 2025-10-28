@@ -35,9 +35,11 @@ exports.createPack = async (req, res) => {
 
 // 获取图包列表（带筛选和分页）
 exports.getAllPacks = async (req, res) => {
-    const { page, pageSize, searchKeys, tags, type, ranked, loved, startDate, endDate } = req.query;
+    const { page, pageSize, searchKeys, tags, type, ranked, loved, sort } = req.query;
     const offset = (parseInt(page, 10) - 1) * parseInt(pageSize, 10);
     const limit = parseInt(pageSize, 10);
+    const keyword = decodeURIComponent(searchKeys || '');
+    const sortNum = Number(sort);
     try {
         const findOptions = {
             distinct: true,
@@ -64,13 +66,19 @@ exports.getAllPacks = async (req, res) => {
         if (searchKeys) {
             findOptions.where = {
                 [Op.or]: [
-                    { title: { [Op.like]: `%${searchKeys}%` } },
-                    { title_unicode: { [Op.like]: `%${searchKeys}%` } },
-                    { artist: { [Op.like]: `%${searchKeys}%` } },
-                    { artist_unicode: { [Op.like]: `%${searchKeys}%` } },
-                    { creator: { [Op.like]: `%${searchKeys}%` } }
+                    { title: { [Op.like]: `%${keyword}%` } },
+                    { title_unicode: { [Op.like]: `%${keyword}%` } },
+                    { artist: { [Op.like]: `%${keyword}%` } },
+                    { artist_unicode: { [Op.like]: `%${keyword}%` } },
+                    { creator: { [Op.like]: `%${keyword}%` } }
                 ]
             };
+        }
+
+        if (sortNum === 1) {
+            findOptions.order = [['submitted_date', 'ASC']];
+        } else if (sortNum === 2) {
+            findOptions.order = [['submitted_date', 'DESC']];
         }
 
         if (type) {
@@ -82,17 +90,6 @@ exports.getAllPacks = async (req, res) => {
         if (loved) statusArr.push(4);
         if (statusArr.length > 0) {
             findOptions.where.status = { [Op.in]: statusArr };
-        }
-
-        if (startDate && endDate) {
-            const start = new Date(startDate);
-            const end = new Date(endDate);
-            end.setMonth(end.getMonth() + 1);
-            end.setSeconds(end.getSeconds() - 1);
-
-            findOptions.where.submitted_date = {
-                [Op.between]: [start, end],
-            };
         }
 
         if (tags) {

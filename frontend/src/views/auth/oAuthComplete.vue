@@ -45,10 +45,14 @@ onBeforeMount(async () => {
         )
         if(confirm === 'confirm'){
           // 选择同步
-          await userUpdate(userId, {
-            user_name: thirdName,
-            avatar: thirdAvatar,
-          })
+          let data = {};
+          if(thirdName){
+            data.user_name = thirdName
+          }
+          if(thirdAvatar){
+            data.avatar = thirdAvatar
+          }
+          await userUpdate(userId, data)
           ElMessage.success(t('login.syncSuccess'))
         } else {
           ElMessage.info(t('login.syncSkipped'))
