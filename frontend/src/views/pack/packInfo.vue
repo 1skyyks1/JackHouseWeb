@@ -240,7 +240,7 @@
             </div>
           </div>
         </el-card>
-        <el-card shadow="never" style="margin-top: 8px">
+        <el-card shadow="never" style="margin: 8px 0">
           <template #header>
             <div class="card-header">
               <div class="pack-header">

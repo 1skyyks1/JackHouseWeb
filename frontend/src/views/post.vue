@@ -141,6 +141,7 @@
                 :page-size="pageSize"
                 :total="totalComments"
                 @current-change="handlePageChange"
+                hide-on-single-page
             ></el-pagination>
           </div>
         </el-card>

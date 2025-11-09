@@ -35,6 +35,17 @@ export function postFileList(page, pageSize, post_id, status, keyword){
     })
 }
 
+export function postFileUpload(postId, data){
+    return request({
+        url: '/postFile/upload/' + postId,
+        method: 'POST',
+        data: data,
+        headers:{
+            'Content-Type': 'multipart/form-data',
+        }
+    })
+}
+
 // 创建投稿
 export function postFileCreate(data){
     return request({

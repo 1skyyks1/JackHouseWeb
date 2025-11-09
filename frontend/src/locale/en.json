@@ -178,10 +178,10 @@
   },
 
   "pack": {
-    "pattern": "Pattern:",
-    "difficulty": "Difficulty:",
-    "bpm": "BPM:",
-    "status": "Status:",
+    "pattern": "Pattern",
+    "difficulty": "Difficulty",
+    "bpm": "BPM",
+    "status": "Status",
     "byTime": "Sort by time",
     "oldestFirst": "Oldest first",
     "newestFirst": "Newest first",

@@ -3,6 +3,10 @@ const ROLES = require('../../config/roles')
 const sequelize = require('../../config/db')
 const { Op } = require("sequelize");
 const { fetchUploadUrl, getSign, getAuthCode } = require('../../utils/pan');
+const { upload } = require('../../config/multer')
+// const { uploadToStorage, preSign } = require('../../utils/tebiS3')
+const fs = require('fs')
+const mc = require('../../config/minio')
 
 // 条件获取所有投稿
 exports.getFileByPostId = async (req, res) => {
@@ -99,6 +103,47 @@ exports.getFileByUserId = async (req, res) => {
     }
 }
 
+// 上传文件
+exports.uploadFile = [
+    upload.single('file'),
+    async (req, res) => {
+        const { post_id } = req.params;
+        const user_id = req.user.user_id;
+        const file = req.file;
+
+        if (!file) {
+            return res.status(400).json({ message: req.t('postFile.noFile') });
+        }
+
+        const filePath = file.path;
+        const fileName = file.filename;
+
+        try {
+            await mc.fPutObject(process.env.MINIO_POSTFILES_BUCKET, fileName, filePath, {
+                'Content-Type': file.mimetype,
+            });
+
+            const postFile = await PostFile.create({
+                post_id,
+                user_id,
+                file_name: Buffer.from(file.originalname, 'latin1').toString('utf8'),
+                file_url: fileName,
+                size: file.size,
+            });
+
+            fs.unlinkSync(filePath);
+            res.status(201).json({ message: req.t('postFile.uploadSuccess'), data: postFile });
+        } catch (error) {
+            // 如果上传失败，删除临时文件
+            if (fs.existsSync(file.path)) {
+                fs.unlinkSync(file.path);
+            }
+            console.log(error)
+            res.status(500).json({ message: req.t('postFile.uploadFailed') });
+        }
+    }
+];
+
 // 创建投稿
 exports.createPostFile = async (req, res) => {
     const { post_id, file_url, file_name, size } = req.body;
@@ -140,6 +185,27 @@ exports.getUploadUrl = async (req, res) => {
 }
 
 // 获取文件下载url
+// exports.getFileUrl = async (req, res) => {
+//     const { file_id } = req.params;
+//     try {
+//         const file = await PostFile.findByPk(file_id);
+//         if(!file) {
+//             return res.status(404).json({ message: req.t('postFile.notFound') });
+//         }
+//         const authCode = await getAuthCode()
+//         const url = await getSign(file.file_url, authCode)
+//         res.status(200).json({ data: url.data });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: req.t('postFile.getUrlFailed') });
+//     }
+// }
+
+const preSign = async (name) => {
+    const expires = 24 * 60 * 60;
+    return await mc.presignedUrl('GET', process.env.MINIO_POSTFILES_BUCKET, name, expires)
+}
+
 exports.getFileUrl = async (req, res) => {
     const { file_id } = req.params;
     try {
@@ -147,11 +213,10 @@ exports.getFileUrl = async (req, res) => {
         if(!file) {
             return res.status(404).json({ message: req.t('postFile.notFound') });
         }
-        const authCode = await getAuthCode()
-        const url = await getSign(file.file_url, authCode)
-        res.status(200).json({ data: url.data });
+        const url = await preSign(file.file_url)
+        res.status(200).json({ data: url });
     } catch (error) {
-        console.error(error);
+        console.log(error);
         res.status(500).json({ message: req.t('postFile.getUrlFailed') });
     }
 }
@@ -194,7 +259,7 @@ exports.reviewPostFile = async (req, res) => {
     }
 }
 
-// 新删除投稿，不删除文件
+// 删除投稿，删除文件
 exports.deleteFile = async (req, res) => {
     const { file_id } = req.params;
     try {
@@ -202,7 +267,10 @@ exports.deleteFile = async (req, res) => {
         if (!file) {
             return res.status(404).json({ message: req.t('postFile.notFound') });
         }
-        await file.destroy();
+        await sequelize.transaction(async (t) => {
+            await file.destroy({ transaction: t });
+            await mc.removeObject(process.env.MINIO_POSTFILES_BUCKET, file.file_url);
+        })
         res.json({ message: req.t('postFile.deleteSuccess') });
     } catch (error) {
         res.status(500).json({ message: req.t('postFile.deleteFailed') });

@@ -32,7 +32,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import { uploadUrl, postFileCreate } from "@/api/postFile";
+import { uploadUrl, postFileCreate, postFileUpload } from "@/api/postFile";
 import { Upload, UploadFilled } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n';
 import { ElMessage } from "element-plus";
@@ -60,26 +60,15 @@ const removeFile = (file, fileList) => {
 }
 
 const uploadFile = async (file) => {
+  console.log(file)
   if(!file.file){
     ElMessage.warning(t('mapUpload.warning'));
     return;
   }
   uploading.value = true
-  const url = await getUploadUrl();
   const formData = new FormData();
   formData.append('file', file.file);
-  const response = await fetch(url, {
-    method: 'POST',
-    body: formData,
-  });
-  const result = await response.json();
-  console.log(file);
-  await postFileCreate({
-    post_id: props.postId,
-    file_url: result.data,
-    file_name: file.file.name,
-    size: file.file.size
-  }).then(() => {
+  await postFileUpload(props.postId, formData).then(() => {
     ElMessage.success(t('mapUpload.success'));
     uploading.value = false;
     uploadRef.value.clearFiles();
@@ -90,6 +79,38 @@ const uploadFile = async (file) => {
     uploading.value = false
   })
 }
+
+// const uploadFile = async (file) => {
+//   if(!file.file){
+//     ElMessage.warning(t('mapUpload.warning'));
+//     return;
+//   }
+//   uploading.value = true
+//   const url = await getUploadUrl();
+//   const formData = new FormData();
+//   formData.append('file', file.file);
+//   const response = await fetch(url, {
+//     method: 'POST',
+//     body: formData,
+//   });
+//   const result = await response.json();
+//   console.log(file);
+//   await postFileCreate({
+//     post_id: props.postId,
+//     file_url: result.data,
+//     file_name: file.file.name,
+//     size: file.file.size
+//   }).then(() => {
+//     ElMessage.success(t('mapUpload.success'));
+//     uploading.value = false;
+//     uploadRef.value.clearFiles();
+//     selected.value = false;
+//     emit('upload-success');
+//   }).catch(err => {
+//     console.log(err)
+//     uploading.value = false
+//   })
+// }
 
 const getUploadUrl = async () => {
   const res = await uploadUrl(props.postId)

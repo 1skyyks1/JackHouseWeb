@@ -178,11 +178,11 @@
   },
 
   "pack": {
-    "pattern": "键型：",
-    "difficulty": "难度：",
-    "bpm": "BPM：",
-    "status": "状态：",
-    "byTime": "时间排序：",
+    "pattern": "键型",
+    "difficulty": "难度",
+    "bpm": "BPM",
+    "status": "状态",
+    "byTime": "时间排序",
     "oldestFirst": "从旧到新",
     "newestFirst": "从新到旧",
     "all": "全部类型",

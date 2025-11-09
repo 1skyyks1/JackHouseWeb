@@ -51,26 +51,26 @@
             </el-radio-group>
           </div>
           <div class="tag-box">
-            <p>{{ t('pack.pattern') }}</p>
+            <b>{{ t('pack.pattern') }}</b>
             <el-check-tag v-for="tag in tags.slice(0, 7)" v-model:checked="tag.checked" @change="(checked) => handleTagSelect(tag, checked)" :disabled="packType === 1 || packType === 2">
               {{ t(`tags.${tag.tag_name}`) }}
             </el-check-tag>
           </div>
           <div class="tag-box">
-            <p>{{ t('pack.bpm') }}</p>
+            <b>{{ t('pack.bpm') }}</b>
             <el-check-tag v-for="tag in tags.slice(7, 19)" v-model:checked="tag.checked" @change="(checked) => handleTagSelect(tag, checked)" :disabled="packType === 1 || packType === 2 || packType === 3">{{ tag.tag_name }}</el-check-tag>
           </div>
           <div class="tag-box">
-            <p>{{ t('pack.difficulty') }}</p>
+            <b>{{ t('pack.difficulty') }}</b>
             <el-check-tag v-for="tag in tags.slice(19)" v-model:checked="tag.checked" @change="(checked) => handleTagSelect(tag, checked)" :disabled="packType === 1 || packType === 3">{{ tag.tag_name }}</el-check-tag>
           </div>
           <div class="tag-box">
-            <p>{{ t('pack.status') }}</p>
+            <b>{{ t('pack.status') }}</b>
             <el-check-tag v-for="tag in status" v-model:checked="tag.checked" @change="(checked) => handleStatusSelect(tag, checked)" :type="tag.type">{{ tag.label }}</el-check-tag>
           </div>
           <div class="tag-box">
-            <p>{{ t('pack.byTime') }}</p>
-            <el-check-tag v-for="tag in sort" v-model:checked="tag.checked" @change="(checked) => handleSortSelect(tag, checked)">{{ tag.label }}</el-check-tag>
+            <b>{{ t('pack.byTime') }}</b>
+            <el-check-tag v-for="tag in sort" v-model:checked="tag.checked" @change="(checked) => handleSortSelect(tag, checked)">{{ t(tag.label) }}</el-check-tag>
           </div>
         </el-card>
       </el-col>
@@ -184,6 +184,14 @@
         />
       </el-col>
     </el-row>
+    <div class="floating-btn-group">
+      <el-button class="fixed-btn" @click="goToMapSetHelp" type="warning">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
+          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+          <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94"/>
+        </svg>
+      </el-button>
+    </div>
   </div>
 </template>
 
@@ -216,8 +224,10 @@ const packType = ref(-1)
 const tags = ref([])
 const status = ref([{ val: 1, label: 'Ranked', checked: false, type: 'success' },
   { val: 4, label: 'Loved', checked: false, type: 'error' }])
-const sort = ref([{ val: 1, label: t('pack.oldestFirst'), checked: false },
-  { val: 2, label: t('pack.newestFirst'), checked: false }])
+const sort = ref([
+  { val: 1, label: 'pack.oldestFirst', checked: false },
+  { val: 2, label: 'pack.newestFirst', checked: false }
+])
 
 
 const breakpoints = useBreakpoints({
@@ -446,7 +456,6 @@ const initFiltersFromVuex = () => {
   searchKeyword.value = savedFilters.searchKeyword ?? '';
   page.value = savedFilters.page ?? 1
   packType.value = savedFilters.packType ?? -1;
-  console.log(savedFilters);
   status.value.forEach((sTag) => {
     sTag.checked = savedFilters.checkedStatus
         ? savedFilters.checkedStatus.includes(sTag.val)
@@ -455,6 +464,14 @@ const initFiltersFromVuex = () => {
   if(savedFilters.sort !== 0) {
     sort.value.find(tag => tag.val === savedFilters.sort).checked = true
   }
+}
+
+const goToMapSetHelp = () => {
+  router.push({ path: '/post/19' })
+}
+
+const scrollToTop = () => {
+  document.documentElement.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 onBeforeMount(async () => {
@@ -494,6 +511,7 @@ onBeforeMount(async () => {
   flex-wrap: wrap;
   gap: 6px;
   justify-content: flex-start;
+  align-items: center;
   margin-bottom: 10px;
   &:last-child{
     margin-bottom: 0;
@@ -712,5 +730,18 @@ onBeforeMount(async () => {
 }
 .el-pagination{
   margin-bottom: 8px;
+}
+.floating-btn-group {
+  position: fixed;
+  bottom: 8%;
+  right: 8%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  z-index: 1000;
+}
+.fixed-btn {
+  padding: 8px;
 }
 </style>
