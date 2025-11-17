@@ -13,13 +13,13 @@
         :defaultConfig="editorConfig"
         :mode="mode"
         @onCreated="handleCreated"
-        class="prose max-w-none"
+        class="prose dark:prose-invert max-w-none"
     />
   </div>
 </template>
 
 <script setup>
-import '@wangeditor/editor/dist/css/style.css' // 引入 css
+import '@wangeditor/editor/dist/css/style.css'
 
 import { onBeforeUnmount, ref, shallowRef, onMounted, nextTick } from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'

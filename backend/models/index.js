@@ -9,6 +9,7 @@ const PackMap = require('./pack/packMap');
 const Tag = require('./pack/tag');
 const PackComment = require('./pack/packComment');
 const Badge = require('./user/badge');
+const Role = require('./user/role');
 
 const Event = require('../models/event/event');
 const EventStage = require('../models/event/eventStage');
@@ -39,6 +40,12 @@ User.belongsToMany(Badge, {
     otherKey: 'badge_id',
     as: 'badges'
 })
+User.belongsToMany(Role, {
+    through: 'user_roles',
+    foreignKey: 'user_id',
+    otherKey: 'role_id',
+    as: 'roles'
+})
 
 HomeImg.belongsTo(User, {foreignKey: 'user_id'})
 
@@ -67,6 +74,13 @@ PackComment.belongsTo(Pack, { foreignKey: 'pack_id' });
 Badge.belongsToMany(User, {
     through: 'user_badges',
     foreignKey: 'badge_id',
+    otherKey: 'user_id',
+    as: 'users'
+})
+
+Role.belongsToMany(User, {
+    through: 'user_roles',
+    foreignKey: 'role_id',
     otherKey: 'user_id',
     as: 'users'
 })

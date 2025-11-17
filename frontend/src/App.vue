@@ -2,7 +2,6 @@
   <div id="app">
     <div class="main-content-wrapper px-2">
       <RouterView></RouterView>
-      <el-backtop :right="20" :bottom="40" />
     </div>
   </div>
 </template>
@@ -25,5 +24,8 @@ body {
 html, body {
   overflow-x: hidden;
   height: 100%;
+}
+body, .smooth-container {
+  scroll-behavior: smooth;
 }
 </style>

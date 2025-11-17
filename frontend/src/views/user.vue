@@ -142,7 +142,7 @@
                     <el-tag v-else type="danger">{{ t('user.info.rejected') }}</el-tag>
                   </template>
                 </el-popover>
-                <span class="post-time">{{ formatDate(file.created_time) }}</span>
+                <span class="post-time">{{ formatDate(file.uploaded_time) }}</span>
               </div>
             </div>
             <div class="custom-divider">
