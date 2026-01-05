@@ -2,10 +2,10 @@
   <el-menu router
            :default-active="route.path"
            mode="horizontal"
-           class="nav-menu"
+           :class="['nav-menu', { 'transparent-nav': isHomePage }]"
            :ellipsis="false">
     <div class="logo">
-      <img alt="logo" src="../assets/pic/jackHouseDark.webp" v-if="isDark"/>
+      <img alt="logo" src="../assets/pic/jackHouseDark.webp" v-if="isHomePage || isDark"/>
       <img alt="logo" src="../assets/pic/jackHouseLight.webp" v-else/>
     </div>
     <div v-if="isMobile" style="">
@@ -18,7 +18,7 @@
       <el-menu-item index="/forum" class="menu-item">{{ t('menu.forum') }}</el-menu-item>
       <el-menu-item index="/pack" class="menu-item">{{ t('menu.pack') }}</el-menu-item>
       <el-menu-item index="/about" class="menu-item">{{ t('menu.about') }}</el-menu-item>
-      <el-menu-item>
+      <el-menu-item v-if="!isHomePage">
         <div class="darkModeSvg">
           <svg
               v-if="!isDark"
@@ -80,7 +80,8 @@
     <el-menu router
              :default-active="route.path"
              mode="vertical"
-             :ellipsis="false">
+             :ellipsis="false"
+             :class="[{ 'transparent-nav': isHomePage }]">
       <el-menu-item>
         <el-dropdown>
           <el-avatar shape="square" :src="avatar"/>
@@ -181,6 +182,7 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 const route = useRoute();
+const isHomePage = computed(() => route.path === '/');
 const isDark = useDark();
 const breakpoints = useBreakpoints({
   mobile: 860,
@@ -371,7 +373,7 @@ html.dark .darkModeSvg{
   padding: 0
 }
 .lang-option{
-  margin: 0 10px 3px;
+  margin: 0 10px 1px;
   display: flex;
   align-items: center;
 }
@@ -387,10 +389,55 @@ html.dark .darkModeSvg{
 .el-select{
   margin: 8px
 }
-.el-drawer {
+.el-drawer{
   z-index: 2000;
 }
 :deep(.el-drawer .el-drawer__footer){
   text-align: left !important;
+}
+
+.nav-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  /* 其他页面 */
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--el-border-color-light);
+  transition: all 0.3s ease;
+}
+
+/* 暗黑模式下的默认状态 */
+html.dark .nav-menu {
+  background: rgba(30, 30, 30, 0.8);
+}
+
+/* 主页透明 */
+.nav-menu.transparent-nav {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+/* 透明模式下的文字颜色处理 */
+/* 强制把菜单文字、图标变成白色，并且加一点阴影防止背景太亮看不清 */
+.nav-menu.transparent-nav :deep(.el-menu-item),
+.nav-menu.transparent-nav :deep(.el-sub-menu__title),
+.nav-menu.transparent-nav .dark-mode-svg,
+.nav-menu.transparent-nav .login-text {
+  color: #ffffff !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+/* 透明模式下的hover：鼠标放上去变成半透明 */
+.nav-menu.transparent-nav :deep(.el-menu-item:hover) {
+  background-color: rgba(255,255,255,0.1) !important;
 }
 </style>

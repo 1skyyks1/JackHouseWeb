@@ -15,6 +15,14 @@ const Role = sequelize.define('role', {
         type: DataTypes.STRING(255),
         allowNull: false,
     },
+    desc_en: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+    },
+    desc_zh: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+    },
     created_time: {
         type: DataTypes.DATE,
         defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),

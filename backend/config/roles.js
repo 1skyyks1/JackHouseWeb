@@ -4,4 +4,8 @@ const ROLES = {
     ADMIN: 2 //管理
 }
 
+const PERMISSIONS = {
+
+}
+
 module.exports = ROLES

@@ -46,7 +46,19 @@
     "event": "Challenge Event",
     "noEvent": "No ongoing events",
     "closestEvent": "Upcoming event: ",
-    "stat": "Website Statistics"
+    "stat": "Website Statistics",
+    "home": {
+      "desc": "A community for Jack players.",
+      "button": "START EXPLORING"
+    },
+    "maps": {
+      "desc": "Search and discover Jack maps you want.",
+      "button": "Find JackMaps"
+    },
+    "tourney": {
+      "desc": "Test your skill against Jack players from around the world.",
+      "button": "Enter Tourney"
+    }
   },
 
   "post": {

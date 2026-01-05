@@ -1,16 +1,17 @@
 <template>
   <div id="app">
-    <div class="main-content-wrapper px-2">
+    <div :class="!isHomePage ? 'main-content-wrapper px-2' : ''">
       <RouterView></RouterView>
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 
-export default {
-  name: 'App',
-}
+const route = useRoute();
+const isHomePage = computed(() => route.path === '/');
 </script>
 
 <style>

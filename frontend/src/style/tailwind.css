@@ -15,24 +15,24 @@ html.dark {
 }
 
 html.dark {
-    --w-e-textarea-bg-color: #1e1e1e;              /* 编辑区域背景 */
-    --w-e-textarea-color: #e5e5e5;                 /* 文本颜色 */
-    --w-e-textarea-border-color: #3c3c3c;          /* 边框颜色 */
-    --w-e-textarea-slight-border-color: #2a2a2a;   /* 弱边框 */
-    --w-e-textarea-slight-color: #888;             /* placeholder 等浅色文字 */
-    --w-e-textarea-slight-bg-color: #252526;       /* 代码块、空白背景等 */
-    --w-e-textarea-selected-border-color: #6aa9ff; /* 选中、聚焦元素的边框 */
-    --w-e-textarea-handler-bg-color: #2780f8;      /* 工具点（图片拖拽按钮等） */
+    --w-e-textarea-bg-color: #1e1e1e;
+    --w-e-textarea-color: #e5e5e5;
+    --w-e-textarea-border-color: #3c3c3c;
+    --w-e-textarea-slight-border-color: #2a2a2a;
+    --w-e-textarea-slight-color: #888;
+    --w-e-textarea-slight-bg-color: #252526;
+    --w-e-textarea-selected-border-color: #6aa9ff;
+    --w-e-textarea-handler-bg-color: #2780f8;
 
-    /* toolbar - css vars */
-    --w-e-toolbar-color: #d1d1d1;                  /* 工具栏图标文字颜色 */
-    --w-e-toolbar-bg-color: #1f1f1f;               /* 工具栏背景 */
-    --w-e-toolbar-active-color: #fff;              /* 激活图标 */
-    --w-e-toolbar-active-bg-color: #2b2b2b;        /* 激活背景 */
-    --w-e-toolbar-disabled-color: #555;            /* 禁用图标 */
-    --w-e-toolbar-border-color: #3a3a3a;           /* 工具栏边框 */
+    /* toolbar */
+    --w-e-toolbar-color: #d1d1d1;
+    --w-e-toolbar-bg-color: #1f1f1f;
+    --w-e-toolbar-active-color: #fff;
+    --w-e-toolbar-active-bg-color: #2b2b2b;
+    --w-e-toolbar-disabled-color: #555;
+    --w-e-toolbar-border-color: #3a3a3a;
 
-    /* modal - css vars */
-    --w-e-modal-button-bg-color: #2f2f2f;          /* 弹窗按钮背景 */
-    --w-e-modal-button-border-color: #444;         /* 按钮边框 */
+    /* modal */
+    --w-e-modal-button-bg-color: #2f2f2f;
+    --w-e-modal-button-border-color: #444;
 }
