@@ -5,7 +5,7 @@ const EventStageController = require('../controllers/event/eventStageController'
 const EventScoreController = require('../controllers/event/eventScoreController');
 const osuEventController = require('../controllers/osu/osuEventController');
 const checkAuth = require('../middleware/authMiddleware');
-const ROLES = require('../config/roles');
+const { ROLES } = require('../config/roles');
 
 const rateLimit = require('express-rate-limit');
 const osuLimiter = rateLimit({
@@ -22,10 +22,10 @@ router.get('/', EventController.getEvents);
 router.get('/:event_id', EventController.getEventInfo);
 
 // 创建活动
-router.post('/', checkAuth([ROLES.ORG,ROLES.ADMIN]), EventController.createEvent);
+router.post('/', checkAuth([ROLES.ORG, ROLES.ADMIN]), EventController.createEvent);
 
 // 更新活动
-router.put('/:event_id', checkAuth([ROLES.ORG,ROLES.ADMIN]), EventController.updateEvent);
+router.put('/:event_id', checkAuth([ROLES.ORG, ROLES.ADMIN]), EventController.updateEvent);
 
 // 删除活动
 router.delete('/:event_id', checkAuth([ROLES.ADMIN]), EventController.deleteEvent);
@@ -34,13 +34,13 @@ router.delete('/:event_id', checkAuth([ROLES.ADMIN]), EventController.deleteEven
 router.get('/:event_id/stage', EventStageController.getStages);
 
 // 创建项目
-router.post('/stage', checkAuth([ROLES.ORG,ROLES.ADMIN]), EventStageController.createStage);
+router.post('/stage', checkAuth([ROLES.ORG, ROLES.ADMIN]), EventStageController.createStage);
 
 // 修改项目
-router.put('/stage/:stage_id', checkAuth([ROLES.ORG,ROLES.ADMIN]), EventStageController.updateStage);
+router.put('/stage/:stage_id', checkAuth([ROLES.ORG, ROLES.ADMIN]), EventStageController.updateStage);
 
 // 删除项目
-router.delete('/stage/:stage_id', checkAuth([ROLES.ORG,ROLES.ADMIN]), EventStageController.deleteStage);
+router.delete('/stage/:stage_id', checkAuth([ROLES.ORG, ROLES.ADMIN]), EventStageController.deleteStage);
 
 // 获取指定项目的分数排行榜
 router.get('/rank/stage/:stage_id', EventScoreController.getStageScore);

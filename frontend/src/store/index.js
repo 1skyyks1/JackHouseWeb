@@ -5,6 +5,8 @@ export default createStore({
     state: {
         isLogged: !!localStorage.getItem('token'),
         userId: localStorage.getItem('userId') || null,
+        userRole: null,
+        adminPermissions: [],
         loginRedirect: null,
         showLoginDialog: false,
         packFilters: {
@@ -30,6 +32,14 @@ export default createStore({
         },
         setPackFilters(state, filters) {
             state.packFilters = filters;
+        },
+        setPermissions(state, { role, adminPermissions }) {
+            state.userRole = role
+            state.adminPermissions = adminPermissions
+        },
+        clearPermissions(state) {
+            state.userRole = null
+            state.adminPermissions = []
         }
     },
     actions: {
@@ -54,6 +64,7 @@ export default createStore({
                 localStorage.removeItem('token');
                 localStorage.removeItem('userId');
                 commit('logout');
+                commit('clearPermissions');
                 resolve();
             })
         },

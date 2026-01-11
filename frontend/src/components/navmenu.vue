@@ -170,7 +170,8 @@
 import { useRoute } from "vue-router";
 import { useDark, useToggle, useBreakpoints } from "@vueuse/core";
 import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from "vue";
-import { userById } from "@/api/user"
+import { userById, getPermissions } from "@/api/user"
+import { hasAnyAdminPermission } from "@/utils/permissions"
 import router from "@/router";
 import { useStore } from 'vuex'
 import { User, Lock } from '@element-plus/icons-vue'
@@ -218,7 +219,7 @@ const dropdownItems = computed(() => {
     items.push({ label: t('menu.userEdit'), action: goUserEdit });
   }
 
-  if ((role.value === 1 || role.value === 2) && isLogged.value) {
+  if (hasAnyAdminPermission() && isLogged.value) {
     items.push({ label: t('menu.admin'), action: goAdmin });
   }
 
@@ -242,12 +243,20 @@ const toggleDarkMode = () => {
   useToggle(isDark)();
 };
 
-const getUserInfo = (userId) => {
-  userById(userId).then(response => {
+const getUserInfo = async (userId) => {
+  try {
+    const response = await userById(userId)
     userName.value = response.data.user_name;
     avatar.value = response.data.avatar;
     role.value = response.data.role;
-  })
+    // 获取权限信息
+    if (store.state.adminPermissions.length === 0) {
+      const permRes = await getPermissions()
+      store.commit('setPermissions', permRes.data)
+    }
+  } catch (error) {
+    console.error('获取用户信息失败', error)
+  }
 }
 
 const goLogin = () => {

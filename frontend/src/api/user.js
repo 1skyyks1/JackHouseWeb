@@ -1,7 +1,7 @@
 import request from "@/utils/request";
 
 // 获取所有用户
-export function userList(page, pageSize, search){
+export function userList(page, pageSize, search) {
     return request({
         url: '/user',
         method: 'GET',
@@ -14,7 +14,7 @@ export function userList(page, pageSize, search){
 }
 
 // 创建用户
-export function userCreate(data){
+export function userCreate(data) {
     return request({
         url: '/user',
         method: 'POST',
@@ -23,7 +23,7 @@ export function userCreate(data){
 }
 
 // 根据userId获取单个用户
-export function userById(userId){
+export function userById(userId) {
     return request({
         url: '/user/' + userId,
         method: 'GET'
@@ -31,7 +31,7 @@ export function userById(userId){
 }
 
 // 更新用户信息
-export function userUpdate(userId, data){
+export function userUpdate(userId, data) {
     return request({
         url: '/user/' + userId,
         method: 'PUT',
@@ -40,7 +40,7 @@ export function userUpdate(userId, data){
 }
 
 // 删除用户（管理系统）
-export function userDelete(userId){
+export function userDelete(userId) {
     return request({
         url: '/user/' + userId,
         method: 'DELETE'
@@ -48,9 +48,17 @@ export function userDelete(userId){
 }
 
 // 根据token获取用户信息
-export function userInfo(){
+export function userInfo() {
     return request({
         url: '/user/info',
+        method: 'GET'
+    })
+}
+
+// 获取当前用户的 admin 页面权限
+export function getPermissions() {
+    return request({
+        url: '/permissions',
         method: 'GET'
     })
 }

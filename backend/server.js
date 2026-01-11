@@ -11,6 +11,7 @@ const tagRoutes = require('./routes/tagRoute')
 const packCommentRoutes = require('./routes/packCommentRoute')
 const eventRoutes = require('./routes/eventRoute');
 const badgeRoutes = require('./routes/badgeRoute');
+const permissionsRoutes = require('./routes/permissions');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -79,6 +80,7 @@ app.use('/tag', commonLimiter, tagRoutes);
 app.use('/packCom', commonLimiter, packCommentRoutes);
 app.use('/event', commonLimiter, eventRoutes)
 app.use('/badge', commonLimiter, badgeRoutes)
+app.use('/permissions', commonLimiter, permissionsRoutes)
 
 app.listen(port, '0.0.0.0', () => {
     console.log(`Server running on http://localhost:${port}`);

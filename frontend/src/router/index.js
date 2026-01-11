@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { userInfo } from "@/api/user.js";
+import { getPermissions } from "@/api/user.js";
+import { hasAdminPermission } from '@/utils/permissions';
+import store from '@/store';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -125,23 +127,27 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-    if(to.meta.requiresAdmin) {
+    if (to.meta.requiresAdmin) {
         try {
-            const res = await userInfo();
-            const role = res.data.role;
-            if (role === 1 || role === 2) {
+            // 如果 store 中没有权限信息，先获取
+            if (store.state.adminPermissions.length === 0 && store.state.isLogged) {
+                const res = await getPermissions()
+                store.commit('setPermissions', res.data)
+            }
+            if (hasAdminPermission(to.name)) {
                 next()
             } else {
-                next(false)
+                next({ name: 'home' })
             }
         }
         catch (error) {
-            next(false)
+            next({ name: 'home' })
         }
     } else {
         next()
     }
 })
+
 
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
