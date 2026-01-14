@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const UserController = require('../controllers/user/userController');
 const checkAuth = require("../middleware/authMiddleware");
-const ROLES = require("../config/roles");
+const { ROLES } = require("../config/roles");
 
 // 创建用户
 router.post('/', UserController.createUser);
@@ -20,6 +20,6 @@ router.get('/:user_id', UserController.getUserById);
 router.put('/:user_id', checkAuth(), UserController.updateUser);
 
 // 删除用户
-router.delete('/:user_id', checkAuth([ROLES.ORG,ROLES.ADMIN]), UserController.deleteUser);
+router.delete('/:user_id', checkAuth([ROLES.ORG, ROLES.ADMIN]), UserController.deleteUser);
 
 module.exports = router;

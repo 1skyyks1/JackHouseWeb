@@ -16,6 +16,7 @@
     <div v-else style="display: flex">
       <el-menu-item index="/" class="menu-item">{{ t('menu.home') }}</el-menu-item>
       <el-menu-item index="/forum" class="menu-item">{{ t('menu.forum') }}</el-menu-item>
+      <el-menu-item index="/t" class="menu-item">{{ t('menu.tournament') }}</el-menu-item>
       <el-menu-item index="/pack" class="menu-item">{{ t('menu.pack') }}</el-menu-item>
       <el-menu-item index="/about" class="menu-item">{{ t('menu.about') }}</el-menu-item>
       <el-menu-item v-if="!isHomePage">
@@ -101,6 +102,7 @@
       </el-menu-item>
       <el-menu-item index="/" class="menu-item">{{ t('menu.home') }}</el-menu-item>
       <el-menu-item index="/forum" class="menu-item">{{ t('menu.forum') }}</el-menu-item>
+      <el-menu-item index="/t" class="menu-item">{{ t('menu.tournament') }}</el-menu-item>
       <el-menu-item index="/pack" class="menu-item">{{ t('menu.pack') }}</el-menu-item>
       <el-menu-item index="/about" class="menu-item">{{ t('menu.about') }}</el-menu-item>
     </el-menu>
@@ -252,7 +254,7 @@ const getUserInfo = async (userId) => {
     // 获取权限信息
     if (store.state.adminPermissions.length === 0) {
       const permRes = await getPermissions()
-      store.commit('setPermissions', permRes.data)
+      store.commit('setPermissions', permRes)
     }
   } catch (error) {
     console.error('获取用户信息失败', error)

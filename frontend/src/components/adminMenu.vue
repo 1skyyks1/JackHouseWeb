@@ -4,46 +4,39 @@
            mode="vertical"
            class="admin-menu"
            :ellipsis="false">
-    <el-menu-item index="dashboard" route="/admin/dashboard">
-      <el-icon><Odometer /></el-icon>
-      <span>仪表盘</span>
-    </el-menu-item>
-    <el-menu-item index="announcement" route="/admin/announcement">
-      <el-icon><Bell /></el-icon>
-      <span>公告管理</span>
-    </el-menu-item>
-    <el-menu-item index="homeImgs" route="/admin/homeImgs">
-      <el-icon><Postcard /></el-icon>
-      <span>头图设置</span>
-    </el-menu-item>
-    <el-menu-item index="users" route="/admin/users">
-      <el-icon><User /></el-icon>
-      <span>用户管理</span>
-    </el-menu-item>
-    <el-menu-item index="posts" route="/admin/posts">
-      <el-icon><ChatLineSquare /></el-icon>
-      <span>帖子管理</span>
-    </el-menu-item>
-    <el-menu-item index="postFiles" route="/admin/postFiles">
-      <el-icon><DocumentChecked /></el-icon>
-      <span>投稿审核</span>
-    </el-menu-item>
-    <el-menu-item index="events" route="/admin/events">
-      <el-icon><Aim /></el-icon>
-      <span>活动管理</span>
-    </el-menu-item>
-    <el-menu-item index="badges" route="/admin/badges">
-      <el-icon><Medal /></el-icon>
-      <span>牌子发放</span>
+    <el-menu-item v-for="item in visibleMenuItems" :key="item.index" :index="item.index" :route="item.route">
+      <el-icon><component :is="item.icon" /></el-icon>
+      <span>{{ item.label }}</span>
     </el-menu-item>
   </el-menu>
 </template>
 
 <script setup>
+import { computed } from "vue";
 import { useRoute } from "vue-router";
+import { useStore } from "vuex";
 import { Odometer, Bell, User, ChatLineSquare, DocumentChecked, Postcard, Aim, Medal } from "@element-plus/icons-vue"
+import { hasAdminPermission } from "@/utils/permissions"
 
 const route = useRoute();
+const store = useStore();
+
+// 所有菜单项配置
+const menuItems = [
+  { index: 'dashboard', route: '/admin/dashboard', icon: Odometer, label: '仪表盘' },
+  { index: 'announcement', route: '/admin/announcement', icon: Bell, label: '公告管理' },
+  { index: 'homeImgs', route: '/admin/homeImgs', icon: Postcard, label: '头图设置' },
+  { index: 'users', route: '/admin/users', icon: User, label: '用户管理' },
+  { index: 'posts', route: '/admin/posts', icon: ChatLineSquare, label: '帖子管理' },
+  { index: 'postFiles', route: '/admin/postFiles', icon: DocumentChecked, label: '投稿审核' },
+  { index: 'events', route: '/admin/events', icon: Aim, label: '活动管理' },
+  { index: 'badges', route: '/admin/badges', icon: Medal, label: '牌子发放' },
+]
+
+// 根据权限过滤可见菜单项
+const visibleMenuItems = computed(() => {
+  return menuItems.filter(item => hasAdminPermission(item.index))
+})
 </script>
 
 <style scoped>

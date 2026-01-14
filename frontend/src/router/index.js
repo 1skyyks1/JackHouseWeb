@@ -70,6 +70,61 @@ const router = createRouter({
             props: true
         },
         {
+            path: '/t',
+            name: 'tournaments',
+            component: () => import('../views/tournament/tournamentList.vue')
+        },
+        {
+            path: '/t/:tid',
+            component: () => import('../views/tournament/tournamentDetail.vue'),
+            props: true,
+            children: [
+                {
+                    path: '',
+                    name: 'tournamentOverview',
+                    component: () => import('../views/tournament/tournamentOverview.vue')
+                },
+                {
+                    path: 'teams',
+                    name: 'tournamentTeams',
+                    component: () => import('../views/tournament/tournamentTeams.vue')
+                },
+                {
+                    path: 'register',
+                    name: 'tournamentRegister',
+                    component: () => import('../views/tournament/tournamentRegister.vue')
+                },
+                {
+                    path: 'qualifier',
+                    name: 'tournamentQualifier',
+                    component: () => import('../views/tournament/tournamentQualifier.vue')
+                },
+                {
+                    path: 'bracket',
+                    name: 'tournamentBracket',
+                    component: () => import('../views/tournament/tournamentBracket.vue')
+                },
+                {
+                    path: 'ranking',
+                    name: 'tournamentRanking',
+                    component: () => import('../views/tournament/tournamentRanking.vue')
+                }
+            ]
+        },
+        {
+            path: '/t/:tid/match/:matchId',
+            name: 'matchDetail',
+            component: () => import('../views/tournament/matchDetail.vue'),
+            props: true
+        },
+        {
+            path: '/t/:tid/referee/:matchId',
+            name: 'refereeWorkbench',
+            component: () => import('../views/tournament/refereeWorkbench.vue'),
+            props: true,
+            meta: { requiresStaff: true }
+        },
+        {
             path: '/admin',
             name: 'admin',
             component: () => import('../views/admin/admin.vue'),
@@ -120,6 +175,17 @@ const router = createRouter({
                     path: 'badges',
                     name: 'badges',
                     component: () => import('../views/admin/badges.vue')
+                },
+                {
+                    path: 'tournament',
+                    name: 'adminTournamentList',
+                    component: () => import('../views/admin/tournament/adminTournamentList.vue')
+                },
+                {
+                    path: 'tournament/:tid',
+                    name: 'adminTournamentDetail',
+                    component: () => import('../views/admin/tournament/adminTournamentDetail.vue'),
+                    props: true
                 }
             ]
         }
@@ -132,7 +198,7 @@ router.beforeEach(async (to, from, next) => {
             // 如果 store 中没有权限信息，先获取
             if (store.state.adminPermissions.length === 0 && store.state.isLogged) {
                 const res = await getPermissions()
-                store.commit('setPermissions', res.data)
+                store.commit('setPermissions', res)
             }
             if (hasAdminPermission(to.name)) {
                 next()

@@ -38,12 +38,6 @@
 
         <div class="slide-content relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
 
-          <div class="mb-8 p-6 rounded-full glass-icon" data-swiper-parallax="-300">
-            <el-icon :size="48" :color="slide.color">
-              <component :is="slide.icon" />
-            </el-icon>
-          </div>
-
           <h1 class="text-5xl md:text-8xl font-black text-white mb-6 tracking-tighter title-glow" style="font-family: 'Arial Black', sans-serif;">
             <span class="typing-wrapper">
               {{ currentTypingText[index] }}<span class="cursor" :style="{backgroundColor: slide.color}"></span>
@@ -118,7 +112,7 @@ const slides = [
     desc: 'Test your skill against Jack players from around the world.',
     bg: bgImages[2],
     icon: TrophyBase,
-    link: '#',
+    link: '/t',
     color: '#f43f5e'
   }
 ];

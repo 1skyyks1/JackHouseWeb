@@ -2,6 +2,7 @@
   "menu": {
     "home": "Home",
     "forum": "Forum",
+    "tournament": "Tourney",
     "pack": "Mapset",
     "about": "About",
     "login": "Sign in",
@@ -14,7 +15,6 @@
       "logoutSuccess": "Logged out successfully"
     }
   },
-
   "login": {
     "syncPrompt": "Hello {name}! We've detected an update in your osu! name/avatar. Do you want to sync it?",
     "syncTitle": "osu! User Info Sync Update",
@@ -23,7 +23,6 @@
     "syncSuccess": "Synced successfully",
     "syncSkipped": "Sync skipped"
   },
-
   "loginDialog": {
     "username": "Username / Email",
     "password": "Password",
@@ -32,7 +31,6 @@
     "enterUsername": "Enter your username or email",
     "enterPassword": "Enter your password"
   },
-
   "home": {
     "by": "by",
     "announcement": "Announcement",
@@ -60,7 +58,6 @@
       "button": "Enter Tourney"
     }
   },
-
   "post": {
     "by": "by",
     "comments": "Comments",
@@ -94,7 +91,6 @@
     "noteTooltip": "Please input your suggested difficulty and pattern in the note. Reviewers can see your note, and it will also be used as a reference for the difficulty list later.",
     "more": "Go to your profile to view submission history"
   },
-
   "forum": {
     "submit": "Create",
     "cancel": "Cancel",
@@ -135,7 +131,6 @@
       "limit": "Submission limit"
     }
   },
-
   "mapUpload": {
     "dropText": "Drop file here or",
     "clickText": "click to upload",
@@ -144,7 +139,6 @@
     "success": "File uploaded successfully",
     "upload": "Submit"
   },
-
   "user": {
     "info": {
       "info": "Info",
@@ -188,7 +182,6 @@
       "updateSuccess": "Update successful"
     }
   },
-
   "pack": {
     "pattern": "Pattern",
     "difficulty": "Difficulty",
@@ -265,7 +258,6 @@
       }
     }
   },
-
   "request": {
     "unknown": "Unknown Error",
     "pleaseLogin": "Please Login",
@@ -274,14 +266,12 @@
     "requestError": "Request Error",
     "serverError": "Server Exception"
   },
-
   "about": {
     "qq": "QQ Groups",
     "dc": "Discord Servers",
     "intro": "About Jack House...",
     "p": "<p><strong>4Key Jack House</strong> — founded on <em>June 1, 2022</em> — is a community for jack players.</p><p>By <em>August 2025</em>, it has grown to over <em><strong>4,000</strong></em><strong> members</strong> worldwide, with the majority from China. </p><p>\uD83D\uDC40<em>What can you do here?</em> - Search for a variety of jack packs, participate in rare jack-only tournaments, and connect with jack players across the globe...</p><p>There are no entrance requirements — <strong>whether you are jack main or not, everyone is welcome to join!</strong></p>"
   },
-
   "event": {
     "overview": "Overview",
     "countdown": "Time left: ",
@@ -303,7 +293,6 @@
     "rule5": "5. To prevent abuse, syncing is limited to once every 30 minutes. If you need assistance, please contact admin.",
     "desc": "Details"
   },
-
   "tags": {
     "Full Jack": "Full Jack",
     "Dense Jack": "Dense Jack",

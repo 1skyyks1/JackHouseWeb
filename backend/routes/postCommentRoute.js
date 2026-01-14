@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const PostCommentController = require('../controllers/post/postCommentController');
 const checkAuth = require("../middleware/authMiddleware");
-const ROLES = require("../config/roles");
+const { ROLES } = require("../config/roles");
 
 // 获取指定帖子的所有评论
 router.get('/post/:post_id', PostCommentController.getCommentsByPostId);

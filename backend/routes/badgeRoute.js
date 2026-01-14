@@ -2,18 +2,18 @@ const express = require('express');
 const router = express.Router();
 const BadgeController = require(`../controllers/user/badgeController`);
 const checkAuth = require('../middleware/authMiddleware');
-const ROLES = require("../config/roles");
+const { ROLES } = require("../config/roles");
 
 // 获取牌子列表
-router.get('/', checkAuth([ROLES.ORG,ROLES.ADMIN]), BadgeController.getAllBadges)
+router.get('/', checkAuth([ROLES.ORG, ROLES.ADMIN]), BadgeController.getAllBadges)
 
 // 上传牌子
-router.post('/', checkAuth([ROLES.ORG,ROLES.ADMIN]), BadgeController.uploadBadge)
+router.post('/', checkAuth([ROLES.ORG, ROLES.ADMIN]), BadgeController.uploadBadge)
 
 // 添加拥有者
-router.post('/:id', checkAuth([ROLES.ORG,ROLES.ADMIN]), BadgeController.addUsersToBadge)
+router.post('/:id', checkAuth([ROLES.ORG, ROLES.ADMIN]), BadgeController.addUsersToBadge)
 
 // 删除牌子
-router.delete('/:id', checkAuth([ROLES.ORG,ROLES.ADMIN]), BadgeController.deleteBadge)
+router.delete('/:id', checkAuth([ROLES.ORG, ROLES.ADMIN]), BadgeController.deleteBadge)
 
 module.exports = router;

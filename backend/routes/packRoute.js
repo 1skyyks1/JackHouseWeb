@@ -3,7 +3,7 @@ const router = express.Router();
 const PackController = require('../controllers/pack/packController');
 const OsuPackController = require('../controllers/osu/osuPackController');
 const checkAuth = require('../middleware/authMiddleware');
-const ROLES = require("../config/roles");
+const { ROLES } = require("../config/roles");
 
 // 获取所有包
 router.get('/', PackController.getAllPacks)

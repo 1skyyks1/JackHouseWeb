@@ -2,6 +2,7 @@
   "menu": {
     "home": "主页",
     "forum": "论坛",
+    "tournament": "赛事",
     "pack": "叠包",
     "about": "关于",
     "login": "登录",
@@ -14,7 +15,6 @@
       "logoutSuccess": "已退出登录"
     }
   },
-
   "login": {
     "syncPrompt": "{name} 你好！，检测到osu!名字/头像更新，是否同步？",
     "syncTitle": "osu!用户信息同步更新",
@@ -23,7 +23,6 @@
     "syncSuccess": "已同步",
     "syncSkipped": "已跳过同步"
   },
-
   "loginDialog": {
     "username": "用户名/邮箱",
     "password": "密码",
@@ -32,7 +31,6 @@
     "enterUsername": "输入用户名或邮箱",
     "enterPassword": "输入密码"
   },
-
   "home": {
     "by": "发帖人",
     "announcement": "公告",
@@ -60,7 +58,6 @@
       "button": "进入比赛"
     }
   },
-
   "post": {
     "by": "发帖人",
     "comments": "评论区",
@@ -94,7 +91,6 @@
     "noteTooltip": "请在备注中填写你的投稿的定级和键型。审核人可以看到你的备注，也会作为难度表的参考。",
     "more": "前往个人页查看所有投稿记录"
   },
-
   "forum": {
     "submit": "创建",
     "cancel": "取消",
@@ -135,7 +131,6 @@
       "limit": "投稿数量限制"
     }
   },
-
   "mapUpload": {
     "dropText": "拖动文件到这里 或",
     "clickText": " 点击选择文件",
@@ -144,7 +139,6 @@
     "success": "成功上传",
     "upload": "确认上传"
   },
-
   "user": {
     "info": {
       "info": "信息",
@@ -188,7 +182,6 @@
       "updateSuccess": "更新成功"
     }
   },
-
   "pack": {
     "pattern": "键型",
     "difficulty": "难度",
@@ -265,7 +258,6 @@
       }
     }
   },
-
   "request": {
     "unknown": "未知错误",
     "pleaseLogin": "请登录",
@@ -274,14 +266,12 @@
     "requestError": "请求发送出错",
     "serverError": "服务器异常"
   },
-
   "about": {
     "qq": "QQ 群",
     "dc": "Discord 服务器",
     "intro": "关于叠屋...",
     "p": "<p><strong>叠屋</strong>，创建于 <em>2022 年 6 月 1 日</em>，是一个面向叠键玩家的社区。</p><p>截至 <em>2025 年 8 月</em>，已经有近 <em>4,000 </em>名成员，其中大部分来自中国。</p><p>\uD83D\uDC40你可以在这里做什么？- 搜索各种各样的叠包，参与4K社区中稀有的叠键比赛，还可以和来自世界各地的叠键玩家交流...</p><p>没有任何准入门槛，<strong>无论你是否强叠，我们都欢迎你加入！</strong></p>"
   },
-
   "event": {
     "overview": "概览",
     "countdown": "活动倒计时：",
@@ -303,7 +293,6 @@
     "rule5": "5. 为防滥用，每30分钟只能同步1次，如需协助请联系管理员。",
     "desc": "活动详情"
   },
-
   "tags": {
     "Full Jack": "满叠",
     "Dense Jack": "大叠",
