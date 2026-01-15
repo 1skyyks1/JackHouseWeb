@@ -15,7 +15,7 @@
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
-import { Odometer, Bell, User, ChatLineSquare, DocumentChecked, Postcard, Aim, Medal } from "@element-plus/icons-vue"
+import { Odometer, Bell, User, ChatLineSquare, DocumentChecked, Postcard, Aim, Medal, Trophy } from "@element-plus/icons-vue"
 import { hasAdminPermission } from "@/utils/permissions"
 
 const route = useRoute();
@@ -31,6 +31,7 @@ const menuItems = [
   { index: 'postFiles', route: '/admin/postFiles', icon: DocumentChecked, label: '投稿审核' },
   { index: 'events', route: '/admin/events', icon: Aim, label: '活动管理' },
   { index: 'badges', route: '/admin/badges', icon: Medal, label: '牌子发放' },
+  { index: 'adminTournamentList', route: '/admin/tournament', icon: Trophy, label: '赛事管理' },
 ]
 
 // 根据权限过滤可见菜单项

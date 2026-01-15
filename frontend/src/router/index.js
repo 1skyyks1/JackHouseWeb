@@ -108,6 +108,11 @@ const router = createRouter({
                     path: 'ranking',
                     name: 'tournamentRanking',
                     component: () => import('../views/tournament/tournamentRanking.vue')
+                },
+                {
+                    path: 'rules',
+                    name: 'tournamentRules',
+                    component: () => import('../views/tournament/tournamentRules.vue')
                 }
             ]
         },

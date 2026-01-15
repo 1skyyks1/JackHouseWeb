@@ -1,7 +1,9 @@
 const { TStaff } = require('../models/tournament');
+const User = require('../models/user/user');
 
 /**
  * 检查用户是否有指定赛事的 Staff 权限
+ * ADMIN 用户（role=2）可以绕过所有权限检查
  * @param {string[]} allowedRoles - 允许的角色列表
  */
 const checkTournamentRole = (allowedRoles) => {
@@ -12,6 +14,13 @@ const checkTournamentRole = (allowedRoles) => {
 
             if (!userId) {
                 return res.status(401).json({ message: '请先登录' });
+            }
+
+            // 检查是否是系统管理员（ADMIN），管理员可以执行任何操作
+            const user = await User.findByPk(userId);
+            if (user && user.role === 2) {
+                req.staffRoles = ['admin'];
+                return next();
             }
 
             // 查找用户在该赛事的角色

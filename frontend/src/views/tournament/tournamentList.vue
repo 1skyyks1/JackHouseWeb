@@ -26,7 +26,7 @@
               </div>
               <h3 class="card-title">{{ t.name }}</h3>
               <el-text type="secondary" class="card-desc" truncated>
-                {{ t.desc || '暂无简介' }}
+                {{ getDesc(t) }}
               </el-text>
               <div class="card-meta">
                 <el-icon><Calendar /></el-icon>
@@ -47,18 +47,25 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { getTournaments } from '@/api/tournament'
 import { Calendar } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import navMenu from '@/components/navmenu.vue'
+import { useI18n } from 'vue-i18n'
 
 const router = useRouter()
+const { locale } = useI18n()
 
 // 响应式状态
 const tournaments = ref([])
 const loading = ref(true)
+
+// 根据语言获取简介
+const getDesc = (t) => {
+  return locale.value === 'zh' ? (t.desc_zh || t.desc_en || '暂无简介') : (t.desc_en || t.desc_zh || 'No description')
+}
 
 // 获取赛事列表
 const fetchTournaments = async () => {

@@ -37,10 +37,10 @@ exports.getTournament = async (req, res) => {
 // 创建赛事（需 host 权限）
 exports.createTournament = async (req, res) => {
     try {
-        const { name, acronym, desc, banner, team_size_min, team_size_max, qual_top_n, qual_rank_mode, reg_start, reg_end, qual_start, qual_end } = req.body;
+        const { name, acronym, desc_zh, desc_en, rule_zh, rule_en, banner, team_size_min, team_size_max, qual_top_n, qual_rank_mode, reg_start, reg_end, qual_start, qual_end } = req.body;
 
         const tournament = await Tournament.create({
-            name, acronym, desc, banner,
+            name, acronym, desc_zh, desc_en, rule_zh, rule_en, banner,
             team_size_min: team_size_min || 1,
             team_size_max: team_size_max || 2,
             qual_top_n: qual_top_n || 32,
@@ -72,7 +72,7 @@ exports.updateTournament = async (req, res) => {
             return res.status(404).json({ message: '赛事不存在' });
         }
 
-        const updateFields = ['name', 'acronym', 'desc', 'banner', 'team_size_min', 'team_size_max',
+        const updateFields = ['name', 'acronym', 'desc_zh', 'desc_en', 'rule_zh', 'rule_en', 'banner', 'team_size_min', 'team_size_max',
             'qual_top_n', 'qual_rank_mode', 'reg_start', 'reg_end', 'qual_start', 'qual_end', 'status'];
 
         updateFields.forEach(field => {

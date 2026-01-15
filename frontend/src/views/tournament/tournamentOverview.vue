@@ -1,16 +1,5 @@
 <template>
   <div class="overview" :class="{ 'mobile-view': isMobile }">
-    <!-- 赛事简介 -->
-    <el-card shadow="never" class="section-card">
-      <template #header>
-        <div class="card-header">
-          <el-icon><Document /></el-icon>
-          <span>赛事简介</span>
-        </div>
-      </template>
-      <el-text>{{ props.tournament?.desc || '暂无简介' }}</el-text>
-    </el-card>
-
     <!-- 时间安排 -->
     <el-card shadow="never" class="section-card">
       <template #header>
@@ -65,7 +54,7 @@
 </template>
 
 <script setup>
-import { Document, Clock, UserFilled } from '@element-plus/icons-vue'
+import { Clock, UserFilled } from '@element-plus/icons-vue'
 import { useBreakpoints } from '@vueuse/core'
 
 const props = defineProps({

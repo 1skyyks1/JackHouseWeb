@@ -46,12 +46,14 @@
     </el-table>
 
     <!-- 创建赛事弹窗 -->
-    <el-dialog v-model="showCreateModal" title="创建赛事" width="600px">
-      <el-form :model="form" label-width="100px">
-        <el-row :gutter="16">
+    <el-dialog v-model="showCreateModal" title="创建赛事" width="650px">
+      <el-form :model="form" label-width="90px" label-position="left">
+        <!-- 基本信息 -->
+        <el-divider content-position="left">基本信息</el-divider>
+        <el-row :gutter="20">
           <el-col :span="16">
             <el-form-item label="赛事名称" required>
-              <el-input v-model="form.name" placeholder="输入赛事名称" />
+              <el-input v-model="form.name" placeholder="输入赛事全称" />
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -60,23 +62,54 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="简介">
-          <el-input v-model="form.desc" type="textarea" :rows="3" placeholder="赛事简介" />
-        </el-form-item>
-        <el-row :gutter="16">
+        <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="队伍规模">
-              <el-input-number v-model="form.team_size_min" :min="1" :max="8" /> - 
-              <el-input-number v-model="form.team_size_max" :min="1" :max="8" /> 人
+            <el-form-item label="中文简介">
+              <el-input v-model="form.desc_zh" type="textarea" :rows="2" placeholder="中文简介" maxlength="255" show-word-limit />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="英文简介">
+              <el-input v-model="form.desc_en" type="textarea" :rows="2" placeholder="English desc" maxlength="255" show-word-limit />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-form-item label="横幅图片">
+          <el-input v-model="form.banner" placeholder="输入图片 URL，如 https://example.com/banner.jpg" />
+        </el-form-item>
+
+        <!-- 赛制设置 -->
+        <el-divider content-position="left">赛制设置</el-divider>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="队伍人数">
+              <div class="inline-inputs">
+                <el-input-number v-model="form.team_size_min" :min="1" :max="8" :controls="false" placeholder="最少" />
+                <span class="input-separator">~</span>
+                <el-input-number v-model="form.team_size_max" :min="1" :max="8" :controls="false" placeholder="最多" />
+                <span class="input-unit">人</span>
+              </div>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="晋级名额">
-              <el-input-number v-model="form.qual_top_n" :min="2" :max="128" /> 名
+              <div class="inline-inputs">
+                <el-input-number v-model="form.qual_top_n" :min="2" :max="128" :controls="false" placeholder="前 N 名" />
+                <span class="input-unit">名</span>
+              </div>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="16">
+        <el-form-item label="排名模式">
+          <el-radio-group v-model="form.qual_rank_mode">
+            <el-radio :value="0">排名累加</el-radio>
+            <el-radio :value="1">加权分数</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
+        <!-- 时间安排 -->
+        <el-divider content-position="left">时间安排</el-divider>
+        <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="报名开始" required>
               <el-date-picker v-model="form.reg_start" type="datetime" placeholder="选择时间" style="width: 100%;" />
@@ -88,16 +121,10 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="排名模式">
-          <el-radio-group v-model="form.qual_rank_mode">
-            <el-radio :value="0">排名累加</el-radio>
-            <el-radio :value="1">加权分数</el-radio>
-          </el-radio-group>
-        </el-form-item>
       </el-form>
       <template #footer>
         <el-button @click="showCreateModal = false">取消</el-button>
-        <el-button type="primary" :loading="creating" @click="handleCreate">创建</el-button>
+        <el-button type="primary" :loading="creating" @click="handleCreate">创建赛事</el-button>
       </template>
     </el-dialog>
   </div>
@@ -121,7 +148,8 @@ const creating = ref(false)
 const form = reactive({
   name: '',
   acronym: '',
-  desc: '',
+  desc_zh: '',
+  desc_en: '',
   team_size_min: 1,
   team_size_max: 2,
   qual_top_n: 32,
@@ -158,7 +186,7 @@ const handleCreate = async () => {
     resetForm()
     await fetchTournaments()
   } catch (error) {
-    ElMessage.error(error.response?.data?.message || '创建失败')
+    // 错误已在 axios 拦截器中处理
   } finally {
     creating.value = false
   }
@@ -171,14 +199,14 @@ const handleDelete = async (id) => {
     ElMessage.success('删除成功')
     await fetchTournaments()
   } catch (error) {
-    ElMessage.error(error.response?.data?.message || '删除失败')
+    // 错误已在 axios 拦截器中处理
   }
 }
 
 // 重置表单
 const resetForm = () => {
   Object.assign(form, {
-    name: '', acronym: '', desc: '',
+    name: '', acronym: '', desc_zh: '', desc_en: '', banner: '',
     team_size_min: 1, team_size_max: 2,
     qual_top_n: 32, qual_rank_mode: 0,
     reg_start: '', reg_end: ''
@@ -214,5 +242,31 @@ onMounted(() => {
 .page-title {
   font-size: 1.25rem;
   font-weight: 600;
+}
+
+/* 创建赛事弹窗样式 */
+.inline-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.inline-inputs .el-input-number {
+  width: 80px;
+}
+
+.input-separator {
+  color: var(--el-text-color-secondary);
+}
+
+.input-unit {
+  color: var(--el-text-color-secondary);
+  white-space: nowrap;
+}
+
+:deep(.el-divider__text) {
+  font-size: 13px;
+  color: var(--el-text-color-secondary);
+  font-weight: 500;
 }
 </style>

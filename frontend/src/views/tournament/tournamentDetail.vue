@@ -42,6 +42,26 @@
           <el-icon><Trophy /></el-icon>
           <span class="menu-text" v-show="!isMobile || activeTab === `/t/${props.tid}/ranking`">排名</span>
         </el-menu-item>
+        <el-menu-item :index="`/t/${props.tid}/rules`">
+          <el-icon><Document /></el-icon>
+          <span class="menu-text" v-show="!isMobile || activeTab === `/t/${props.tid}/rules`">规则</span>
+        </el-menu-item>
+        <!-- 分隔 -->
+        <div class="flex-grow"></div>
+        <!-- 语言切换 (仅桌面端显示) -->
+        <div class="lang-option" v-show="!isMobile">
+          <lang></lang>
+        </div>
+        <!-- 黑夜模式切换 (仅桌面端显示) -->
+        <div class="dark-mode-toggle" @click="toggleDarkMode" v-show="!isMobile">
+          <svg v-if="!isDark" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5" />
+            <path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" />
+          </svg>
+          <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </div>
       </el-menu>
     </div>
 
@@ -64,10 +84,11 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
-import { useBreakpoints } from '@vueuse/core'
+import { useDark, useToggle, useBreakpoints } from '@vueuse/core'
 import { useRouter, useRoute } from 'vue-router'
 import { getTournament } from '@/api/tournament'
-import { House, User, List, DataLine, Edit, Trophy } from '@element-plus/icons-vue'
+import { House, User, List, DataLine, Edit, Trophy, Document } from '@element-plus/icons-vue'
+import lang from '@/components/lang.vue'
 
 const props = defineProps({
   tid: { type: [String, Number], required: true }
@@ -75,6 +96,12 @@ const props = defineProps({
 
 const router = useRouter()
 const route = useRoute()
+
+// 黑夜模式
+const isDark = useDark()
+const toggleDarkMode = () => {
+  useToggle(isDark)()
+}
 
 // 断点响应式
 const breakpoints = useBreakpoints({ tablet: 768 })
@@ -255,5 +282,30 @@ onMounted(() => {
 
 .mobile-view .el-menu-item {
   padding: 0 12px;
+}
+
+/* 分隔占位 */
+.flex-grow {
+  flex-grow: 1;
+}
+
+/* 语言切换 */
+.lang-option {
+  margin: 0 10px 1px;
+  display: flex;
+  align-items: center;
+}
+
+/* 黑夜模式切换 */
+.dark-mode-toggle {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--el-text-color-primary);
+  margin: 0 10px;
+}
+
+.dark-mode-toggle:hover {
+  color: var(--el-color-primary);
 }
 </style>

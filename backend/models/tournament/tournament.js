@@ -17,10 +17,25 @@ const Tournament = sequelize.define('Tournament', {
         allowNull: false,
         comment: '赛事名称缩写'
     },
-    desc: {
+    desc_zh: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+        comment: '赛事简介（中文）'
+    },
+    desc_en: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+        comment: '赛事简介（英文）'
+    },
+    rule_zh: {
         type: DataTypes.TEXT,
         allowNull: true,
-        comment: '赛事简介'
+        comment: '赛事规则（中文）'
+    },
+    rule_en: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        comment: '赛事规则（英文）'
     },
     banner: {
         type: DataTypes.STRING(255),

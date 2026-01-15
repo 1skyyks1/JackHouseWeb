@@ -99,6 +99,7 @@ const handleCreated = (editor) => {
 
 const handleChange = () => {
   const editor = editorRef.value
+  if (editor == null) return
   const html = editor.getHtml()
   emit('update:modelValue', html)
 }

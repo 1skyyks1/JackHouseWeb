@@ -27,6 +27,15 @@
                 </el-form-item>
               </el-col>
             </el-row>
+            <el-form-item label="中文简介">
+              <el-input v-model="form.desc_zh" type="textarea" :rows="2" placeholder="中文简介（255字符以内）" maxlength="255" />
+            </el-form-item>
+            <el-form-item label="英文简介">
+              <el-input v-model="form.desc_en" type="textarea" :rows="2" placeholder="English description (max 255 chars)" maxlength="255" />
+            </el-form-item>
+            <el-form-item label="横幅图片">
+              <el-input v-model="form.banner" placeholder="输入图片 URL，如 https://example.com/banner.jpg" />
+            </el-form-item>
             <el-form-item label="状态">
               <el-select v-model="form.status">
                 <el-option :value="0" label="未开始" />
@@ -38,6 +47,23 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="updateInfo">保存修改</el-button>
+            </el-form-item>
+          </el-form>
+        </el-card>
+      </el-tab-pane>
+
+      <!-- 规则编辑 -->
+      <el-tab-pane label="规则" name="rules">
+        <el-card shadow="never" v-if="tab === 'rules'">
+          <el-form label-width="100px">
+            <el-form-item label="中文规则">
+              <wangEditor v-model="form.rule_zh" key="rule_zh" />
+            </el-form-item>
+            <el-form-item label="英文规则">
+              <wangEditor v-model="form.rule_en" key="rule_en" />
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="updateInfo">保存规则</el-button>
             </el-form-item>
           </el-form>
         </el-card>
@@ -85,7 +111,7 @@
         <el-card shadow="never">
           <template #header>
             <el-space>
-              <el-input-number v-model="newStaffUserId" placeholder="用户 ID" :min="1" />
+              <el-input-number v-model="newStaffUserId" placeholder="用户 ID" :min="1" :controls="false" />
               <el-select v-model="newStaffRole" style="width: 120px;">
                 <el-option value="referee" label="Referee" />
                 <el-option value="pooler" label="Pooler" />
@@ -132,12 +158,12 @@
           </el-table>
           <el-divider />
           <el-space wrap>
-            <el-input-number v-model="newQualMap.index" :min="1" placeholder="Stage" style="width: 80px;" />
-            <el-input-number v-model="newQualMap.map_id" :min="1" placeholder="Beatmap ID" style="width: 140px;" />
+            <el-input-number v-model="newQualMap.index" :min="1" placeholder="Stage" style="width: 80px;" :controls="false" />
+            <el-input-number v-model="newQualMap.map_id" :min="1" placeholder="Beatmap ID" style="width: 140px;" :controls="false" />
             <el-input v-model="newQualMap.artist" placeholder="Artist" style="width: 120px;" />
             <el-input v-model="newQualMap.title" placeholder="Title" style="width: 160px;" />
             <el-input v-model="newQualMap.mapper" placeholder="Mapper" style="width: 100px;" />
-            <el-input-number v-model="newQualMap.weight" :min="0" :step="0.1" placeholder="Weight" style="width: 100px;" />
+            <el-input-number v-model="newQualMap.weight" :min="0" :step="0.1" placeholder="Weight" style="width: 100px;" :controls="false" />
             <el-button type="primary" @click="addQualMapItem">添加</el-button>
           </el-space>
         </el-card>
@@ -166,8 +192,8 @@
               <el-option :value="0" label="胜者组" />
               <el-option :value="1" label="败者组" />
             </el-select>
-            <el-input-number v-model="newRound.first_to" :min="1" placeholder="First To" style="width: 100px;" />
-            <el-input-number v-model="newRound.order" :min="1" placeholder="顺序" style="width: 80px;" />
+            <el-input-number v-model="newRound.first_to" :min="1" placeholder="First To" style="width: 100px;" :controls="false" />
+            <el-input-number v-model="newRound.order" :min="1" placeholder="顺序" style="width: 80px;" :controls="false" />
             <el-button type="primary" @click="addRoundItem">添加</el-button>
           </el-space>
         </el-card>
@@ -209,6 +235,7 @@ import {
   getRounds, createRound, getBracket
 } from '@/api/tournament'
 import { ElMessage } from 'element-plus'
+import wangEditor from '@/components/wangEditor.vue'
 
 const props = defineProps({
   tid: { type: [String, Number], required: true }
@@ -228,8 +255,8 @@ const matches = ref([])
 
 const newStaffUserId = ref(null)
 const newStaffRole = ref('referee')
-const newQualMap = reactive({ index: 1, map_id: null, artist: '', title: '', mapper: '', weight: 1 })
-const newRound = reactive({ name: '', bracket_type: 0, first_to: 4, order: 1 })
+const newQualMap = reactive({ index: null, map_id: null, artist: '', title: '', mapper: '', weight: null })
+const newRound = reactive({ name: '', bracket_type: 0, first_to: null, order: null })
 
 // 获取所有数据
 const fetchAll = async () => {
