@@ -11,15 +11,20 @@
 
       <el-row :gutter="16" v-if="mappool.length">
         <el-col :xs="12" :sm="8" :md="6" v-for="map in mappool" :key="map.id">
-          <el-card class="map-card" :body-style="{ padding: '0' }" shadow="hover">
+          <el-card 
+            class="map-card" 
+            :body-style="{ padding: '0' }" 
+            shadow="hover"
+            @click="openBeatmap(map)"
+          >
             <div class="map-cover">
               <el-image 
-                :src="`https://assets.ppy.sh/beatmaps/${map.map_id}/covers/cover.jpg`" 
+                :src="`https://assets.ppy.sh/beatmaps/${map.set_id}/covers/cover.jpg`" 
                 fit="cover" 
                 lazy 
               />
-              <el-tag class="map-index" type="danger" effect="dark">Stage {{ map.index }}</el-tag>
-              <el-tag v-if="props.tournament?.qual_rank_mode === 1" class="map-weight" type="warning" effect="dark">
+              <el-tag class="map-index" type="danger">Stage {{ map.index }}</el-tag>
+              <el-tag v-if="props.tournament?.qual_rank_mode === 1" class="map-weight" type="warning">
                 {{ map.weight }}x
               </el-tag>
             </div>
@@ -35,8 +40,8 @@
       <el-empty v-else description="图池暂未公布" />
     </el-card>
 
-    <!-- 排名榜 -->
-    <el-card shadow="never" class="section-card">
+    <!-- 排名榜（仅在正赛中或已结束时显示）-->
+    <el-card shadow="never" class="section-card" v-if="canShowRanking">
       <template #header>
         <div class="card-header">
           <el-icon><Trophy /></el-icon>
@@ -83,6 +88,17 @@
 
       <el-empty v-if="!loading && !ranking.length" description="暂无排名数据" />
     </el-card>
+
+    <!-- 排名未公布提示 -->
+    <el-card shadow="never" class="section-card" v-else>
+      <template #header>
+        <div class="card-header">
+          <el-icon><Trophy /></el-icon>
+          <span>资格赛排名</span>
+        </div>
+      </template>
+      <el-empty description="排名将在资格赛结束后公布" />
+    </el-card>
   </div>
 </template>
 
@@ -110,6 +126,8 @@ const loading = ref(true)
 
 // 计算属性
 const qualTopN = computed(() => props.tournament?.qual_top_n || 32)
+// 只有正赛中(3)或已结束(4)才显示排名
+const canShowRanking = computed(() => props.tournament?.status >= 3)
 
 // 获取资格赛数据
 const fetchData = async () => {
@@ -128,6 +146,11 @@ const fetchData = async () => {
   }
 }
 
+// 在新标签页打开 osu 谱面页面
+const openBeatmap = (map) => {
+  window.open(`https://osu.ppy.sh/beatmapsets/${map.set_id}#mania/${map.map_id}`, '_blank')
+}
+
 onMounted(() => {
   fetchData()
 })
@@ -144,6 +167,10 @@ onMounted(() => {
   border-radius: 12px;
 }
 
+.section-card :deep(.el-card__body) {
+  padding-bottom: 4px;
+}
+
 .card-header {
   display: flex;
   align-items: center;
@@ -155,11 +182,12 @@ onMounted(() => {
   margin-bottom: 16px;
   border-radius: 12px;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .map-cover {
   position: relative;
-  height: 80px;
+  height: 100px;
 }
 
 .map-cover .el-image {
@@ -180,7 +208,7 @@ onMounted(() => {
 }
 
 .map-info {
-  padding: 12px;
+  padding: 6px;
   display: flex;
   flex-direction: column;
   gap: 2px;

@@ -39,6 +39,36 @@ const TQualMappool = sequelize.define('TQualMappool', {
         defaultValue: 1.0,
         comment: '权重'
     },
+    set_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        comment: 'osu beatmapset_id'
+    },
+    version: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+        comment: '难度名'
+    },
+    star: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: true,
+        comment: '星级'
+    },
+    hp: {
+        type: DataTypes.DECIMAL(10, 1),
+        allowNull: true,
+        comment: 'HP'
+    },
+    od: {
+        type: DataTypes.DECIMAL(10, 1),
+        allowNull: true,
+        comment: 'OD'
+    },
+    length: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        comment: '长度（秒）'
+    },
     created_time: {
         type: DataTypes.DATE,
         defaultValue: sequelize.literal('CURRENT_TIMESTAMP'),

@@ -143,7 +143,6 @@
           <template #header>
             <div class="card-header">
               <span>资格赛图池</span>
-              <el-button type="primary" size="small" @click="calculateRank">计算排名</el-button>
             </div>
           </template>
           <el-table :data="qualMaps" stripe>
@@ -157,15 +156,56 @@
             </el-table-column>
           </el-table>
           <el-divider />
-          <el-space wrap>
-            <el-input-number v-model="newQualMap.index" :min="1" placeholder="Stage" style="width: 80px;" :controls="false" />
-            <el-input-number v-model="newQualMap.map_id" :min="1" placeholder="Beatmap ID" style="width: 140px;" :controls="false" />
-            <el-input v-model="newQualMap.artist" placeholder="Artist" style="width: 120px;" />
-            <el-input v-model="newQualMap.title" placeholder="Title" style="width: 160px;" />
-            <el-input v-model="newQualMap.mapper" placeholder="Mapper" style="width: 100px;" />
-            <el-input-number v-model="newQualMap.weight" :min="0" :step="0.1" placeholder="Weight" style="width: 100px;" :controls="false" />
-            <el-button type="primary" @click="addQualMapItem">添加</el-button>
+          <el-space wrap style="align-items: flex-end;">
+            <el-form-item label="Stage" style="margin-bottom: 0;">
+              <el-input-number v-model="newQualMap.index" :min="1" placeholder="1" style="width: 80px;" :controls="false" />
+            </el-form-item>
+            <el-form-item label="谱面链接" style="margin-bottom: 0; flex: 1;">
+              <el-input v-model="newQualMap.url" placeholder="https://osu.ppy.sh/beatmapsets/xxx#mania/xxx" style="width: 400px;" />
+            </el-form-item>
+            <el-form-item label="权重" style="margin-bottom: 0;">
+              <el-input-number v-model="newQualMap.weight" :min="0" :step="0.1" placeholder="1.0" style="width: 80px;" :controls="false" />
+            </el-form-item>
+            <el-button type="primary" @click="addQualMapItem" :loading="addingMap">添加</el-button>
           </el-space>
+        </el-card>
+
+        <!-- 资格赛排名 -->
+        <el-card shadow="never" style="margin-top: 16px;">
+          <template #header>
+            <div class="card-header">
+              <span>资格赛排名（仅管理员可见）</span>
+              <el-button type="primary" size="small" @click="calculateRank" :loading="calculatingRank">计算排名</el-button>
+            </div>
+          </template>
+          <el-table :data="qualRanking" stripe>
+            <el-table-column label="排名" width="80" align="center">
+              <template #default="{ row }">
+                <el-tag 
+                  v-if="row.qual_rank <= 3" 
+                  :type="row.qual_rank === 1 ? 'danger' : row.qual_rank === 2 ? 'warning' : ''" 
+                  effect="dark"
+                  round
+                >
+                  {{ row.qual_rank }}
+                </el-tag>
+                <span v-else>{{ row.qual_rank }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="display_name" label="队伍" />
+            <el-table-column label="总分" width="140" align="right">
+              <template #default="{ row }">
+                {{ row.qual_score?.toLocaleString() || 0 }}
+              </template>
+            </el-table-column>
+            <el-table-column label="状态" width="100" align="center">
+              <template #default="{ row }">
+                <el-tag v-if="row.qual_rank <= (tournament?.qual_top_n || 32)" type="success" effect="plain">晋级</el-tag>
+                <el-tag v-else type="info" effect="plain">淘汰</el-tag>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-empty v-if="!qualRanking.length" description="暂无排名，请先计算" />
         </el-card>
       </el-tab-pane>
 
@@ -232,7 +272,7 @@ import { useRouter } from 'vue-router'
 import { 
   getTournament, updateTournament, getTeams, updateTeamStatus, approveAllTeams,
   getStaff, addStaff, removeStaff, getQualMappool, addQualMap, deleteQualMap, calculateRanking,
-  getRounds, createRound, getBracket
+  getRounds, createRound, getBracket, getQualRanking
 } from '@/api/tournament'
 import { ElMessage } from 'element-plus'
 import wangEditor from '@/components/wangEditor.vue'
@@ -255,8 +295,11 @@ const matches = ref([])
 
 const newStaffUserId = ref(null)
 const newStaffRole = ref('referee')
-const newQualMap = reactive({ index: null, map_id: null, artist: '', title: '', mapper: '', weight: null })
+const newQualMap = reactive({ index: null, url: '', weight: null })
 const newRound = reactive({ name: '', bracket_type: 0, first_to: null, order: null })
+const addingMap = ref(false)
+const qualRanking = ref([])
+const calculatingRank = ref(false)
 
 // 获取所有数据
 const fetchAll = async () => {
@@ -264,18 +307,20 @@ const fetchAll = async () => {
   tournament.value = res
   Object.assign(form, res)
   
-  const [teamsRes, staffRes, qualRes, roundsRes, bracketRes] = await Promise.all([
+  const [teamsRes, staffRes, qualRes, roundsRes, bracketRes, rankingRes] = await Promise.all([
     getTeams(props.tid),
     getStaff(props.tid),
     getQualMappool(props.tid),
     getRounds(props.tid),
-    getBracket(props.tid)
+    getBracket(props.tid),
+    getQualRanking(props.tid)
   ])
   teams.value = teamsRes
   staff.value = staffRes
   qualMaps.value = qualRes
   rounds.value = roundsRes
   matches.value = bracketRes
+  qualRanking.value = rankingRes
 }
 
 // 更新基本信息
@@ -315,9 +360,21 @@ const removeStaffMember = async (id) => {
 
 // 资格赛图池管理
 const addQualMapItem = async () => {
-  await addQualMap(props.tid, newQualMap)
-  Object.assign(newQualMap, { index: newQualMap.index + 1, map_id: null, artist: '', title: '', mapper: '', weight: 1 })
-  await fetchAll()
+  if (!newQualMap.url) {
+    ElMessage.warning('请输入谱面链接')
+    return
+  }
+  addingMap.value = true
+  try {
+    await addQualMap(props.tid, newQualMap)
+    Object.assign(newQualMap, { index: (newQualMap.index || 0) + 1, url: '', weight: null })
+    await fetchAll()
+    ElMessage.success('添加成功')
+  } catch (error) {
+    // 错误已在 axios 拦截器中处理
+  } finally {
+    addingMap.value = false
+  }
 }
 
 const deleteQualMapItem = async (id) => {
@@ -326,8 +383,18 @@ const deleteQualMapItem = async (id) => {
 }
 
 const calculateRank = async () => {
-  await calculateRanking(props.tid)
-  ElMessage.success('排名计算完成')
+  calculatingRank.value = true
+  try {
+    await calculateRanking(props.tid)
+    // 重新获取排名数据
+    const rankingRes = await getQualRanking(props.tid)
+    qualRanking.value = rankingRes
+    ElMessage.success('排名计算完成')
+  } catch (error) {
+    // 错误已在 axios 拦截器中处理
+  } finally {
+    calculatingRank.value = false
+  }
 }
 
 // 轮次管理

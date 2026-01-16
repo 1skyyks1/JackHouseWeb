@@ -60,7 +60,7 @@ async function rebuildToc() {
   const headings = rulesContentRef.value.querySelectorAll('h1, h2, h3, h4, h5')
   headings.forEach((h, index) => {
     if (!h.id) {
-      h.id = (h.innerText || `header-${index}`).trim().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '')
+      h.id = (h.innerText || `header-${index}`).trim().toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '') || `heading-${index}`
     }
   })
 
@@ -76,10 +76,22 @@ async function rebuildToc() {
     listClass: 'toc-list',
     listItemClass: 'toc-list-item',
     activeListItemClass: 'is-active-li',
-    collapseDepth: 4,
+    collapseDepth: 6,
     scrollSmooth: false,
-    headingsOffset: 70,
-    scrollContainer: 'body',
+    disableTocScrollSync: true,
+    headingsOffset: 80,
+    // 自定义点击处理
+    onClick: function(e) {
+      e.preventDefault()
+      const targetId = e.target.getAttribute('href')?.replace('#', '')
+      if (targetId) {
+        const targetEl = document.getElementById(targetId)
+        if (targetEl) {
+          targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }
+      return false
+    }
   })
 }
 

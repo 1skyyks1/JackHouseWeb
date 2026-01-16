@@ -22,23 +22,59 @@ exports.getQualMappool = async (req, res) => {
 };
 
 // 添加资格赛图（需 pooler 权限）
+// 输入链接格式：https://osu.ppy.sh/beatmapsets/2099900#mania/4405224
 exports.addQualMap = async (req, res) => {
     try {
         const { tid } = req.params;
-        const { index, map_id, artist, title, mapper, weight } = req.body;
+        const { index, url, weight } = req.body;
+
+        if (!url) {
+            return res.status(400).json({ message: '请输入谱面链接' });
+        }
+
+        // 解析链接获取 set_id 和 map_id
+        // 格式：https://osu.ppy.sh/beatmapsets/{set_id}#mania/{map_id}
+        const urlMatch = url.match(/beatmapsets\/(\d+)(?:#\w+\/(\d+))?/);
+        if (!urlMatch) {
+            return res.status(400).json({ message: '链接格式无效，请使用 osu.ppy.sh/beatmapsets/... 格式' });
+        }
+
+        const set_id = parseInt(urlMatch[1]);
+        const map_id = urlMatch[2] ? parseInt(urlMatch[2]) : null;
+
+        if (!map_id) {
+            return res.status(400).json({ message: '链接中缺少谱面 ID，请使用完整链接（包含 #mania/xxx）' });
+        }
+
+        // 通过 osu! API 获取谱面信息
+        const api = await osu.API.createAsync(CLIENT_ID, CLIENT_SECRET);
+        const beatmap = await api.getBeatmap(map_id);
+
+        if (!beatmap) {
+            return res.status(404).json({ message: '谱面不存在' });
+        }
 
         const map = await TQualMappool.create({
             t_id: tid,
-            index,
-            map_id,
-            artist,
-            title,
-            mapper,
+            index: index || 1,
+            map_id: beatmap.id,
+            set_id: beatmap.beatmapset_id || set_id,
+            artist: beatmap.beatmapset?.artist || '',
+            title: beatmap.beatmapset?.title || '',
+            mapper: beatmap.beatmapset?.creator || '',
+            version: beatmap.version || '',
+            star: beatmap.difficulty_rating || 0,
+            hp: beatmap.drain || 0,
+            od: beatmap.accuracy || 0,
+            length: beatmap.total_length || 0,
             weight: weight || 1.0
         });
         res.status(201).json(map);
     } catch (error) {
         console.error(error);
+        if (error.message?.includes('404')) {
+            return res.status(404).json({ message: '谱面不存在' });
+        }
         res.status(500).json({ message: req.t('common.serverError') });
     }
 };
