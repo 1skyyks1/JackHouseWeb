@@ -78,8 +78,10 @@ async function rebuildToc() {
     activeListItemClass: 'is-active-li',
     collapseDepth: 6,
     scrollSmooth: false,
-    disableTocScrollSync: true,
     headingsOffset: 80,
+    scrollSmoothOffset: -80,
+    // 指定滚动容器，让 tocbot 正确监听滚动事件
+    scrollContainer: 'body',
     // 自定义点击处理
     onClick: function(e) {
       e.preventDefault()
